@@ -1,0 +1,44 @@
+# Environment and credentials
+.env
+.env.*
+!.env.example
+/auth.json
+*.pem
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Generated assets
+/public/build/
+/public/hot
+/public/storage/
+
+# Laravel runtime
+/bootstrap/cache/*.php
+/storage/*.key
+/storage/logs/*.log
+
+# Test artifacts
+/.phpunit.cache/
+/.phpunit.result.cache
+/coverage/
+
+# Local databases
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+
+# Research datasets
+/data/raw/
+/data/snapshots/
+/datasets/
+
+# Local IDE and operating system files
+/.idea/
+/.fleet/
+.DS_Store
+Thumbs.db

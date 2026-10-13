@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "laravel.vscode-laravel",
+        "bmewburn.vscode-intelephense-client",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "shufo.vscode-blade-formatter",
+        "editorconfig.editorconfig",
+        "usernamehw.errorlens",
+        "streetsidesoftware.code-spell-checker",
+        "github.vscode-pull-request-github"
+    ]
+}
