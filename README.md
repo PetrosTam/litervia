@@ -8,7 +8,7 @@ Litervia is an independent research discovery and personal knowledge platform fo
 
 **Early development — Laravel application foundation.**
 
-The initial Laravel backend foundation is implemented locally and undergoing review. The research catalogue, user accounts, private knowledge features, frontend integration, and deployment are not yet implemented.
+The Laravel application foundation is implemented. The research catalogue, user accounts, private knowledge features, frontend integration, and deployment are not yet implemented.
 
 Development follows a GitHub Issue, feature branch, and Pull Request workflow.
 
