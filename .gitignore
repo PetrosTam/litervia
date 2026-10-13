@@ -18,6 +18,7 @@
 /bootstrap/cache/*.php
 /storage/*.key
 /storage/logs/*.log
+/storage/pail
 
 # Test artifacts
 /.phpunit.cache/
