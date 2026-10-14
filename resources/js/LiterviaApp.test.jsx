@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
@@ -14,12 +14,19 @@ function renderApp(route = '/') {
 }
 
 beforeEach(() => {
+  // jsdom does not implement viewport scrolling; assert the requested scroll explicitly.
+  vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+
   document.head.innerHTML = `
     <meta name="description" content="">
     <meta name="robots" content="noindex, nofollow">
     <meta property="og:title" content="">
     <meta property="og:description" content="">
   `;
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe('Litervia frontend', () => {
@@ -170,6 +177,44 @@ describe('Litervia frontend', () => {
     await waitFor(() => {
       expect(screen.getByRole('main')).toHaveFocus();
     });
+  });
+
+  it('restores the page top without scrolling the focused main out of context', async () => {
+    const user = userEvent.setup();
+    const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
+    renderApp();
+
+    // The initial page load must not force scrolling or focus.
+    expect(window.scrollTo).not.toHaveBeenCalled();
+    expect(screen.getByRole('main')).not.toHaveFocus();
+
+    const researchLink = screen.getByRole('link', { name: 'Research' });
+    researchLink.focus();
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { level: 1, name: 'Research' })).toBeInTheDocument();
+      expect(screen.getByRole('main')).toHaveFocus();
+    });
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+
+    vi.mocked(window.scrollTo).mockClear();
+    focusSpy.mockClear();
+
+    const homeLink = screen.getByRole('link', { name: 'Home' });
+    homeLink.focus();
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', {
+        level: 1,
+        name: '40+ years of CHI research, in one place.',
+      })).toBeInTheDocument();
+      expect(screen.getByRole('main')).toHaveFocus();
+    });
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
   });
 
   it('preserves the noindex directive during client navigation', async () => {

@@ -49,7 +49,9 @@ function RouteFocus() {
     }
 
     previousPath.current = pathname;
-    document.getElementById('main-content')?.focus();
+    // Start each new page at the top; focusing <main> must not scroll past the header.
+    window.scrollTo(0, 0);
+    document.getElementById('main-content')?.focus({ preventScroll: true });
   }, [pathname]);
 
   return null;
