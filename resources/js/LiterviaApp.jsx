@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Link, NavLink, Route, Routes } from 'react-router';
+import { useEffect, useRef } from 'react';
+import { Link, NavLink, Route, Routes, useLocation } from 'react-router';
 
 const container = 'mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-12';
 
@@ -33,6 +33,24 @@ function PageMetadata({ title, description }) {
       }
     }
   }, [title, description]);
+
+  return null;
+}
+
+// Client-side navigation should announce the new main content to keyboard
+// and assistive-technology users without stealing focus on the initial load.
+function RouteFocus() {
+  const { pathname } = useLocation();
+  const previousPath = useRef(pathname);
+
+  useEffect(() => {
+    if (previousPath.current === pathname) {
+      return;
+    }
+
+    previousPath.current = pathname;
+    document.getElementById('main-content')?.focus();
+  }, [pathname]);
 
   return null;
 }
@@ -222,6 +240,7 @@ export default function LiterviaApp() {
         Skip to main content
       </a>
       <AppHeader />
+      <RouteFocus />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/research" element={<ResearchPage />} />

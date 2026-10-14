@@ -150,6 +150,28 @@ describe('Litervia frontend', () => {
     expect(researchMain).toHaveFocus();
   });
 
+  it('moves keyboard focus to the new main region after SPA navigation', async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const initialMain = screen.getByRole('main');
+    expect(initialMain).not.toHaveFocus();
+
+    const researchLink = screen.getByRole('link', { name: 'Research' });
+    researchLink.focus();
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Research' })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('main')).toHaveFocus();
+    });
+
+    await user.click(screen.getByRole('link', { name: 'Litervia' }));
+    await waitFor(() => {
+      expect(screen.getByRole('main')).toHaveFocus();
+    });
+  });
+
   it('preserves the noindex directive during client navigation', async () => {
     const user = userEvent.setup();
 
