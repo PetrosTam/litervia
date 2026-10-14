@@ -53,7 +53,7 @@ function HomePage() {
           Discover research. Explore knowledge.
         </p>
 
-        <p className="mt-6 text-sm text-slate-600">
+        <p className="mt-6 text-sm text-ink-muted">
           Frontend foundation in progress.
         </p>
       </main>
@@ -75,7 +75,7 @@ function ResearchPage() {
           Research
         </h1>
 
-        <p className="mt-4 text-slate-600">
+        <p className="mt-4 text-ink-muted">
           The Litervia research catalogue is under development.
         </p>
       </main>
@@ -85,15 +85,15 @@ function ResearchPage() {
 
 export default function LiterviaApp() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-canvas text-ink font-sans">
       <a
         href="#main-content"
-        className="sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:p-3 focus:not-sr-only"
+        className="sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-surface focus:text-ink focus:p-3 focus:not-sr-only"
       >
         Skip to main content
       </a>
 
-      <header className="border-b border-slate-200">
+      <header className="border-b border-stroke">
         <nav
           aria-label="Main navigation"
           className="mx-auto flex max-w-3xl items-center gap-6 px-6 py-4"
