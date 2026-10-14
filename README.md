@@ -6,9 +6,9 @@ Litervia is an independent research discovery and personal knowledge platform fo
 
 ## Project Status
 
-**Early development — Laravel and React application foundation.**
+**Early development — Laravel and React foundation with an initial editorial interface.**
 
-The application foundation includes Laravel, Blade, React, React Router, TanStack Query, Tailwind CSS, and Vite. The current UI contains development placeholders. Research ingestion, user accounts, private knowledge features, the final Design System, and deployment remain unimplemented.
+The application foundation includes Laravel, Blade, React, React Router, TanStack Query, Tailwind CSS, and Vite. The Home page now presents an initial Editorial Research design; the Research route remains an explicit catalogue-under-development placeholder. Research ingestion, real search and filters, user accounts, private knowledge features, and deployment remain unimplemented. The design system is a foundation, not a completed or independently accessibility-certified UI.
 
 Development follows a GitHub Issue, feature branch, and Pull Request workflow.
 
@@ -95,8 +95,8 @@ php artisan test
 
 The application foundation provides:
 
-- `/` — React Home placeholder
-- `/research` — React Research placeholder
+- `/` — editorial React Home page with an original decorative research illustration
+- `/research` — React Research page that clearly states the catalogue is under development
 - `/up` — Laravel health endpoint
 
 ### 6. Start the development server
@@ -177,7 +177,11 @@ Before creating indexable publication, author, country, or catalogue pages, the 
 
 ### Design direction
 
-Editorial Research is the approved visual direction for Litervia. The final Design System, including typography, design tokens, dark mode, reusable components, and accessibility requirements, will be reviewed separately before major UI implementation.
+Editorial Research is the approved visual direction for Litervia. The current UI foundation uses centralized semantic Tailwind CSS 4 design tokens, a cream/forest-green palette, system-following light/dark colors via `prefers-color-scheme`, and self-hosted variable Newsreader (editorial headings) and Inter (interface/body text) WOFF2 subsets. Their SIL Open Font License notices are preserved under `resources/fonts/`. The Home artwork is an original decorative SVG/CSS composition, not an image from an actual CHI conference.
+
+There is no manual theme selector, theme-preference persistence, live publication list, functional search, or account feature. The existing routes retain their server-delivered metadata and `noindex, nofollow` settings.
+
+Accessibility and responsive behavior require ongoing verification. The current component and browser checks do not constitute comprehensive WCAG conformance or cross-browser certification; record actual viewport, keyboard, zoom, text resizing, reduced-motion, and focus evidence in the associated pull request.
 
 Generated frontend assets in `public/build/` and installed dependencies in `node_modules/` must not be committed to Git.
 
