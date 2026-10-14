@@ -98,6 +98,24 @@ describe('Litervia frontend', () => {
     ).toHaveAttribute('content', 'Research | Litervia');
   });
 
+  it('exposes a focusable skip target on both pages', () => {
+    const homeView = renderApp();
+    const homeMain = screen.getByRole('main');
+
+    expect(homeMain).toHaveAttribute('tabindex', '-1');
+    homeMain.focus();
+    expect(homeMain).toHaveFocus();
+
+    homeView.unmount();
+
+    renderApp('/research');
+    const researchMain = screen.getByRole('main');
+
+    expect(researchMain).toHaveAttribute('tabindex', '-1');
+    researchMain.focus();
+    expect(researchMain).toHaveFocus();
+  });
+
   it('preserves the noindex directive during client navigation', async () => {
     const user = userEvent.setup();
 

@@ -42,6 +42,7 @@ function HomePage() {
 
       <main
         id="main-content"
+        tabIndex={-1}
         className="mx-auto max-w-3xl px-6 py-16"
       >
         <h1 className="text-4xl font-semibold tracking-tight">
@@ -67,6 +68,7 @@ function ResearchPage() {
 
       <main
         id="main-content"
+        tabIndex={-1}
         className="mx-auto max-w-3xl px-6 py-16"
       >
         <h1 className="text-4xl font-semibold tracking-tight">
