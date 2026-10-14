@@ -23,11 +23,14 @@ beforeEach(() => {
 });
 
 describe('Litervia frontend', () => {
-  it('renders the home page with accessible navigation', () => {
+  it('renders the editorial home page with accessible navigation', () => {
     renderApp();
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Litervia' }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: '40+ years of CHI research, in one place.',
+      }),
     ).toBeInTheDocument();
 
     expect(
@@ -36,11 +39,35 @@ describe('Litervia frontend', () => {
 
     expect(
       screen.getByRole('link', { name: 'Litervia' }),
+    ).not.toHaveAttribute('aria-current');
+
+    expect(
+      screen.getByRole('link', { name: 'Home' }),
     ).toHaveAttribute('aria-current', 'page');
 
     expect(
       screen.getByRole('link', { name: 'Skip to main content' }),
     ).toHaveAttribute('href', '#main-content');
+  });
+
+  it('offers a real Research destination without pretending the catalogue is live', async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    expect(screen.getByText('Catalogue under development')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /search|sign in|filter/i })).not.toBeInTheDocument();
+
+    const exploreLink = screen.getByRole('link', { name: 'Explore research' });
+    expect(exploreLink).toHaveAttribute('href', '/research');
+
+    await user.click(exploreLink);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Research' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('The Litervia research catalogue is under development.'),
+    ).toBeInTheDocument();
   });
 
   it('navigates between Home and Research', async () => {
@@ -58,6 +85,10 @@ describe('Litervia frontend', () => {
       screen.getByRole('link', { name: 'Research' }),
     ).toHaveAttribute('aria-current', 'page');
 
+    expect(
+      screen.getByRole('link', { name: 'Litervia' }),
+    ).not.toHaveAttribute('aria-current');
+
     await waitFor(() => {
       expect(document.title).toBe('Research | Litervia');
     });
@@ -65,7 +96,10 @@ describe('Litervia frontend', () => {
     await user.click(screen.getByRole('link', { name: 'Litervia' }));
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Litervia' }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: '40+ years of CHI research, in one place.',
+      }),
     ).toBeInTheDocument();
 
     await waitFor(() => {

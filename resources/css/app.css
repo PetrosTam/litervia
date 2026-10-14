@@ -117,3 +117,11 @@ body {
   background-color: var(--lv-selection-surface);
   color: var(--lv-selection-text);
 }
+
+/* Decorative, original artwork: not a conference photograph or research record. */
+.lv-research-art {
+  background:
+    radial-gradient(circle at 76% 18%, rgb(171 213 163 / 0.28), transparent 39%),
+    linear-gradient(145deg, #285740 0%, #163b2d 48%, #0b211a 100%);
+  color: #e9f3e6;
+}
