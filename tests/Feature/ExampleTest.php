@@ -17,6 +17,17 @@ class ExampleTest extends TestCase
             ->assertSee('<div id="app"></div>', false);
     }
 
+    public function test_application_shell_uses_a_temporary_blank_favicon(): void
+    {
+        $this->withoutVite();
+
+        foreach (['/', '/research'] as $path) {
+            $this->get($path)
+                ->assertOk()
+                ->assertSee('<link rel="icon" href="data:,">', false);
+        }
+    }
+
     public function test_placeholder_has_safe_initial_seo_metadata(): void
     {
         $this->withoutVite();
