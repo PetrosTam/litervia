@@ -6,29 +6,30 @@ Litervia is an independent research discovery and personal knowledge platform fo
 
 ## Project Status
 
-**Early development — Laravel application foundation.**
+**Early development — Laravel and React application foundation.**
 
-The Laravel application foundation is implemented. The research catalogue, user accounts, private knowledge features, frontend integration, and deployment are not yet implemented.
+The application foundation includes Laravel, Blade, React, React Router, TanStack Query, Tailwind CSS, and Vite. The current UI contains development placeholders. Research ingestion, user accounts, private knowledge features, the final Design System, and deployment remain unimplemented.
 
 Development follows a GitHub Issue, feature branch, and Pull Request workflow.
 
 ## Technology Stack
 
-The planned application stack includes:
+The application technology stack includes:
 
 - **Backend:** PHP and Laravel
-- **Frontend:** Blade, React (JavaScript), Tailwind CSS, and Vite
+- **Frontend:** Blade, React (JavaScript), React Router, TanStack Query, Tailwind CSS 4, and Vite 8
 - **Data:** A normalized research catalogue and a separately secured private user data store
 
-Laravel 13 is used for the current backend foundation. The frontend stack and final data architecture will be integrated through subsequent reviewed deliverables.
+Laravel 13 owns HTTP routing and server responses. React Router handles navigation between explicitly registered application pages. TanStack Query provides the initial server-state infrastructure; real API integrations and the final data architecture remain future work.
 
 ## Requirements
 
-The current Laravel foundation requires:
+Local development requires:
 
 - PHP 8.4.1 or later, below PHP 9.0
 - Composer
 - Git for cloning the repository
+- Node.js 24.x and npm 11.x
 - PHP extensions required by the locked dependencies
 
 The foundation has been tested locally with:
@@ -39,7 +40,7 @@ The foundation has been tested locally with:
 
 Other operating systems and PHP versions have not yet been independently tested.
 
-Node.js and npm are not required for the current backend-only foundation.
+The frontend environment has been verified locally with Node.js 24.21.0 and npm 11.19.0.
 
 ## Local Development
 
@@ -74,7 +75,7 @@ For the default development server, set `APP_URL` in the local `.env` to `http:/
 composer install --no-interaction --prefer-dist
 ```
 
-Composer installs the versions specified in `composer.lock`.
+Composer installs the versions specified in `composer.lock`. Also run `npm ci` to install the frontend dependencies from `package-lock.json`.
 
 ### 4. Generate the application key
 
@@ -92,9 +93,10 @@ php artisan route:list
 php artisan test
 ```
 
-The current foundation provides:
+The application foundation provides:
 
-- `/` — Initial application welcome page
+- `/` — React Home placeholder
+- `/research` — React Research placeholder
 - `/up` — Laravel health endpoint
 
 ### 6. Start the development server
@@ -103,9 +105,13 @@ The current foundation provides:
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
-Open http://127.0.0.1:8000 in a browser.
+In a second PowerShell terminal, start the Vite development server with `npm run dev`.
 
-Stop the development server with `Ctrl+C`.
+After both Laravel and Vite are running, open http://127.0.0.1:8000 in a browser.
+
+Alternatively, run `npm run build` before opening the application to serve compiled assets without the Vite development server.
+
+Stop running development servers with `Ctrl+C`.
 
 ## Testing and Quality
 
@@ -127,9 +133,53 @@ Check locked dependencies for known security advisories:
 composer audit --locked
 ```
 
-The current foundation includes basic tests for the home page, health endpoint, and disabled private storage routes.
+Laravel feature tests cover the application shell, initial SEO metadata, routing, HTTP 404 responses, health endpoint, and disabled private storage routes.
 
 These tests do not constitute comprehensive application or security coverage.
+
+## Frontend Testing, Routing and SEO
+
+### Frontend quality checks
+
+Run the React component integration tests:
+
+`npm test`
+
+Build production frontend assets:
+
+`npm run build`
+
+Check frontend dependencies for known security advisories:
+
+`npm audit --audit-level=high`
+
+The frontend tests use Vitest, React Testing Library, and jsdom. They cover initial rendering, client-side navigation, accessibility-related elements, and placeholder metadata.
+
+The GitHub Actions workflow includes independent PHP 8.4, PHP 8.5, and Node.js 24 jobs. Their results must be verified on the actual Pull Request.
+
+### Routing responsibilities
+
+Laravel explicitly registers `/` and `/research` and serves a Blade application shell. React Router handles client-side navigation between these pages.
+
+Unknown research routes and unmatched API endpoints must return appropriate HTTP error responses rather than silently serving the React application shell.
+
+TanStack Query is configured as a provider. No real research API requests have been implemented.
+
+### Technical SEO
+
+Laravel supplies page-specific titles, descriptions, and Open Graph metadata in the initial HTML response. React updates relevant metadata during client-side navigation.
+
+Both unfinished application pages currently use `noindex, nofollow`.
+
+No production canonical URL, research sitemap, or publication structured data has been published.
+
+Before creating indexable publication, author, country, or catalogue pages, the public rendering strategy must be reviewed for reliable crawlability, canonical URLs, correct HTTP statuses, source provenance, and permitted metadata.
+
+### Design direction
+
+Editorial Research is the approved visual direction for Litervia. The final Design System, including typography, design tokens, dark mode, reusable components, and accessibility requirements, will be reviewed separately before major UI implementation.
+
+Generated frontend assets in `public/build/` and installed dependencies in `node_modules/` must not be committed to Git.
 
 ## Data and Storage
 
