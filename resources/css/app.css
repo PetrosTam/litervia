@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 @source "../js";
 @source "../views";
@@ -66,10 +67,10 @@
   --lv-warning-text: #906021;
   --lv-warning-surface: #fff5dd;
 
-  /* Font stacks only: qualified self-hosted WOFF2 files come next. */
-  --lv-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+  /* Self-hosted variable fonts are declared in fonts.css. */
+  --lv-font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --lv-font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --lv-font-display: "Newsreader Variable", Georgia, "Times New Roman", serif;
 
   --lv-focus-width: 2px;
   --lv-focus-offset: 3px;
