@@ -58,8 +58,12 @@ function RouteFocus() {
 }
 
 function AppHeader() {
-  const navLinkClass =
-    'inline-flex min-h-11 items-center rounded-control px-3 text-sm font-medium text-ink-muted hover:bg-surface-muted hover:text-ink aria-[current=page]:bg-selected aria-[current=page]:text-on-selected focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus';
+  // A persistent rounded border marks the current page without relying on color alone.
+  // Both states reserve a 2px border to avoid layout shifts on navigation.
+  const navLinkClass = ({ isActive }) =>
+    `inline-flex min-h-11 items-center rounded-control border-2 px-3 text-sm font-medium text-ink-muted hover:bg-surface-muted hover:text-ink aria-[current=page]:bg-selected aria-[current=page]:text-on-selected focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus ${
+      isActive ? 'border-current' : 'border-transparent'
+    }`;
 
   return (
     <header className="border-b border-stroke bg-surface">

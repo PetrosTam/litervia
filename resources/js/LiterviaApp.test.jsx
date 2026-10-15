@@ -57,6 +57,28 @@ describe('Litervia frontend', () => {
     ).toHaveAttribute('href', '#main-content');
   });
 
+  it('marks only the active navigation link with a persistent rounded border', async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const home = screen.getByRole('link', { name: 'Home' });
+    const research = screen.getByRole('link', { name: 'Research' });
+
+    expect(home).toHaveAttribute('aria-current', 'page');
+    expect(home).toHaveClass('border-2', 'border-current');
+    expect(home).toHaveClass('focus-visible:outline-2', 'focus-visible:outline-offset-4');
+    expect(research).not.toHaveAttribute('aria-current');
+    expect(research).toHaveClass('border-2', 'border-transparent');
+    expect(research).toHaveClass('focus-visible:outline-2', 'focus-visible:outline-offset-4');
+
+    await user.click(research);
+
+    expect(home).not.toHaveAttribute('aria-current');
+    expect(home).toHaveClass('border-transparent');
+    expect(research).toHaveAttribute('aria-current', 'page');
+    expect(research).toHaveClass('border-current');
+  });
+
   it('offers a real Research destination without pretending the catalogue is live', async () => {
     const user = userEvent.setup();
     renderApp();
