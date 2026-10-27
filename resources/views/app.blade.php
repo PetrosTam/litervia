@@ -14,12 +14,17 @@
         <meta property="og:title" content="{{ $title }}">
         <meta property="og:description" content="{{ $description }}">
 
+        @isset($heroImage)
+            <link rel="preload" as="image" type="image/webp" media="(max-width: 639px)" href="{{ $heroImage['mobileSrc'] }}" fetchpriority="high">
+            <link rel="preload" as="image" type="image/webp" media="(min-width: 640px)" href="{{ $heroImage['desktopSrc'] }}" fetchpriority="high">
+        @endisset
+
         @viteReactRefresh
         @vite('resources/js/app.jsx')
     </head>
 
     <body>
-        <div id="app"></div>
+        <div id="app" @isset($heroImage) data-hero-image="{{ json_encode($heroImage, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) }}" @endisset></div>
 
         <noscript>
             JavaScript is required to use Litervia.

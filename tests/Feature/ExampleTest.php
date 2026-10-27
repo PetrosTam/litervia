@@ -14,7 +14,7 @@ class ExampleTest extends TestCase
         $this->get('/')
             ->assertOk()
             ->assertSee('Litervia')
-            ->assertSee('<div id="app"></div>', false);
+            ->assertSee('data-hero-image=', false);
     }
 
     public function test_application_shell_uses_a_temporary_blank_favicon(): void

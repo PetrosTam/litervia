@@ -12,9 +12,32 @@ class FrontendRoutingTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('<title>Litervia — Discover research. Explore knowledge.</title>', false)
+            ->assertSee('<title>Litervia - Discover research. Explore knowledge.</title>', false)
             ->assertSee('<meta name="robots" content="noindex, nofollow">', false)
-            ->assertSee('<div id="app"></div>', false);
+            ->assertSee('data-hero-image=', false);
+    }
+
+    public function test_home_preloads_only_the_selected_responsive_hero_at_high_priority(): void
+    {
+        $this->withoutVite();
+
+        $response = $this->get('/')->assertOk();
+
+        preg_match_all('/<link rel="preload" as="image"[^>]*>/', $response->getContent(), $matches);
+
+        $this->assertCount(2, $matches[0]);
+        $this->assertStringContainsString('media="(max-width: 639px)"', $matches[0][0]);
+        $this->assertStringContainsString('media="(min-width: 640px)"', $matches[0][1]);
+
+        foreach ($matches[0] as $preload) {
+            $this->assertStringContainsString('type="image/webp"', $preload);
+            $this->assertStringContainsString('fetchpriority="high"', $preload);
+            $this->assertStringContainsString('/media/heroes/', $preload);
+        }
+
+        $this->get('/research')
+            ->assertOk()
+            ->assertDontSee('rel="preload" as="image"', false);
     }
 
     public function test_research_page_has_its_own_server_rendered_metadata(): void

@@ -15,6 +15,7 @@
   --color-surface: var(--lv-surface);
   --color-surface-muted: var(--lv-surface-muted);
   --color-surface-elevated: var(--lv-surface-elevated);
+  --color-editorial-surface: var(--lv-editorial-surface);
   --color-ink: var(--lv-text-primary);
   --color-ink-muted: var(--lv-text-secondary);
   --color-action: var(--lv-action-primary);
@@ -76,6 +77,19 @@
   --lv-focus-offset: 3px;
   --lv-motion-fast: 120ms;
   --lv-motion-standard: 200ms;
+  /* Shared, owner-approved beige for header, context cards and evidence band. */
+  --lv-editorial-surface: #f1ebe0;
+  --lv-header-surface: var(--lv-editorial-surface);
+  --lv-header-hover: #ebe3d5;
+  --lv-header-selected: #e4d9c7;
+  --lv-header-rule: #d9d0c2;
+  --lv-hero-text: #ffffff;
+  --lv-hero-base: #10271e;
+  --lv-hero-scrim: 15 35 27;
+  --lv-footer-surface: #1d3027;
+  --lv-footer-text: #f6f3ea;
+  --lv-footer-muted: #d1ddce;
+  --lv-footer-rule: #466051;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -104,6 +118,17 @@
     --lv-success-surface: #183b2b;
     --lv-warning-text: #fad690;
     --lv-warning-surface: #443621;
+    /* Match the existing dark header surface without introducing a light beige. */
+    --lv-editorial-surface: #273a30;
+    --lv-header-surface: var(--lv-editorial-surface);
+    --lv-header-hover: #334d3d;
+    --lv-header-selected: #425c4a;
+    --lv-header-rule: #476251;
+    /* The photographic hero uses the same high-contrast text/scrim in both themes. */
+    --lv-footer-surface: #0b1913;
+    --lv-footer-text: #f6f3ea;
+    --lv-footer-muted: #d1ddce;
+    --lv-footer-rule: #345246;
   }
 }
 
@@ -118,10 +143,132 @@ body {
   color: var(--lv-selection-text);
 }
 
-/* Decorative, original artwork: not a conference photograph or research record. */
-.lv-research-art {
+/* Dedicated site header surface: preserves global canvas and content tokens. */
+.lv-site-header {
+  background-color: var(--lv-header-surface);
+  border-color: var(--lv-header-rule);
+}
+.lv-site-header .lv-nav-link { color: var(--lv-text-primary); }
+.lv-site-header .lv-nav-link:hover { background-color: var(--lv-header-hover); }
+.lv-site-header .lv-nav-link[aria-current="page"] {
+  background-color: var(--lv-header-selected);
+}
+
+/* One gentle typographic marker, distinct from the keyboard focus ring. */
+.lv-nav-link[aria-current="page"] {
+  color: var(--lv-text-primary);
+  font-weight: 650;
+}
+.lv-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.85rem;
+  bottom: 0.45rem;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+/* Photo remains sharp; contrast is supplied by a separate site-owned scrim. */
+.lv-hero {
+  background: var(--lv-hero-base);
+  color: var(--lv-hero-text);
+}
+.lv-hero-picture,
+.lv-hero-picture img,
+.lv-hero-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.lv-hero-picture img {
+  object-fit: cover;
+  object-position: center center;
+}
+.lv-hero-scrim {
   background:
-    radial-gradient(circle at 76% 18%, rgb(171 213 163 / 0.28), transparent 39%),
-    linear-gradient(145deg, #285740 0%, #163b2d 48%, #0b211a 100%);
-  color: #e9f3e6;
+    linear-gradient(90deg, rgb(var(--lv-hero-scrim) / 0.98) 0%, rgb(var(--lv-hero-scrim) / 0.86) 34%, rgb(var(--lv-hero-scrim) / 0.45) 70%, rgb(var(--lv-hero-scrim) / 0.2) 100%),
+    linear-gradient(0deg, rgb(var(--lv-hero-scrim) / 0.6), transparent 38%);
+}
+.lv-hero-inner {
+  position: relative;
+  z-index: 1;
+  min-height: clamp(34rem, 75svh, 46rem);
+}
+.lv-hero-note { color: #e8f0e8; }
+.lv-entrance { animation: lv-enter 650ms both cubic-bezier(0.22, 1, 0.36, 1); }
+.lv-entrance-1 { animation-delay: 0ms; }
+.lv-entrance-2 { animation-delay: 90ms; }
+.lv-entrance-3 { animation-delay: 180ms; }
+.lv-entrance-4 { animation-delay: 270ms; }
+@keyframes lv-enter {
+  from { opacity: 0.01; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.lv-scroll-reveal[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.lv-scroll-reveal[data-reveal="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 640ms ease, transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Evidence section only: opposite, subtle reveals on wider screens.
+ * On narrow screens use opacity alone; keep the default reveal elsewhere.
+ */
+.lv-scroll-reveal[data-reveal-direction][data-reveal="pending"] {
+  transform: none;
+}
+.lv-scroll-reveal[data-reveal-direction][data-reveal="visible"] {
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .lv-scroll-reveal[data-reveal-direction="left"][data-reveal="pending"] {
+    transform: translateX(-24px);
+  }
+  .lv-scroll-reveal[data-reveal-direction="right"][data-reveal="pending"] {
+    transform: translateX(24px);
+  }
+}
+.lv-site-footer { background: var(--lv-footer-surface); color: var(--lv-footer-text); }
+.lv-footer-link {
+  color: var(--lv-footer-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.lv-footer-link:hover { color: var(--lv-footer-text); text-decoration-line: underline; }
+.lv-footer-link:focus-visible {
+  outline: 2px solid var(--lv-footer-text);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+@media (max-width: 639px) {
+  .lv-hero-picture img { object-position: center top; }
+  .lv-hero-scrim {
+    background:
+      linear-gradient(180deg, rgb(var(--lv-hero-scrim) / 0.97) 0%, rgb(var(--lv-hero-scrim) / 0.85) 43%, rgb(var(--lv-hero-scrim) / 0.48) 76%, rgb(var(--lv-hero-scrim) / 0.32) 100%);
+  }
+  .lv-hero-inner { min-height: 38rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lv-entrance { animation: none; }
+  .lv-scroll-reveal, .lv-scroll-reveal[data-reveal="pending"], .lv-scroll-reveal[data-reveal="visible"],
+  .lv-scroll-reveal[data-reveal-direction][data-reveal="pending"],
+  .lv-scroll-reveal[data-reveal-direction][data-reveal="visible"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .lv-site-header { border-bottom: 1px solid CanvasText; }
+  .lv-hero { background: Canvas; color: CanvasText; }
+  .lv-hero-picture, .lv-hero-scrim { display: none; }
+  .lv-hero-note { color: CanvasText; }
+  .lv-site-footer { background: Canvas; color: CanvasText; border-top: 1px solid CanvasText; }
+  .lv-footer-link { color: LinkText; }
+  .lv-footer-link:focus-visible { outline-color: Highlight; }
+  .lv-nav-link[aria-current="page"] { border-bottom: 2px solid currentColor; }
 }

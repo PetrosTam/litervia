@@ -12,13 +12,24 @@ if (!mountPoint) {
   throw new Error('Missing React mount point: #app');
 }
 
+// On a direct Research visit there is no selected hero; React uses a static
+// fallback if a later in-app navigation opens Home without a document reload.
+let initialHeroImage = null;
+if (mountPoint.dataset.heroImage) {
+  try {
+    initialHeroImage = JSON.parse(mountPoint.dataset.heroImage);
+  } catch {
+    initialHeroImage = null;
+  }
+}
+
 const queryClient = new QueryClient();
 
 createRoot(mountPoint).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <LiterviaApp />
+        <LiterviaApp initialHeroImage={initialHeroImage} />
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,
