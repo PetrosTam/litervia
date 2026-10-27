@@ -48,6 +48,8 @@ class HeroImageTest extends TestCase
 
     public function test_only_home_selects_and_sets_previous_hero_cookie(): void
     {
+        $this->withoutVite();
+
         // Inspect the raw cookie contract without the encryption middleware.
         // Laravel's test client still encrypts withCookie() automatically;
         // withUnencryptedCookie() sends the exact previous hero ID instead.
@@ -73,6 +75,8 @@ class HeroImageTest extends TestCase
 
     public function test_home_cookie_is_encrypted_and_honors_http_security_attributes(): void
     {
+        $this->withoutVite();
+
         // Keep the real web middleware active: the client encrypts the incoming
         // previous ID, and EncryptCookies encrypts the outgoing response cookie.
         $response = $this->withCookie('lv_previous_hero', '06')->get('/');
@@ -104,6 +108,8 @@ class HeroImageTest extends TestCase
 
     public function test_home_cookie_is_secure_when_the_request_uses_https(): void
     {
+        $this->withoutVite();
+
         $response = $this->get('https://localhost/');
         $response->assertOk();
 
