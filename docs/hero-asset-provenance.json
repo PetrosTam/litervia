@@ -1,0 +1,108 @@
+{
+  "catalogue": "Litervia Home hero v02",
+  "candidate_ids": [
+    "02",
+    "06",
+    "07"
+  ],
+  "source_originals_location": "external user-owned C:\\Dev\\litervia-assets\\hero-images\\originals",
+  "asset_rights_review": "owner_origin_attestation_recorded",
+  "generation_attestation": {
+    "recorded_date": "2026-10-27",
+    "attested_by": "project_owner",
+    "applies_to": "all_six_listed_desktop_and_mobile_hero_assets",
+    "generation_platform": "ChatGPT (OpenAI)",
+    "chat_session_model_owner_reported": "GPT-6",
+    "chat_session_thinking_effort_owner_reported": "High",
+    "actual_image_generation_model": "not_verified",
+    "input_method": "owner_authored_text_prompts",
+    "third_party_reference_images_or_copyrighted_uploads": "none_declared_by_owner",
+    "verification_basis": "owner_statement_not_independently_audited",
+    "legal_exclusivity_or_non_infringement": "not_certified",
+    "public_release_status": "pending_separate_visual_and_release_review"
+  },
+  "visual_approval": {
+    "recorded_date": "2026-10-27",
+    "approved_by": "project_owner",
+    "asset_filename": "litervia-hero-06-tangible-computing-mobile.webp",
+    "scope": "final_visual_selection_for_current_mobile_06_v02_artwork_and_crop",
+    "review_method": "owner_manual_mobile_browser_viewport",
+    "owner_confirmed_checks": [
+      "main_subject_and_composition",
+      "hero_text_readability_with_overlay",
+      "crop_preserves_important_details",
+      "visual_consistency_with_mobile_02_and_07",
+      "final_visual_preference"
+    ],
+    "independent_device_accessibility_and_performance_validation": "not_completed",
+    "deployment_authorization": "not_granted"
+  },
+  "files": [
+    {
+      "filename": "litervia-hero-02-interaction-lab-desktop.webp",
+      "sha256": "851d8fc1bf4bd3665467568482afc88ec6a680824c83174ff0e5e599c3c3b446",
+      "size_bytes": 82094,
+      "source_platform": "ChatGPT",
+      "provider": "OpenAI",
+      "generation_model": "not_verified",
+      "asset_type": "conceptual_AI_generated",
+      "approval": "local_review_only",
+      "note": "Generation origin attested by owner; final responsive/visual release review remains open."
+    },
+    {
+      "filename": "litervia-hero-02-interaction-lab-mobile.webp",
+      "sha256": "9e4d8038e7dc8374dd31ab283c6f7d0ef4c906d4a2cfe15e8114f4e1dc3e0e60",
+      "size_bytes": 60840,
+      "source_platform": "ChatGPT",
+      "provider": "OpenAI",
+      "generation_model": "not_verified",
+      "asset_type": "conceptual_AI_generated",
+      "approval": "local_review_only",
+      "note": "Generation origin attested by owner; final responsive/visual release review remains open."
+    },
+    {
+      "filename": "litervia-hero-06-tangible-computing-desktop.webp",
+      "sha256": "2f7650af1e18b0139a0538e1f6ad3c8af0be252edd354204258adaabe97bd450",
+      "size_bytes": 87800,
+      "source_platform": "ChatGPT",
+      "provider": "OpenAI",
+      "generation_model": "not_verified",
+      "asset_type": "conceptual_AI_generated",
+      "approval": "local_review_only",
+      "note": "Generation origin attested by owner; final responsive/visual release review remains open."
+    },
+    {
+      "filename": "litervia-hero-06-tangible-computing-mobile.webp",
+      "sha256": "49e337bc153ed8ff5a9078084b2edf76f2a2b1ebaf424c9f9a4fa8fb2febc72c",
+      "size_bytes": 55880,
+      "source_platform": "ChatGPT",
+      "provider": "OpenAI",
+      "generation_model": "not_verified",
+      "asset_type": "conceptual_AI_generated",
+      "approval": "owner_approved_visual",
+      "note": "Owner approved this exact Mobile 06 v02 artwork and crop as final after five-point mobile browser viewport review. Independent device, accessibility, performance and deployment gates remain open."
+    },
+    {
+      "filename": "litervia-hero-07-interactive-demo-space-desktop.webp",
+      "sha256": "1ea38d6bbee25bde185dfdc534c3c0bb70932dd79ae7df1ec8e43fb109139d5d",
+      "size_bytes": 86272,
+      "source_platform": "ChatGPT",
+      "provider": "OpenAI",
+      "generation_model": "not_verified",
+      "asset_type": "conceptual_AI_generated",
+      "approval": "local_review_only",
+      "note": "Generation origin attested by owner; final responsive/visual release review remains open."
+    },
+    {
+      "filename": "litervia-hero-07-interactive-demo-space-mobile.webp",
+      "sha256": "a038842d5bf1867fbd16a83e64c73e9f4c3231222c09333b392aa1c8247fb3ab",
+      "size_bytes": 57698,
+      "source_platform": "ChatGPT",
+      "provider": "OpenAI",
+      "generation_model": "not_verified",
+      "asset_type": "conceptual_AI_generated",
+      "approval": "local_review_only",
+      "note": "Generation origin attested by owner; final responsive/visual release review remains open."
+    }
+  ]
+}

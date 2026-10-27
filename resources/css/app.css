@@ -1,4 +1,274 @@
 @import "tailwindcss";
+@import "./fonts.css";
 
 @source "../js";
 @source "../views";
+
+/*
+ * Litervia semantic design foundation.
+ * The --lv-* variables are the single source of truth for both color schemes.
+ * Tailwind utilities expose those roles through @theme inline.
+ * No custom theme switcher or browser storage is used in this delivery.
+ */
+@theme inline {
+  --color-canvas: var(--lv-canvas);
+  --color-surface: var(--lv-surface);
+  --color-surface-muted: var(--lv-surface-muted);
+  --color-surface-elevated: var(--lv-surface-elevated);
+  --color-editorial-surface: var(--lv-editorial-surface);
+  --color-ink: var(--lv-text-primary);
+  --color-ink-muted: var(--lv-text-secondary);
+  --color-action: var(--lv-action-primary);
+  --color-action-hover: var(--lv-action-primary-hover);
+  --color-on-action: var(--lv-on-action-primary);
+  --color-link: var(--lv-link);
+  --color-link-visited: var(--lv-link-visited);
+  --color-stroke: var(--lv-border-decorative);
+  --color-control: var(--lv-border-control);
+  --color-selected: var(--lv-selection-surface);
+  --color-on-selected: var(--lv-selection-text);
+  --color-focus: var(--lv-focus-indicator);
+  --color-danger: var(--lv-error-text);
+  --color-danger-surface: var(--lv-error-surface);
+  --color-success: var(--lv-success-text);
+  --color-success-surface: var(--lv-success-surface);
+  --color-warning: var(--lv-warning-text);
+  --color-warning-surface: var(--lv-warning-surface);
+
+  --font-sans: var(--lv-font-sans);
+  --font-display: var(--lv-font-display);
+  --radius-control: 0.5rem;
+  --radius-panel: 0.75rem;
+  --radius-media: 1rem;
+}
+
+:root {
+  color-scheme: light;
+
+  --lv-canvas: #f6f3ea;
+  --lv-surface: #fffdf7;
+  --lv-surface-muted: #ecefe7;
+  --lv-surface-elevated: #fffefa;
+  --lv-text-primary: #1d2d25;
+  --lv-text-secondary: #54665a;
+  --lv-action-primary: #23533d;
+  --lv-action-primary-hover: #173e2d;
+  --lv-on-action-primary: #ffffff;
+  --lv-link: #23533d;
+  --lv-link-visited: #593c72;
+  --lv-border-control: #6e8475;
+  --lv-border-decorative: #dce5da;
+  --lv-selection-surface: #e1eee5;
+  --lv-selection-text: #23533d;
+  --lv-focus-indicator: #895117;
+  --lv-error-text: #a12c36;
+  --lv-error-surface: #fff0ef;
+  --lv-success-text: #236843;
+  --lv-success-surface: #e6f4e9;
+  --lv-warning-text: #906021;
+  --lv-warning-surface: #fff5dd;
+
+  /* Self-hosted variable fonts are declared in fonts.css. */
+  --lv-font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --lv-font-display: "Newsreader Variable", Georgia, "Times New Roman", serif;
+
+  --lv-focus-width: 2px;
+  --lv-focus-offset: 3px;
+  --lv-motion-fast: 120ms;
+  --lv-motion-standard: 200ms;
+  /* Shared, owner-approved beige for header, context cards and evidence band. */
+  --lv-editorial-surface: #f1ebe0;
+  --lv-header-surface: var(--lv-editorial-surface);
+  --lv-header-hover: #ebe3d5;
+  --lv-header-selected: #e4d9c7;
+  --lv-header-rule: #d9d0c2;
+  --lv-hero-text: #ffffff;
+  --lv-hero-base: #10271e;
+  --lv-hero-scrim: 15 35 27;
+  --lv-footer-surface: #1d3027;
+  --lv-footer-text: #f6f3ea;
+  --lv-footer-muted: #d1ddce;
+  --lv-footer-rule: #466051;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --lv-canvas: #121e19;
+    --lv-surface: #1b2b23;
+    --lv-surface-muted: #24362c;
+    --lv-surface-elevated: #294034;
+    --lv-text-primary: #f4f1e9;
+    --lv-text-secondary: #bcd0c0;
+    --lv-action-primary: #c1ddb8;
+    --lv-action-primary-hover: #b4d0ac;
+    --lv-on-action-primary: #121e19;
+    --lv-link: #c1ddb8;
+    --lv-link-visited: #dac0f0;
+    --lv-border-control: #789589;
+    --lv-border-decorative: #30483b;
+    --lv-selection-surface: #294637;
+    --lv-selection-text: #c1ddb8;
+    --lv-focus-indicator: #ffd38a;
+    --lv-error-text: #ffafb5;
+    --lv-error-surface: #49282d;
+    --lv-success-text: #b5deb8;
+    --lv-success-surface: #183b2b;
+    --lv-warning-text: #fad690;
+    --lv-warning-surface: #443621;
+    /* Match the existing dark header surface without introducing a light beige. */
+    --lv-editorial-surface: #273a30;
+    --lv-header-surface: var(--lv-editorial-surface);
+    --lv-header-hover: #334d3d;
+    --lv-header-selected: #425c4a;
+    --lv-header-rule: #476251;
+    /* The photographic hero uses the same high-contrast text/scrim in both themes. */
+    --lv-footer-surface: #0b1913;
+    --lv-footer-text: #f6f3ea;
+    --lv-footer-muted: #d1ddce;
+    --lv-footer-rule: #345246;
+  }
+}
+
+body {
+  background-color: var(--lv-canvas);
+  color: var(--lv-text-primary);
+  font-family: var(--lv-font-sans);
+}
+
+::selection {
+  background-color: var(--lv-selection-surface);
+  color: var(--lv-selection-text);
+}
+
+/* Dedicated site header surface: preserves global canvas and content tokens. */
+.lv-site-header {
+  background-color: var(--lv-header-surface);
+  border-color: var(--lv-header-rule);
+}
+.lv-site-header .lv-nav-link { color: var(--lv-text-primary); }
+.lv-site-header .lv-nav-link:hover { background-color: var(--lv-header-hover); }
+.lv-site-header .lv-nav-link[aria-current="page"] {
+  background-color: var(--lv-header-selected);
+}
+
+/* One gentle typographic marker, distinct from the keyboard focus ring. */
+.lv-nav-link[aria-current="page"] {
+  color: var(--lv-text-primary);
+  font-weight: 650;
+}
+.lv-nav-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.85rem;
+  bottom: 0.45rem;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+/* Photo remains sharp; contrast is supplied by a separate site-owned scrim. */
+.lv-hero {
+  background: var(--lv-hero-base);
+  color: var(--lv-hero-text);
+}
+.lv-hero-picture,
+.lv-hero-picture img,
+.lv-hero-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.lv-hero-picture img {
+  object-fit: cover;
+  object-position: center center;
+}
+.lv-hero-scrim {
+  background:
+    linear-gradient(90deg, rgb(var(--lv-hero-scrim) / 0.98) 0%, rgb(var(--lv-hero-scrim) / 0.86) 34%, rgb(var(--lv-hero-scrim) / 0.45) 70%, rgb(var(--lv-hero-scrim) / 0.2) 100%),
+    linear-gradient(0deg, rgb(var(--lv-hero-scrim) / 0.6), transparent 38%);
+}
+.lv-hero-inner {
+  position: relative;
+  z-index: 1;
+  min-height: clamp(34rem, 75svh, 46rem);
+}
+.lv-hero-note { color: #e8f0e8; }
+.lv-entrance { animation: lv-enter 650ms both cubic-bezier(0.22, 1, 0.36, 1); }
+.lv-entrance-1 { animation-delay: 0ms; }
+.lv-entrance-2 { animation-delay: 90ms; }
+.lv-entrance-3 { animation-delay: 180ms; }
+.lv-entrance-4 { animation-delay: 270ms; }
+@keyframes lv-enter {
+  from { opacity: 0.01; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.lv-scroll-reveal[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.lv-scroll-reveal[data-reveal="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 640ms ease, transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Evidence section only: opposite, subtle reveals on wider screens.
+ * On narrow screens use opacity alone; keep the default reveal elsewhere.
+ */
+.lv-scroll-reveal[data-reveal-direction][data-reveal="pending"] {
+  transform: none;
+}
+.lv-scroll-reveal[data-reveal-direction][data-reveal="visible"] {
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .lv-scroll-reveal[data-reveal-direction="left"][data-reveal="pending"] {
+    transform: translateX(-24px);
+  }
+  .lv-scroll-reveal[data-reveal-direction="right"][data-reveal="pending"] {
+    transform: translateX(24px);
+  }
+}
+.lv-site-footer { background: var(--lv-footer-surface); color: var(--lv-footer-text); }
+.lv-footer-link {
+  color: var(--lv-footer-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.lv-footer-link:hover { color: var(--lv-footer-text); text-decoration-line: underline; }
+.lv-footer-link:focus-visible {
+  outline: 2px solid var(--lv-footer-text);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+@media (max-width: 639px) {
+  .lv-hero-picture img { object-position: center top; }
+  .lv-hero-scrim {
+    background:
+      linear-gradient(180deg, rgb(var(--lv-hero-scrim) / 0.97) 0%, rgb(var(--lv-hero-scrim) / 0.85) 43%, rgb(var(--lv-hero-scrim) / 0.48) 76%, rgb(var(--lv-hero-scrim) / 0.32) 100%);
+  }
+  .lv-hero-inner { min-height: 38rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lv-entrance { animation: none; }
+  .lv-scroll-reveal, .lv-scroll-reveal[data-reveal="pending"], .lv-scroll-reveal[data-reveal="visible"],
+  .lv-scroll-reveal[data-reveal-direction][data-reveal="pending"],
+  .lv-scroll-reveal[data-reveal-direction][data-reveal="visible"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .lv-site-header { border-bottom: 1px solid CanvasText; }
+  .lv-hero { background: Canvas; color: CanvasText; }
+  .lv-hero-picture, .lv-hero-scrim { display: none; }
+  .lv-hero-note { color: CanvasText; }
+  .lv-site-footer { background: Canvas; color: CanvasText; border-top: 1px solid CanvasText; }
+  .lv-footer-link { color: LinkText; }
+  .lv-footer-link:focus-visible { outline-color: Highlight; }
+  .lv-nav-link[aria-current="page"] { border-bottom: 2px solid currentColor; }
+}

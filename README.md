@@ -6,9 +6,9 @@ Litervia is an independent research discovery and personal knowledge platform fo
 
 ## Project Status
 
-**Early development — Laravel and React application foundation.**
+**Early development — Laravel and React foundation with an initial editorial interface.**
 
-The application foundation includes Laravel, Blade, React, React Router, TanStack Query, Tailwind CSS, and Vite. The current UI contains development placeholders. Research ingestion, user accounts, private knowledge features, the final Design System, and deployment remain unimplemented.
+The application foundation includes Laravel, Blade, React, React Router, TanStack Query, Tailwind CSS, and Vite. The Home page implements the owner-approved Editorial Research visual direction with three conceptual responsive hero compositions and a narrowly scoped public, read-only hero-image manifest; the Research route remains an explicit catalogue-under-development placeholder. Research ingestion, real search and filters, user accounts, private knowledge features, and deployment remain unimplemented. The design system is a locally reviewed foundation, not a completed or independently accessibility-certified product UI. Public release of the imagery remains separately gated.
 
 Development follows a GitHub Issue, feature branch, and Pull Request workflow.
 
@@ -20,7 +20,7 @@ The application technology stack includes:
 - **Frontend:** Blade, React (JavaScript), React Router, TanStack Query, Tailwind CSS 4, and Vite 8
 - **Data:** A normalized research catalogue and a separately secured private user data store
 
-Laravel 13 owns HTTP routing and server responses. React Router handles navigation between explicitly registered application pages. TanStack Query provides the initial server-state infrastructure; real API integrations and the final data architecture remain future work.
+Laravel 13 owns HTTP routing and server responses. React Router handles navigation between explicitly registered application pages. TanStack Query provides the initial server-state infrastructure; research catalogue API integrations and the final data architecture remain future work. A separate public read-only hero-image manifest supports the approved local Home presentation; its route is an explicit, bounded Issue #5 scope exception.
 
 ## Requirements
 
@@ -95,8 +95,9 @@ php artisan test
 
 The application foundation provides:
 
-- `/` — React Home placeholder
-- `/research` — React Research placeholder
+- `/` — editorial React Home page with a locally implemented, server-selected rotating conceptual CHI/HCI-inspired hero (02/06/07); a client-side Research-to-Home transition currently uses a documented static fallback
+- `/research` — React Research page that clearly states the catalogue is under development
+- `/api/home/hero-images` — allowlisted public image manifest (not research data); response is `private, no-store` because the Laravel `web` middleware may set a session cookie
 - `/up` — Laravel health endpoint
 
 ### 6. Start the development server
@@ -133,9 +134,11 @@ Check locked dependencies for known security advisories:
 composer audit --locked
 ```
 
-Laravel feature tests cover the application shell, initial SEO metadata, routing, HTTP 404 responses, health endpoint, and disabled private storage routes.
+Laravel feature tests cover the application shell, initial SEO metadata, routing, HTTP 404 responses, health endpoint, disabled private storage routes, and Home hero selection. The public image-manifest test checks that `Cache-Control` contains `private` and `no-store` (irrespective of directive ordering) under the normal web middleware, including the session cookie behavior.
 
 These tests do not constitute comprehensive application or security coverage.
+
+Recent owner-executed Issue #5 local checks (October 2026) passed: Laravel 19 tests / 100 assertions (including 7 hero-image tests / 57 assertions); Laravel Pint 26 files; React/Vitest 20 tests (rerun after the footer/Tailwind refinements); Vite 8.3.4 production build; `composer validate --strict`; `composer audit --locked --no-interaction` (no advisories reported); `npm audit` (zero vulnerabilities reported); and `git diff --check`. Separately, GitHub PR #6 CI passed PHP 8.4, PHP 8.5 and Frontend Node.js 24 on commit `d4a19ec` ([run #40601317259](https://github.com/PetrosTam/litervia/actions/runs/40601317259)).
 
 ## Frontend Testing, Routing and SEO
 
@@ -159,7 +162,7 @@ The GitHub Actions workflow includes independent PHP 8.4, PHP 8.5, and Node.js 2
 
 ### Routing responsibilities
 
-Laravel explicitly registers `/` and `/research` and serves a Blade application shell. React Router handles client-side navigation between these pages.
+Laravel explicitly registers `/`, `/research`, and the public image manifest route, and serves a Blade application shell. React Router handles client-side navigation between these pages.
 
 Unknown research routes and unmatched API endpoints must return appropriate HTTP error responses rather than silently serving the React application shell.
 
@@ -177,7 +180,13 @@ Before creating indexable publication, author, country, or catalogue pages, the 
 
 ### Design direction
 
-Editorial Research is the approved visual direction for Litervia. The final Design System, including typography, design tokens, dark mode, reusable components, and accessibility requirements, will be reviewed separately before major UI implementation.
+Editorial Research is the approved visual direction for Litervia. The current UI foundation uses centralized semantic Tailwind CSS 4 design tokens, a cream/forest-green palette, system-following light/dark colors via `prefers-color-scheme`, and self-hosted variable Newsreader (editorial headings) and Inter (interface/body text) WOFF2 subsets. Their SIL Open Font License notices are preserved under `resources/fonts/`. The Home hero uses three conceptual AI-generated CHI/HCI-inspired scenes (02, 06 and 07) as responsive, optimized WebP images with a CSS contrast scrim; they are **not documentary CHI imagery**. The owner has confirmed ChatGPT text-prompt-only generation without uploaded third-party reference images; provenance and remaining visual/release gates are recorded below.
+
+There is no manual theme selector, theme-preference persistence, live publication list, functional search, or account feature. The existing routes retain their server-delivered metadata and `noindex, nofollow` settings.
+
+The owner reported satisfactory manual checks of Home/Research motion, responsive layouts, system light/dark styling, keyboard navigation, reduced motion, browser console, images, browser zoom/reflow (200% and 400%), and increased text size. A recorded Home checklist covered 320, 375, 768, 1024 and 1440 CSS-pixel widths (25/25 checks); the exported Research checklist showed 0/25 despite the owner reporting successful Research inspection. Desktop and approximately 370px mobile screenshots show the owner-approved centered footer disclaimer. These are owner-reported browser checks, not independent WCAG certification or complete per-viewport Research evidence.
+
+Chrome 155 Incognito local Lighthouse evidence is recorded in `docs/hero-implementation-review.md`: Home/Research scored 93/95 on Mobile and 100/100 on Desktop in the temporary Caddy/gzip environment, with Accessibility and Best Practices scores of 100 for all four page/device combinations. Earlier uncompressed Laravel Mobile Home LCP (~3.7s) and CLS (~0.001) were observed; final Caddy per-run FCP/LCP/TBT/CLS and production Core Web Vitals are **not consistently recorded**. Comprehensive rendered WCAG 2.2 AA contrast evidence, difficult-content/text-spacing cases and reproducible detailed Research viewport records remain open. These reports do not constitute comprehensive WCAG conformance; the relevant evidence, limitations and remaining gates are tracked in PR #6 and Issue #5.
 
 Generated frontend assets in `public/build/` and installed dependencies in `node_modules/` must not be committed to Git.
 
@@ -206,3 +215,9 @@ Copyright (c) 2026 Petros Tamboutsiaris. All rights reserved.
 Litervia is proprietary software and is not distributed under an open-source license. Unauthorized use, modification, or distribution of its original source code is not permitted, except as allowed by applicable law or expressly authorized in writing.
 
 See [LICENSE](LICENSE) for details.
+
+## Hero imagery — review status
+
+The current visual slice uses conceptual ChatGPT/OpenAI-generated artwork (02, 06, 07), not documentary photos of CHI, actual researchers or historical devices. The owner confirmed generation from their own text prompts, without third-party reference photos or copyrighted uploads; this is an **owner attestation**, not an independent infringement or exclusivity certification. The owner reports a GPT-6 / High-thinking ChatGPT session, but the actual image-generation model is not independently verified; these are separate provenance fields. The large source masters are stored outside Git at `C:\Dev\litervia-assets\hero-images\originals`; only optimized WebP derivatives in `public/media/heroes/` are served to visitors. The external originals are **not required at runtime** but should be retained for re-exporting, editing, and source traceability. The current Mobile 06 v02 artwork and crop are **owner-approved as the final visual choice (2026-10-27)** based on a five-point mobile browser viewport review. Independent responsive contrast measurements, actual-device testing, public-release authorization and production LCP evidence remain open. Local Lighthouse results and their limitations are documented in `docs/hero-implementation-review.md`. See `docs/hero-implementation-review.md` and `docs/hero-asset-provenance.json`. The site remains `noindex, nofollow` during this early development stage.
+
+The Home route alone selects a random image (excluding the last seen ID via an encrypted HttpOnly cookie) and supplies it in the Blade shell for early discovery. The public manifest does not expose private file paths or user data, and its response is explicitly non-cacheable by HTTP caches. Direct navigation to Research does not rotate the image; a Research-to-Home SPA transition uses a documented static fallback until the next document load.
