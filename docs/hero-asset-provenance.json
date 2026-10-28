@@ -37,6 +37,19 @@
     "independent_device_accessibility_and_performance_validation": "not_completed",
     "deployment_authorization": "not_granted"
   },
+  "usage_approval": {
+    "recorded_date": "2026-10-28",
+    "approved_by": "project_owner",
+    "scope": "use_of_all_six_listed_hero_assets_within_litervia_including_commercial_use",
+    "asset_ids": ["02", "06", "07"],
+    "variants": ["desktop", "mobile"],
+    "approval_basis": "explicit_owner_decision_and_applicable_OpenAI_output_ownership_terms",
+    "verification_basis": "owner_decision_and_generation_attestation_not_independent_IP_audit",
+    "independent_non_infringement_certification": "not_obtained",
+    "guaranteed_exclusivity": "not_claimed",
+    "per_file_approval_field": "visual_review_status_separate_from_usage_approval",
+    "public_release_or_deployment_authorization": "not_granted"
+  },
   "files": [
     {
       "filename": "litervia-hero-02-interaction-lab-desktop.webp",
