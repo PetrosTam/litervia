@@ -18,7 +18,7 @@ The application technology stack includes:
 
 - **Backend:** PHP and Laravel
 - **Frontend:** Blade, React (JavaScript), React Router, TanStack Query, Tailwind CSS 4, and Vite 8
-- **Data:** A normalized research catalogue and a separately secured private user data store
+- **Data:** PostgreSQL 18 with separate research-catalogue and private-user databases; approved schemas and ingestion remain future work
 
 Laravel 13 owns HTTP routing and server responses. React Router handles navigation between explicitly registered application pages. TanStack Query provides the initial server-state infrastructure; research catalogue API integrations and the final data architecture remain future work. A separate public read-only hero-image manifest supports the approved local Home presentation; its route is an explicit, bounded Issue #5 scope exception.
 
@@ -30,7 +30,8 @@ Local development requires:
 - Composer
 - Git for cloning the repository
 - Node.js 24.x and npm 11.x
-- PHP extensions required by the locked dependencies
+- PHP extensions required by the locked dependencies (`pdo_pgsql` for PostgreSQL integration)
+- PostgreSQL 18.x for the local database foundation and integration tests; see `docs/postgresql-foundation.md`
 
 The foundation has been tested locally with:
 
@@ -138,6 +139,17 @@ Laravel feature tests cover the application shell, initial SEO metadata, routing
 
 These tests do not constitute comprehensive application or security coverage.
 
+For the isolated local PostgreSQL 18 connection tests (after provisioning, with the four test passwords configured only in the ignored `.env`):
+
+```powershell
+php artisan config:clear
+$env:LITERVIA_PG_INTEGRATION = '1'
+try { php artisan test --filter=PostgreSQLConnectionTest --fail-on-skipped --fail-on-empty-test-suite }
+finally { Remove-Item Env:\LITERVIA_PG_INTEGRATION -ErrorAction SilentlyContinue }
+```
+
+**Issue #11 verification (30 October 2026):** The owner ran the complete Laravel suite with PostgreSQL enabled: **25 passed / 506 assertions**, with no skips; the isolated PostgreSQL subset separately passed **6 tests / 406 assertions**. The default Laravel suite without opt-in passed **20 tests / 268 assertions, with 5 expected skips**. Pint passed on 27 PHP files, React/Vitest passed 20 tests, Composer validation/platform checks and dependency audit passed (no advisories), Vite production build passed, npm audit reported 0 vulnerabilities, and Git diff checks passed. These are owner-executed local results. **GitHub PR-head CI also passed independently:** on [Draft PR #12](https://github.com/PetrosTam/litervia/pull/12), head `b25b66e`, [Actions run #40980614901](https://github.com/PetrosTam/litervia/actions/runs/40980614901) completed **3/3 jobs successfully** (PHP 8.4, PHP 8.5 and Frontend Node.js 24), including fresh disposable PostgreSQL provisioning, fail-closed credential-bootstrap smoke tests, isolated Laravel `config:cache` verification, PostgreSQL integration tests and frontend regression/build checks. This validates the fresh CI fixture, **not** production provisioning, historical catalogue coverage or user-data authorization. See [`docs/postgresql-foundation.md`](docs/postgresql-foundation.md) for scope and recovery limitations.
+
 Recent owner-executed Issue #5 local checks (October 2026) passed: Laravel 19 tests / 100 assertions (including 7 hero-image tests / 57 assertions); Laravel Pint 26 files; React/Vitest 20 tests (rerun after the footer/Tailwind refinements); Vite 8.3.4 production build; `composer validate --strict`; `composer audit --locked --no-interaction` (no advisories reported); `npm audit` (zero vulnerabilities reported); and `git diff --check`. Separately, all three GitHub Actions jobs (PHP 8.4, PHP 8.5, and Frontend Node.js 24) passed on the final PR head `e91094b` ([PR CI run #40602725233](https://github.com/PetrosTam/litervia/actions/runs/40602725233)). Following the separately approved squash merge, the owner provided the successful `push` CI summary for `main` commit `e643d18` (**CI run #9, 3/3 PASS**). The PR #6 code and documentation were merged on 28 October 2026; Issue #5 is closed with 17/17 total checks.
 
 ## Frontend Testing, Routing and SEO
@@ -192,11 +204,9 @@ Generated frontend assets in `public/build/` and installed dependencies in `node
 
 ## Data and Storage
 
-The current foundation does not initialize the research catalogue or private user databases.
+Issue #11 provisions two **empty** PostgreSQL 18 UTF8/ICU databases (`litervia_catalogue` and `litervia_private`) with independent roles and permissions, plus two isolated test databases. Named Laravel connections are configured; the research catalogue, private user tables, auth, normalization and import workflows **are not implemented**. See [`docs/postgresql-foundation.md`](docs/postgresql-foundation.md) for verified local steps, safe test opt-in, CI design and limitations.
 
-Database schemas, normalization, import workflows, authentication, and access controls will be implemented through separately reviewed deliverables.
-
-Do not run database migrations as part of this foundation setup.
+The normal Laravel suite currently uses SQLite in-memory as a legacy isolated fixture. The PostgreSQL integration suite is a separate opt-in check and must never run against application databases. Do not run default or destructive migrations as part of this foundation setup.
 
 The local filesystem disk does not expose Laravel temporary file-serving routes in the current configuration.
 

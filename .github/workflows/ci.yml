@@ -22,6 +22,23 @@ jobs:
       matrix:
         php: ['8.4', '8.5']
 
+    # Disposable service: never a real Litervia database or a shared server.
+    # Its temporary credential is derived per workflow run, never from local secrets.
+    # Official postgres:18.6 multi-platform index digest (Docker Hub, 2026-10-30).
+    # Update BOTH this image and the inspect assertion below after digest review.
+    services:
+      postgres:
+        image: postgres:18.6@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4
+        env:
+          POSTGRES_PASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -32,7 +49,7 @@ jobs:
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, fileinfo, mbstring, pdo_sqlite, xml, xmlwriter
+          extensions: dom, fileinfo, mbstring, pdo_pgsql, pdo_sqlite, xml, xmlwriter
           coverage: none
           tools: composer:v2
 
@@ -59,6 +76,137 @@ jobs:
 
       - name: Run Laravel tests
         run: php artisan test
+
+      - name: Generate disposable PostgreSQL test role credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            LITERVIA_CATALOGUE_TEST_APP_PASSWORD \
+            LITERVIA_CATALOGUE_TEST_MIGRATOR_PASSWORD \
+            LITERVIA_PRIVATE_TEST_APP_PASSWORD \
+            LITERVIA_PRIVATE_TEST_MIGRATOR_PASSWORD; do
+            role_password="$(openssl rand -hex 32)"
+            echo "::add-mask::$role_password"
+            echo "$name=$role_password" >> "$GITHUB_ENV"
+          done
+
+      - name: Provision disposable PostgreSQL databases and roles
+        shell: bash
+        env:
+          # GitHub's service container ID, not an arbitrary host/container.
+          CI_PG_SERVICE_ID: ${{ job.services.postgres.id }}
+          PGPASSWORD: ci-${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          test -n "${CI_PG_SERVICE_ID:-}"
+          # Never execute privileged SQL against a guessed Docker container.
+          actual_image="$(docker inspect --format '{{.Config.Image}}' "$CI_PG_SERVICE_ID")"
+          test "$actual_image" = 'postgres:18.6@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4'
+          # Run psql INSIDE the disposable PostgreSQL service. If psql runs
+          # on the host, Docker's published port can cause inet_server_addr()
+          # to return a bridge IP and trip the local-only SQL preflight.
+          # Send scripts through stdin; never copy credentials or repo files
+          # into the service. Docker forwards environment values without
+          # embedding the four randomly generated passwords in command args.
+          psql_in_service() {
+            docker exec -i \
+              --env PGHOST=127.0.0.1 \
+              --env PGPORT=5432 \
+              --env PGUSER=postgres \
+              --env PGDATABASE=postgres \
+              --env PGPASSWORD \
+              --env GITHUB_ACTIONS \
+              --env LITERVIA_CATALOGUE_TEST_APP_PASSWORD \
+              --env LITERVIA_CATALOGUE_TEST_MIGRATOR_PASSWORD \
+              --env LITERVIA_PRIVATE_TEST_APP_PASSWORD \
+              --env LITERVIA_PRIVATE_TEST_MIGRATOR_PASSWORD \
+              "$CI_PG_SERVICE_ID" psql -X -v ON_ERROR_STOP=1
+          }
+          psql_in_service < database/provisioning/01_postgresql_databases.sql
+          psql_in_service < database/provisioning/02_postgresql_roles.sql
+          psql_in_service < database/provisioning/03_postgresql_test_databases.sql
+          # Negative probes must fail for their expected reason, not merely
+          # due to Docker/connection errors, and must not alter any role.
+          bootstrap=.github/scripts/ci-postgresql-role-passwords.sql
+          assert_bootstrap_rejected() {
+            local expected="$1"
+            local output
+            if output="$(psql_in_service < "$bootstrap" 2>&1)"; then
+              echo "::error::CI password bootstrap unexpectedly succeeded ($expected)"
+              exit 1
+            fi
+            if [[ "$output" != *"$expected"* ]]; then
+              echo "::error::CI password bootstrap failed for an unexpected reason ($expected)"
+              exit 1
+            fi
+          }
+          original_ci_indicator="${GITHUB_ACTIONS:?}"
+          unset GITHUB_ACTIONS
+          assert_bootstrap_rejected 'Refusing to rotate test credentials outside GitHub Actions'
+          export GITHUB_ACTIONS="$original_ci_indicator"
+
+          original_catalogue_password="${LITERVIA_CATALOGUE_TEST_APP_PASSWORD:?}"
+          unset LITERVIA_CATALOGUE_TEST_APP_PASSWORD
+          assert_bootstrap_rejected 'Missing catalogue app CI password'
+          export LITERVIA_CATALOGUE_TEST_APP_PASSWORD="$original_catalogue_password"
+
+          export LITERVIA_CATALOGUE_TEST_APP_PASSWORD=''
+          assert_bootstrap_rejected 'One or more CI test role passwords are empty'
+          export LITERVIA_CATALOGUE_TEST_APP_PASSWORD="$original_catalogue_password"
+          unset original_catalogue_password
+          echo 'CI credential-bootstrap negative smoke tests passed'
+          psql_in_service < "$bootstrap"
+
+      - name: Verify isolated Laravel configuration cache
+        shell: bash
+        env:
+          # Generated solely on this disposable runner, deleted on step exit.
+          APP_CONFIG_CACHE: bootstrap/cache/litervia-issue11-ci-config.php
+        run: |
+          set -euo pipefail
+          test ! -e "$APP_CONFIG_CACHE"
+          trap 'rm -f "$APP_CONFIG_CACHE"' EXIT
+          php artisan config:cache
+          # Inspect only expected test identities; never print cached secrets.
+          php -r '
+            $config = require getenv("APP_CONFIG_CACHE");
+            $targets = [
+                "catalogue_test_app" => ["litervia_catalogue_test", "litervia_catalogue_test_app", "LITERVIA_CATALOGUE_TEST_APP_PASSWORD"],
+                "catalogue_test_migrator" => ["litervia_catalogue_test", "litervia_catalogue_test_migrator", "LITERVIA_CATALOGUE_TEST_MIGRATOR_PASSWORD"],
+                "private_test_app" => ["litervia_private_test", "litervia_private_test_app", "LITERVIA_PRIVATE_TEST_APP_PASSWORD"],
+                "private_test_migrator" => ["litervia_private_test", "litervia_private_test_migrator", "LITERVIA_PRIVATE_TEST_MIGRATOR_PASSWORD"],
+            ];
+            foreach ($targets as $name => [$db, $role, $secretEnv]) {
+                $entry = $config["database"]["connections"][$name] ?? [];
+                if (($entry["driver"] ?? null) !== "pgsql"
+                    || ($entry["host"] ?? null) !== "127.0.0.1"
+                    || (string) ($entry["port"] ?? "") !== "5432"
+                    || ($entry["database"] ?? null) !== $db
+                    || ($entry["username"] ?? null) !== $role
+                    || ($entry["password"] ?? null) !== getenv($secretEnv)) {
+                    fwrite(STDERR, "Unexpected cached PostgreSQL test connection configuration\n");
+                    exit(1);
+                }
+            }
+          '
+          # Environment drift after caching must NOT redirect the test host.
+          env LITERVIA_TEST_DB_HOST=192.0.2.1 php -r '
+            require "vendor/autoload.php";
+            $app = require "bootstrap/app.php";
+            $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+            if (config("database.connections.catalogue_test_app.host") !== "127.0.0.1") {
+                fwrite(STDERR, "Cached database host changed after env drift\n");
+                exit(1);
+            }
+          '
+
+      - name: Run isolated PostgreSQL integration tests
+        env:
+          LITERVIA_PG_INTEGRATION: '1'
+          LITERVIA_TEST_DB_HOST: 127.0.0.1
+          LITERVIA_TEST_DB_PORT: '5432'
+        run: php artisan test --filter=PostgreSQLConnectionTest --fail-on-skipped --fail-on-empty-test-suite
 
   frontend:
     name: Frontend (Node.js 24)
