@@ -5,6 +5,7 @@
 - **Draft date:** 2026-10-31
 - **Status:** **DRAFT CONTRACT / PROPOSED operational rules** based on the [APPROVED ADR baseline](../architecture/adr-0001-chi-catalogue-identity.md). This document is **not** an authorized ingestion specification or physical migration plan.
 - **Sources of truth:** Product Engineering Specification §§5–6, 8, 12; Master Project Instructions Stage 02; Engineering Playbook; dated DBLP source manifest; sampled CSV/manifest; GitHub Issue #13 and PostgreSQL foundation. See [reference register](#12-reference-register).
+- **Evidence companion:** [Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) (five candidate pairs and AutomationXP 2023). It records **source-level findings**, not approval to consolidate canonical works.
 
 ## 1. Normative language and evidence classes
 
@@ -132,7 +133,7 @@ The current extractor's `doi` field is sourced from explicit `<doi>` elements; i
 | Pilot provisional main (68) | `booktitle` heuristic | Source grouping **provisional**; contribution `unknown` | Verify volume identity/official source before `main_chi` approval |
 | Pilot provisional EA (41) | Source title indicates EA | EA candidate; contribution type `unknown` | Verify proceedings membership, not EA-as-document-type inference |
 | Historical Companion (5) | `CHI Conference Companion` | Companion candidate, separate appearances | Confirm volume/edition mapping |
-| AutomationXP@CHI 2023 (20 paper rows + 1 volume row) | 20 `inproceedings` are `unclassified_booktitle` by the selector; a separate `proceedings` record refers to the volume; recognized `<ee>` DOI candidates absent for the 20 papers | `workshop_colocated` candidate; membership disputed for at least one paper | CEUR volume index/source comparison; preserve `Kullmann0HC23`; keep volume out of paper counts |
+| AutomationXP@CHI 2023 (20 paper rows + 1 volume row) | The selector retains `unclassified_booktitle` for the 20 original `inproceedings`; one additional `proceedings` record represents the volume; none of the 20 paper rows has a recognized `<ee>` DOI URL | **VERIFIED** source category `workshop_colocated` from CEUR 3394 and the organizer programme; **19** TOC-linked entries; `Kullmann0HC23` is organizer-listed and CEUR-hosted as `short10.pdf` but **absent from CEUR TOC**; its final indexed-volume membership is **OPEN** | Preserve all 21 source rows and both title assertions (“Physical Inputs” and “Physical Controls”); do not change original CSV; keep the volume out of paper counts; obtain editorial clarification ([review](chi-source-evidence-identity-review.md#3-automationxpchi-2023--reconciliation)) |
 | Pilot `proceedings` (16) | Source record type `proceedings` | Count as volume records only | Evidence-backed volume grouping |
 | 1984 | Zero selected source records for that year | No fabricated source-backed records or edition | Do not state global historical nonexistence |
 
@@ -157,18 +158,24 @@ The current extractor's `doi` field is sourced from explicit `<doi>` elements; i
 
 Rights states to implement only after policy approval: `permitted_metadata`, `permission_required`, `restricted`, `unknown`, `not_applicable`. Record evidence and interpretation date; do not automatically copy an upstream website's blanket license to third-party assets.
 
-## 7. Collision/identity decision register (review still OPEN)
+## 7. Collision/identity decision register (source evidence reviewed; canonical identity OPEN)
 
-| Group | DBLP keys | Verified source-level distinction | Permitted next action |
+The [dated Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) is the supporting evidence register, including DOI, author order, page spans, provenance URLs, the 20-paper AutomationXP crosswalk and proposed EV-01–EV-11 fixtures. These source-level findings **do not** constitute approval of any `same_work_confirmed` decision. **Exactly ten distinct collision source records/appearances remain preserved.**
+
+| Decision ID | Case / source keys | Source-level evidence now established | Current decision and remaining gate |
 |---|---|---|---|
-| TC-001 | `Ogozalek94a` / `Ogozalek94` | Main CHI vs Conference Companion; distinct DOI/pages | Keep two appearances; review exact relationship |
-| TC-002 | `IrvingPI94a` / `IrvingPI94` | Main CHI vs Conference Companion; distinct DOI/pages | Keep two appearances; review exact relationship |
-| TC-071 | `MankoffHA00` / `Mankoff00` | Main CHI three-author vs EA one-author record; distinct DOI/pages | No byline overwrite; relation OPEN |
-| TC-140 | `HerbstWZ23` / `HerbstWZ23a` | Main vs EA; different DOI and page spans | Keep separately; relation OPEN |
-| TC-141 | `RhedenAME25` / `RhedenAME25a` | Two EA DOI and page spans | Keep separately; contribution identity/track OPEN |
-| AutomationXP 2023 | 20 `inproceedings`, including `Kullmann0HC23` | CEUR index reports 19 accepted short papers; pilot contains 20 source rows; title/ToC discrepancy | Keep all source records; official membership disputed for affected cases; no deletion |
+| `ID-TC-001` | `Ogozalek94a` / `Ogozalek94` | Main CHI 1994, pp. 65–71, vs one-page Companion p. 203; different DOI assertions | **VERIFIED:** distinct appearances. **OPEN:** publisher-supported same-work relationship. Candidate relation only; no merge. |
+| `ID-TC-002` | `IrvingPI94a` / `IrvingPI94` | Main CHI 1994, pp. 344–350, vs Companion p. 224; ordered bylines match, DOI differ | **VERIFIED:** distinct appearances. **OPEN:** whether/how these versions relate at canonical work level. |
+| `ID-TC-071` | `MankoffHA00` / `Mankoff00` | Main CHI 2000 three-author byline vs EA single-author byline; different DOI/pages | **VERIFIED:** distinct appearances and author conflict. **OPEN:** work identity; no overwritten authorships. |
+| `ID-TC-140` | `HerbstWZ23` / `HerbstWZ23a` | HUGO main CHI 2023 vs Extended Abstracts; same three bylines, different DOI/extents | **VERIFIED:** distinct appearances. **PROPOSED:** related candidate. **OPEN:** canonical relation pending publisher/content review. |
+| `ID-TC-141` | `RhedenAME25` / `RhedenAME25a` | GestureSock EA article 731 / DOI `10.1145/3706599.3721114` and article 914 / DOI `10.1145/3706599.3721350`; independent programme/institution evidence supports Interactivity and Video Showcase respectively | **VERIFIED:** distinct appearances, separate evidence-backed track assertions (stronger direct DOI-to-Video evidence for article 914). **OPEN:** same-work status; no merge. |
+| `ID-AUT23-CAT` | AutomationXP@CHI 2023 (`conf/chi/2023axp` + 20 paper keys) | Official CEUR-WS Vol. 3394 confirms workshop co-located with CHI, with 19 TOC short papers | **VERIFIED:** `workshop_colocated` source category; source pilot's historical `unclassified_booktitle` values remain unchanged. |
+| `ID-AUT23-TOC` | `Kullmann0HC23`, CEUR `short10.pdf` | DBLP record + workshop programme + hosted PDF; **not** listed among 19 CEUR TOC papers | **OPEN / DISPUTED:** indexed-volume membership, pending editorial answer. Do **not** equate TOC absence with absence of a paper or assert final acceptance. |
+| `ID-AUT23-TITLE` | `Kullmann0HC23` | DBLP/organizer title says “Physical Inputs”; hosted PDF/institutional record says “Physical Controls” | **VERIFIED:** conflicting source assertions. **OPEN:** preferred display title; preserve both and their source links. |
 
-**Decision envelope — PROPOSED:** `case_id`, `left_entity_type/id`, `right_entity_type/id`, `decision_type`, `status (candidate/confirmed/rejected/reversed)`, `reviewer_identity`, `reviewed_at`, `evidence_urls`, `source_snapshot_ids`, `reason`, `supersedes_decision_id`. Review must include source citations with retrieval date; without review evidence, a case stays OPEN. A relationship candidate is not a published equivalence statement.
+**Decision envelope — PROPOSED:** `case_id`, typed subject IDs, `decision_type`, `status` (`candidate/confirmed/rejected/reversed`), reviewer identity, timestamp, source URLs/checked dates, snapshot IDs, rationale and superseding decision link. The verified decision here is **separate appearance identity**, not canonical work equivalence. No inferred reviewer signature or editorial response may be invented.
+
+**Targeted-review limitation:** This evidence register does not replace the Issue #13 requirement for at least **two externally compared records per each of seven mandatory pilot years**, nor the required independent source-rights review. See the open gates and T-17.
 
 ## 8. Import, reconciliation, release and recovery contract
 
@@ -205,7 +212,7 @@ The following tests are measurable contracts for **later** execution. All are **
 | T-14 | Private database references deleted/redirected work | API resolves approved acyclic redirect or refuses invalid ID without data disclosure; cross-user ownership always enforced | AC-04,08 |
 | T-15 | Missing 1984 source year / long titles / invalid DOI URI | No fabricated edition/abstract; safe nullability, consistent counts, valid predictable errors | AC-03,06,08 |
 | T-16 | Wrong UTF-8, malformed JSON, repeated same-snapshot key, wrong kind/owner | Structured rejection; no partial publication or overwritten original evidence | AC-01,07 |
-| T-17 | At least 2 records per each of 7 mandatory years + 5 collision pairs | Each has dated source comparison, evidence URL and finding; unresolved conflict explicitly marked OPEN | AC-05,09 |
+| T-17 | At least 2 records per each of 7 mandatory years + 5 collision pairs | Each has dated source comparison, evidence URL and finding; unresolved conflict explicitly marked OPEN. [Targeted review](chi-source-evidence-identity-review.md) is **partial evidence**, not proof that the seven-year requirement passed | AC-05,09 |
 | T-18 | Cross-database boundary and release counts | No cross-store SQL transaction assumption; counts independently reconcile source/appearance/work/volume; no row multiplication by authorship joins | AC-07,08 |
 | T-19 | Supersede a valid source binding; attempt incompatible kind/target and duplicate active bindings | Original source observation and prior decision remain unchanged; only one active binding; kind mismatch and duplicate active binding fail at a PostgreSQL-enforced boundary, not only an HTTP validation branch | AC-04,07,08 |
 | T-20 | Publish revision A, enrich a byline/title/volume membership, publish B, then roll back to A | Revision A reproduces its exact appearance+volume counts, classifications, author display and selected assertions; no unapproved latest-value leakage | AC-06,07,08 |
@@ -227,7 +234,7 @@ The following tests are measurable contracts for **later** execution. All are **
 | P1 | Publishing thresholds and release approval authority | Reconciliation fixture and owner decision |
 | P1 | Private references, redirects and consistency repair under work mergers | Server-side authorization/integrity tests in private DB |
 
-**Next reviewable delivery:** a *documentation-only* PR containing this ADR and contract, linked to Issue #13, **only after separate authorization for branch/PR operations**. Before merging, reconcile editorial wording/statuses, check all external links and official source claims, run Markdown link/lint checks, complete the source-case evidence register, inspect the complete diff and perform the Issue #13 final re-audit. No migrations, project code, research data exports, or local Windows files belong in this PR. Approval of the architectural baseline does not approve these OPEN decisions or implementations.
+**Draft PR review gate:** [Draft PR #14](https://github.com/PetrosTam/litervia/pull/14) now contains the ADR, this contract and the focused source-evidence register. Before merging, reconcile outstanding publisher evidence and rights, check links/Markdown rendering, inspect CI and the complete diff, and perform the Issue #13 final re-audit. No migrations, project code, research data exports, or local Windows files belong in this PR. Approval of the architectural baseline does not approve these OPEN decisions or implementations.
 
 ## 11. Short risk register
 
@@ -248,6 +255,7 @@ The following tests are measurable contracts for **later** execution. All are **
 - `Litervia_Product_Engineering_Specification.pdf` §§5.1–6.4, 8, 12 and the project's Master Instructions / Engineering Playbook.
 - `Litervia_CHI_1982_2026_Record_Level_Audit_Report.pdf` and the related coverage/collision CSV files; historical audit is distinct from the new snapshot.
 - `chi_pilot_150_records_2026-10-03.csv` and `chi_pilot_150_manifest_2026-10-03.json` (locally supplied and checked); full DBLP source and derived CSV remain outside Git.
+- [Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) — dated source-level observations and the still-open case register; no canonical merges authorized.
 - [GitHub Issue #13](https://github.com/PetrosTam/litervia/issues/13), [PostgreSQL Foundation](https://github.com/PetrosTam/litervia/blob/main/docs/postgresql-foundation.md), [current README](https://github.com/PetrosTam/litervia/blob/main/README.md).
 
 **Official external technical/research references (accessed 2026-10-31):**
