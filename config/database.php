@@ -17,7 +17,9 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    // The private store is the application default; catalogue access is explicit.
+    // PHPUnit's existing SQLite tests override DB_CONNECTION in phpunit.xml.
+    'default' => env('DB_CONNECTION', 'private'),
 
     /*
     |--------------------------------------------------------------------------
@@ -31,6 +33,96 @@ return [
     */
 
     'connections' => [
+
+        // Issue #11: runtime application identity. No privileged fallback.
+        'catalogue' => [
+            'driver' => 'pgsql',
+            'host' => env('LITERVIA_CATALOGUE_DB_HOST', '127.0.0.1'),
+            'port' => env('LITERVIA_CATALOGUE_DB_PORT', '5432'),
+            'database' => env('LITERVIA_CATALOGUE_DB_DATABASE', 'litervia_catalogue'),
+            'username' => env('LITERVIA_CATALOGUE_DB_USERNAME', 'litervia_catalogue_app'),
+            'password' => env('LITERVIA_CATALOGUE_DB_PASSWORD'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('LITERVIA_DB_SSLMODE', 'prefer'),
+        ],
+
+        // Issue #11: runtime application identity. No privileged fallback.
+        'private' => [
+            'driver' => 'pgsql',
+            'host' => env('LITERVIA_PRIVATE_DB_HOST', '127.0.0.1'),
+            'port' => env('LITERVIA_PRIVATE_DB_PORT', '5432'),
+            'database' => env('LITERVIA_PRIVATE_DB_DATABASE', 'litervia_private'),
+            'username' => env('LITERVIA_PRIVATE_DB_USERNAME', 'litervia_private_app'),
+            'password' => env('LITERVIA_PRIVATE_DB_PASSWORD'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('LITERVIA_DB_SSLMODE', 'prefer'),
+        ],
+
+        // Issue #11: isolated integration-test identity. No privileged fallback.
+        'catalogue_test_app' => [
+            'driver' => 'pgsql',
+            'host' => env('LITERVIA_TEST_DB_HOST', '127.0.0.1'),
+            'port' => env('LITERVIA_TEST_DB_PORT', '5432'),
+            'database' => 'litervia_catalogue_test',
+            'username' => 'litervia_catalogue_test_app',
+            'password' => env('LITERVIA_CATALOGUE_TEST_APP_PASSWORD'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('LITERVIA_DB_SSLMODE', 'prefer'),
+        ],
+
+        // Issue #11: isolated integration-test identity. No privileged fallback.
+        'catalogue_test_migrator' => [
+            'driver' => 'pgsql',
+            'host' => env('LITERVIA_TEST_DB_HOST', '127.0.0.1'),
+            'port' => env('LITERVIA_TEST_DB_PORT', '5432'),
+            'database' => 'litervia_catalogue_test',
+            'username' => 'litervia_catalogue_test_migrator',
+            'password' => env('LITERVIA_CATALOGUE_TEST_MIGRATOR_PASSWORD'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('LITERVIA_DB_SSLMODE', 'prefer'),
+        ],
+
+        // Issue #11: isolated integration-test identity. No privileged fallback.
+        'private_test_app' => [
+            'driver' => 'pgsql',
+            'host' => env('LITERVIA_TEST_DB_HOST', '127.0.0.1'),
+            'port' => env('LITERVIA_TEST_DB_PORT', '5432'),
+            'database' => 'litervia_private_test',
+            'username' => 'litervia_private_test_app',
+            'password' => env('LITERVIA_PRIVATE_TEST_APP_PASSWORD'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('LITERVIA_DB_SSLMODE', 'prefer'),
+        ],
+
+        // Issue #11: isolated integration-test identity. No privileged fallback.
+        'private_test_migrator' => [
+            'driver' => 'pgsql',
+            'host' => env('LITERVIA_TEST_DB_HOST', '127.0.0.1'),
+            'port' => env('LITERVIA_TEST_DB_PORT', '5432'),
+            'database' => 'litervia_private_test',
+            'username' => 'litervia_private_test_migrator',
+            'password' => env('LITERVIA_PRIVATE_TEST_MIGRATOR_PASSWORD'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('LITERVIA_DB_SSLMODE', 'prefer'),
+        ],
 
         'sqlite' => [
             'driver' => 'sqlite',
