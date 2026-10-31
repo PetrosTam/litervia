@@ -182,4 +182,3 @@
 [r20]: https://dblp.dagstuhl.de/rec/conf/chi/Ogozalek94a.html
 [r21]: https://dblp.org/db/conf/chi/chi2023a.html
 [r22]: https://research.monash.edu/en/publications/gesturesock-exploring-toe-gestures-as-alternative-input-method/
-
