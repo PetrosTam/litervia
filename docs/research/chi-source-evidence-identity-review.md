@@ -6,6 +6,7 @@
 - **Scope:** Five title/year collision pairs from the 150-record pilot, plus AutomationXP@CHI 2023.
 - **Repository reference:** [Issue #13](https://github.com/PetrosTam/litervia/issues/13); this evidence register is the third documentation file in [Draft PR #14](https://github.com/PetrosTam/litervia/pull/14), alongside the ADR and Normalization Contract. Its inclusion is **not** approval of canonical work merges or of this Issue's closure.
 - **Source distinction:** DBLP CSV is a dated observation; external conference/library/institution sources are later independent assertions. Different assertions are not silently reconciled.
+- **Owner approval (2026-10-31):** [PUB-01–PUB-06 publication policy](chi-metadata-publication-rights-policy.md) and the **non-blocking but unresolved** CEUR `short10.pdf` exception. Neither implies a canonical merge or final membership/title finding.
 
 ## 1. Reproducibility and review limits
 - Input: `chi_pilot_150_records_2026-10-03.csv`, SHA-256 `34360f4b1470213cf5f9c52b5bba9179bc07b1fb6b7fbc18fd82fbcff860a087`; matches uploaded pilot manifest.
@@ -61,7 +62,7 @@
 - **CORROBORATED from [TU Chemnitz bibliography][r16] and [CEUR-hosted file][r15]:** a paper of that author group is associated with CEUR 3394 as `short10.pdf`; its title uses **“Controls”**. The [independently published article reference][r18] also cites the Controls title/short10 file. The CEUR-hosted PDF itself displays the workshop name and **“Physical Controls”** on its first page [r15]. The discrepancy does *not* prove editorial acceptance, withdrawal or retraction.
 - **Source category:** `workshop_colocated` is **VERIFIED** for this volume/cohort by the CEUR publisher index and organizer programme. The original selector annotation `unclassified_booktitle` remains **unchanged historical extraction output**; a reviewed derived classification can supersede it without mutating the CSV.
 - **Publication membership:** 19 entries have `ceur_toc_listed=observed`. The short10 candidate has `ceur_toc_listed=false` (observed index absence), `workshop_programme_listed=observed`, `ceur_file_url_observed=observed`, and `ceur_volume_membership=disputed/open`. Do not conflate `not_in_toc`, `not_published`, `not_accepted`, and `not_presented`.
-- **OPEN review question:** Request clarification from CEUR editors/workshop organizer: Why is `short10.pdf` hosted and cited but omitted from the 19-entry TOC? Is the TOC/accepted count incomplete, or was the paper excluded from the final published volume? Do not invent the answer.
+- **OPEN review question / APPROVED non-blocking handling:** Why is `short10.pdf` hosted and cited but omitted from the 19-entry TOC? An editorial/organizer clarification remains desirable, **not an absolute prerequisite** for unrelated, independently verified records or design work. Keep `ceur_volume_membership=disputed/open`, both title assertions, the observed TOC absence, and no inferred acceptance, DOI or rights clearance. Do not invent the answer.
 
 ### 3.1 Complete DBLP → CEUR candidate mapping in the pilot
 
@@ -123,12 +124,12 @@
 
 - **AC-03:** New official evidence supports the distinct volume/source categories and a specific workshop crosswalk; final contribution types are not fully verified.
 - **AC-04:** Five title/year pairs are documented with separate source keys, source-author order and DOI claims; canonical work relationships remain open.
-- **AC-05:** Five disputed pairs and AutomationXP have source cross-checks; the **at least two records per each of seven mandatory years** requirement is not satisfied by this targeted review alone.
-- **AC-06 / AC-09:** This provides a partial field-provenance and decision register; rights checks, source policy and approved decision log still need completion.
+- **AC-05:** This targeted five-pair/AutomationXP review alone does not cover all seven mandatory years. A separate owner-provided **14-record / two-per-year seven-year comparison package** exists outside this PR, with partial and conflict-limited cases; its evidence quality and full consolidation still require the final Issue re-audit.
+- **AC-06 / AC-09:** This provides partial field-level provenance and identity evidence. The **PUB-01–PUB-06 policy principles are now owner APPROVED**; individual asset rights, final evidence consolidation and verified executable controls remain outstanding. See [publication policy](chi-metadata-publication-rights-policy.md).
 - **AC-07 / AC-08:** Design fixtures are proposed; Laravel/PostgreSQL ingest, constraints and authorization tests have **NOT RUN**.
 - **AC-10:** Approval of model is not authorization for migrations, import, PR merge or GitHub Issue closure.
 
-**Next evidence gate:** Obtain an authoritative editorial explanation for CEUR `short10.pdf`, source-level publisher comparison for the five pair relationships, and explicit approval of any new canonical merge decision. This register is included in an authorized documentation-only Draft PR update; **no approval for any merge, application/database mutation or Issue closure is implied**.
+**Next evidence gate:** Complete the final seven-year/source comparison reconciliation, review unresolved identity and contribution-track decisions and obtain explicit approval of any proposed canonical merge. An editorial answer about CEUR `short10.pdf` is desirable **follow-up**, not a blocker for independently verified records; its membership/title remain OPEN. This register is part of documentation-only Draft PR #14. **No PR merge, application/database mutation or Issue closure is authorized.**
 
 ## 7. External source references
 
