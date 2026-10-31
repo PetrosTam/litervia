@@ -5,8 +5,8 @@
 - **Draft date:** 2026-10-31
 - **Status:** **APPROVED ARCHITECTURAL BASELINE**, with the explicit **PROPOSED** refinements and **OPEN** decisions below. **NOT an approval to create migrations or ingest data.**
 - **Scope:** CHI 1982–2026 research catalogue and its controlled data lifecycle; private user data is addressed solely as a boundary.
-- **Companion:** [CHI Normalization Contract](../research/chi-normalization-contract.md) (draft for a future documentation PR)
-- **Review boundary:** This artifact was prepared outside the Git repository. No branch, PR, migration, database modification, or import is implied.
+- **Companions:** [CHI Normalization Contract](../research/chi-normalization-contract.md) (draft implementation contract) · [Metadata Publication & Rights Policy](../research/chi-metadata-publication-rights-policy.md) (**PUB-01–PUB-06 APPROVED**).
+- **Review boundary:** This document is tracked in documentation-only Draft PR #14. Neither its review nor the approved publication policy authorizes application changes, migrations, research ingestion, PR merge or Issue closure.
 
 ## 1. Decision context and source hierarchy
 
@@ -127,7 +127,7 @@ The exact count of tables, FK names, generated UUID method, selected-field cachi
 | D-06 | **OPEN** | How to decide same-work vs related/different appearances for TC-001/002/071/140/141 | Record-level official sources, reviewer reasoning and evidence log |
 | D-07 | **OPEN** | DOI canonicalization and ambiguous multi-DOI policy, DOI resolver checks | Scheme test cases, official DOI metadata/targets, collisions |
 | D-08 | **OPEN** | Verified main/EA/workshop volume crosswalk and exact track/contribution vocabulary | Official publisher/workshop evidence, including AutomationXP discrepancy |
-| D-09 | **OPEN** | Per-field Crossref/OpenAlex/ACM enrichment and asset rights | Provider TOS/licence, rights matrix and representative records |
+| D-09 | **APPROVED POLICY / OPEN IMPLEMENTATION** | PUB-01–PUB-06 define conservative publication, DBLP title fallback, attribution and asset-clearance gates; source-specific Crossref/OpenAlex/ACM integration and individual content rights remain OPEN | [Approved publication policy](../research/chi-metadata-publication-rights-policy.md), provider terms and per-asset verification |
 | D-10 | **OPEN** | PostgreSQL collation, multilingual search, performance and API query contract | Approved filters plus fixture benchmarks, EXPLAIN, negative API tests |
 | D-11 | **OPEN** | Identity review authority, redirect resolution policy, private-reference migration | Owner decision, authorization and consistency tests |
 | D-12 | **OPEN** | Final physical table count, read-view security grants and importer role privileges | Reviewed migrations and isolated PostgreSQL privilege tests |
@@ -138,13 +138,13 @@ The exact count of tables, FK names, generated UUID method, selected-field cachi
 
 The pilot demonstrates a **need** for separation, not the correctness of a final populated schema. There is no implemented Laravel importer, complete publisher corpus comparison, proven title/author/DOI reconciliation, rights clearance for media/full text, or database ingestion. A valid DOI-shaped URL is not proof that a DOI resolves. Historical zero entries in 1984 describe a source export; they do not prove universal historical absence.
 
-**Example disputes:** `TC-071` has main and EA appearances with different author lists; `TC-141` has two different Extended Abstracts DOI; `AutomationXP@CHI 2023` has **20 `inproceedings` plus one `proceedings` volume record** in the pilot, while the CEUR Volume 3394 index reports 19 accepted short papers. The mismatch is a source-reconciliation case, **not** permission to delete the extra record or infer it was not published.
+**Example disputes:** `TC-071` has main and EA appearances with different author lists; `TC-141` has two different Extended Abstracts DOI; `AutomationXP@CHI 2023` has **20 `inproceedings` plus one `proceedings` volume record** in the pilot, while the CEUR Volume 3394 index reports 19 accepted short papers. The mismatch is a source-reconciliation case, **not** permission to delete the extra record or infer it was not published. **Owner-approved handling (2026-10-31):** `short10.pdf` TOC membership remains OPEN/DISPUTED but an editorial answer is not a prerequisite for unrelated, independently verified records.
 
 ## 10. Acceptance gate and next action
 
 **Verification state:** Uploaded pilot evidence was statically inspected; document checks are distinct from implementation validation. Laravel importer tests, PostgreSQL schema/permission tests and runtime search tests are **NOT RUN**.
 
-This ADR + its companion are an **architecture documentation draft**, satisfying the requested *document preparation* milestone, not Issue #13 closure. Before a future documentation PR is review-ready, require (1) a citation-backed case register for mandatory yearly samples and five collisions, (2) signed-off taxonomy and source/rights mapping, (3) validation of the proposed logical constraints with disposable fixtures, (4) explicit owner approval of pending design details, and (5) a final issue re-audit. Do not tick Issue #13 ACs without corresponding evidence. No application-code, migration or ingestion operation is authorized by this ADR.
+This ADR + its companion are an **architecture documentation draft**, satisfying the requested *document preparation* milestone, not Issue #13 closure. Before a future documentation PR is review-ready, require (1) a citation-backed case register for mandatory yearly samples and five collisions, (2) outstanding taxonomy and per-asset/source-rights mapping (the general PUB-01–PUB-06 policy is APPROVED), (3) validation of the proposed logical constraints with disposable fixtures, (4) explicit owner approval of pending design details, and (5) a final issue re-audit. Do not tick Issue #13 ACs without corresponding evidence. No application-code, migration or ingestion operation is authorized by this ADR.
 
 ## 11. External references (reviewed 2026-10-31)
 
