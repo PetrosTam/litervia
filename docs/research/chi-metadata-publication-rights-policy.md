@@ -3,7 +3,7 @@
 - **Decision date:** 2026-10-31.
 - **Status:** **OWNER APPROVED POLICY (PUB-01–PUB-06)**; implementation, individual asset permissions and the decisions explicitly identified below remain **OPEN / NOT RUN**.
 - **Scope:** Initial public CHI 1982–2026 research catalogue, discovery, citation, provenance, external links and future content enrichment.
-- **Authority:** Explicit owner approval in the Issue #13 continuation conversation; Product & Engineering Specification ``5–6, 8, 12; [ADR-0001](../architecture/adr-0001-chi-catalogue-identity.md); [Normalization Contract](chi-normalization-contract.md); [Issue #13](https://github.com/PetrosTam/litervia/issues/13).
+- **Authority:** Explicit owner approval in the Issue #13 continuation conversation; Product & Engineering Specification §§5–6, 8, 12; [ADR-0001](../architecture/adr-0001-chi-catalogue-identity.md); [Normalization Contract](chi-normalization-contract.md); [Issue #13](https://github.com/PetrosTam/litervia/issues/13).
 - **Interpretation:** Product/engineering publication policy, **not legal advice**, not approval for content copying, database migrations, ingestion, external API collection, PR merge or deployment.
 
 ## 1. Approved publication decisions
@@ -79,13 +79,24 @@ Require separately authorized scope and evidence of (1) source URL and retrieval
 
 ## 8. Planned acceptance tests — **NOT RUN**
 
-**MP-01–MP-04:** publish source-backed bibliography without abstract/media leakage; retain conflicting titles; keep workshop TOC dispute; expose unresolved DOI only as candidate.
-
-**MP-05–MP-08:** handle authorless records and absent historical affiliations honestly; block unlicensed abstract reproduction and automatic PDF/image/video embedding.
-
-**MP-09–MP-12:** verify conditional CC BY attribution and per-location licence checks; preserve collision appearances; withdraw restricted old-release assets from current public responses.
-
-**MP-13–MP-16:** exclude unknown category from main defaults; reject unsafe URLs; version title selections without changing immutable source assertions; prevent public API access to private notes.
+| ID | Fixture / action | Measurable expected result | Related Issue AC |
+|---|---|---|---|
+| MP-01 | Run public-field fixture with observed DBLP `title, year, authors, DOI URL, pages` | These selected metadata facts render with source attribution; no abstract/full-text/media fields leak into response | AC-06/08 |
+| MP-02 | Same paper, two source title assertions (FLUID-IoT) | Original assertion unchanged, alternative retained, selected title remains existing DBLP value until documented review | AC-04/05/06 |
+| MP-03 | Kullmann workshop record with `short10.pdf` | Source category workshop; PDF external link allowed; TOC membership disputed; no asserted official acceptance or main-CHI default visibility | AC-03/05/06 |
+| MP-04 | Unchecked DOI from `<ee>` | DOI marked candidate; no `resolved=true` or unverified primary assignment; valid external DOI link only | AC-04/06 |
+| MP-05 | Three authorless pilot records | No synthetic author; empty byline and honest missingness | AC-04/06 |
+| MP-06 | Historic author with current institution only | Work-specific country remains null; no country-filter inclusion | AC-03/06 |
+| MP-07 | Publisher abstract returned by Crossref but licence not cleared | No raw abstract or paraphrased copyrighted text in public payload; outbound reference permitted | AC-06 |
+| MP-08 | ACM/CEUR PDF link with unspecified asset rights | No automatic PDF mirror, embed, preview image or generated thumbnail | AC-06/07 |
+| MP-09 | CC BY asset with approved explicit reuse exception | Required creator, source, licence link and modification statement rendered; without documented approval asset remains off | AC-06/07 |
+| MP-10 | OpenAlex work labelled OA and `locations` have different licence values | Per-location values preserved; no global work-level hosting permission inferred | AC-06 |
+| MP-11 | Duplicate title/year (TC groups) | Distinct appearances, DOIs and authorships retained; no same-work merge triggered | AC-04/07 |
+| MP-12 | Restricted assertion referenced by old published release | Current public response suppresses restricted asset/field; private audit preserves original source/decision history | AC-06/07 |
+| MP-13 | API requests unresolved/unknown category | Not in main default; accessible only via explicit unclassified/All selection, with no falsified track | AC-03/08 |
+| MP-14 | Inject unsafe external URL `javascript:` / local URL | No rendered active outbound link or server fetch; safe invalid-link state | AC-06/08 |
+| MP-15 | Source conflict resolved in a later release | Earlier fixed release still auditable; default public view uses newly approved selected title and evidence | AC-06/07/08 |
+| MP-16 | Attempt to read private notes through public catalogue endpoint | Forbidden/absent private data; server-side authorization enforced | AC-08 |
 
 These are **design cases** only. No Laravel research endpoint, importer, asset media workflow, PostgreSQL catalogue schema/permission test, or UI test was executed for this policy.
 
