@@ -3,7 +3,7 @@
 - **Project:** Litervia — Discover research. Explore knowledge.
 - **Review date:** 2026-10-31.
 - **Status:** **RESEARCH REVIEW / EVIDENCE REGISTER** (not an approved canonical-work merge or database change).
-- **Scope:** Five title/year collision pairs from the 150-record pilot, plus AutomationXP@CHI 2023.
+- **Scope:** Five title/year collision pairs from the 150-record pilot, AutomationXP@CHI 2023, and a 14-case cross-source comparison index covering the seven required pilot years.
 - **Repository reference:** [Issue #13](https://github.com/PetrosTam/litervia/issues/13); this evidence register is the third documentation file in [Draft PR #14](https://github.com/PetrosTam/litervia/pull/14), alongside the ADR and Normalization Contract. Its inclusion is **not** approval of canonical work merges or of this Issue's closure.
 - **Source distinction:** DBLP CSV is a dated observation; external conference/library/institution sources are later independent assertions. Different assertions are not silently reconciled.
 - **Owner approval (2026-10-31):** [PUB-01–PUB-06 publication policy](chi-metadata-publication-rights-policy.md) and the **non-blocking but unresolved** CEUR `short10.pdf` exception. Neither implies a canonical merge or final membership/title finding.
@@ -11,7 +11,7 @@
 ## 1. Reproducibility and review limits
 - Input: `chi_pilot_150_records_2026-10-03.csv`, SHA-256 `34360f4b1470213cf5f9c52b5bba9179bc07b1fb6b7fbc18fd82fbcff860a087`; matches uploaded pilot manifest.
 - Checked with Python stdlib `csv`, `hashlib`, `json`: **150** distinct keys; **134** `inproceedings`; **16** proceedings volumes; **5** collision pairs (10 records); **20** AutomationXP `inproceedings` plus **1** volume.
-- The 150-record pilot is purposive and oversamples exceptions. This review does **not** check all 28,870 CHI records, resolve all DOIs, compare all seven mandatory pilot years, or establish full official-proceedings completeness.
+- The 150-record pilot is purposive and oversamples exceptions. The separate 14-case comparison matrix below covers **two sampled records in each of seven mandatory pilot years**, but does **not** audit all 28,870 CHI records, verify DOI resolution, prove every contribution's publisher track, or establish official-proceedings completeness.
 - Web pages were inspected as available; the `short10.pdf` server exposes extractable metadata, but an attempted browser screenshot returned a cache error. The hosted PDF's first page attributes the paper to the AutomationXP23 workshop and shows the **“Physical Controls”** wording; the TU Chemnitz bibliography and workshop programme offer separate evidence. The screenshot service returned a cache error during this review, so this is a text-level PDF observation, **not** a completed visual/forensic PDF-authenticity audit.
 
 ## 2. Evidence from source collision pairs
@@ -120,18 +120,45 @@
 | EV-10 | Default main-CHI discovery | All 20 AutomationXP papers excluded; discoverable via workshop filter, respecting unresolved membership | **NOT RUN** |
 | EV-11 | Re-import same source and two snapshots | No added appearances/works for exact replay; immutable source records and decision history; unresolved conflicts do not overwrite identity | **NOT RUN** |
 
-## 6. Issue #13 acceptance impact and follow-up
+## 6. Seven-year comparison register (14 cases)
+
+**Evidence provenance (2026-10-31):** Compact, source-attributed transcription of the owner-provided seven-year evidence package. Original review files remain outside Git: `litervia-issue13-seven-year-source-comparison.csv` (SHA-256 `8c1d4573ac99caa36c83e3d34d24b76fa899e537337b11c8714ce519ec5130dd`) and `litervia-issue13-source-comparison-rights-audit.md` (SHA-256 `9479fb3879bc046989fc93f60e373b149ec35ee35b3271122dc80832567407ec`). The sample's recorded pilot CSV hash is `34360f4b1470213cf5f9c52b5bba9179bc07b1fb6b7fbc18fd82fbcff860a087`. The review files were SHA-256-checked against the uploaded ZIP in this documentation pass; the owner's original raw DBLP XML and full derived export were **not** mounted or independently rescanned.
+
+**Method:** Two actual `inproceedings` source keys from each of 1982, 2000, 2010, 2023, 2024, 2025 and 2026. Cross-check the stated bibliographic facts against an accessible ACM, programme, institutional or secondary source; preserve the DBLP source key/title and the reviewer's status without promoting a link or DOI candidate to proof of publisher-complete metadata. Field scopes below summarize the original `fields_checked` and `evidence_note`; the cited URLs identify the external sources in the owner-provided review and have **not all been independently live-checked** during this pass.
+
+| Case / year | Exact DBLP source key | External comparison evidence | Fields considered and result | Unresolved limitation |
+|---|---|---|---|---|
+| SC-01 / 1982 | `conf/chi/FolleyW82` | [ACM article metadata](https://doi.org/10.1145/800049.801804) | Title, ordered authors, DOI candidate, pp. 326–331, CHI 1982 — **MATCH** | DOI resolution and content rights not independently verified |
+| SC-02 / 1982 | `conf/chi/000182` | [ACM article metadata / author corroboration](https://doi.org/10.1145/800049.801771) | Title, author, DOI candidate, pp. 142–147, CHI 1982 — **MATCH** | Author-site corroboration described in original audit; no PDF reuse clearance |
+| SC-03 / 2000 | `conf/chi/BalakrishnanH00` | [Microsoft Research bibliography](https://www.microsoft.com/en-us/research/group/epic/publications/) | Title, ordered authors, venue, pp. 33–40 — **MATCH** | Author/DBLP bibliography corroboration; DOI resolution not independently checked |
+| SC-04 / 2000 | `conf/chi/ChiPP00` | [Google Research bibliography](https://research.google/pubs/the-scent-of-a-site-a-system-for-analyzing-and-predicting-information-scent-usage-and-usability-of-a-web-site/) | Title, authors, year, venue, pp. 161–168 — **MATCH** | DOI retained as DBLP candidate, not independently resolved |
+| SC-05 / 2010 | `conf/chi/DearmanT10` | [Researchr secondary bibliography](https://researchr.org/publication/DearmanT10) | Title, byline, venue, pp. 329–332, candidate DOI — **PARTIAL** | No independent primary ACM/DOI-resolution or authoritative contribution-track confirmation |
+| SC-06 / 2010 | `conf/chi/DornG10` | [Metascience Observatory secondary bibliography](https://explore.metascienceobservatory.org/papers/W2148447775) | Title, byline, DOI candidate, venue, pp. 703–712 — **PARTIAL** | Publisher primary metadata not independently reviewed; DBLP/live corroboration is not separate publisher proof |
+| SC-07 / 2023 | `conf/chi/YimLL23` | [KAIST institutional record](https://pure.kaist.ac.kr/en/publications/hapticpalmrest-haptic-feedback-through-the-palm-for-the-laptop-ke/) | Title, author order, EA volume, article 153, DOI candidate — **MATCH** | Extended Abstracts appearance; must not be counted as main technical paper |
+| SC-08 / 2023 | `conf/chi/ChowdhuryB23` | [University of Manitoba HCI Lab](https://hci.cs.umanitoba.ca/publications/details/co-designing-with-early-adolescents) | Title, byline, CHI venue, article 198, DOI candidate — **MATCH** | Source corroboration is not media/PDF rights clearance |
+| SC-09 / 2024 | `conf/chi/LeeJSCSSS24` | [DGIST institutional record](https://scholar.dgist.ac.kr/handle/20.500.11750/57542) | Title, byline, year, DOI candidate, article 848 — **TITLE_CONFLICT** | DBLP “Fine-Grained / Multi-user UI Distribution” vs institutional “Granular / UI-Level Control Distribution”; preserve both; publisher title choice OPEN |
+| SC-10 / 2024 | `conf/chi/Whitelock-Wainwright24` | [Monash institutional record](https://research.monash.edu/en/publications/a-mixed-method-case-study-medical-practitioner-sensemaking-in-the/) | Title, ordered authors, EA volume, article 500, DOI candidate — **MATCH** | Extended Abstracts; not main technical paper by default |
+| SC-11 / 2025 | `conf/chi/ZhangJAL25` | [KAIST institutional record](https://pure.kaist.ac.kr/en/publications/causalcff-causal-analysis-between-user-stress-level-and-contextua/) | Title, ordered authors, EA volume, article 130, DOI candidate — **MATCH** | Project links and open availability are not publisher reuse rights |
+| SC-12 / 2025 | `conf/chi/RhedenAME25` | [Monash research record; CHI programme evidence](https://research.monash.edu/en/publications/gesturesock-exploring-toe-gestures-as-alternative-input-method/) | Title, ordered authors, Interactivity track, article 731 and DOI candidate — **MATCH_TRACK_LIMITED** | Distinct article 914/Video Showcase appearance; **no automatic same-work merge** |
+| SC-13 / 2026 | `conf/chi/CaoHLL26` | [City University of Hong Kong](https://scholars.cityu.edu.hk/en/publications/audience-in-the-loop-viewer-feedback-driven-content-creation-in-m/) | Title, ordered authors, CHI venue, article 1287, DOI candidate — **MATCH** | Any CC BY notice is version/copy-specific; rights to rehost not checked |
+| SC-14 / 2026 | `conf/chi/TangLW26` | [SIGCHI CHI 2026 programme](https://programs.sigchi.org/chi/2026/program/content/222630) | Programme title and listed authors — **MATCH_PARTIAL** | DOI/article metadata not independently publisher-confirmed; programme alone is not a rights grant |
+
+**Coverage reconciliation:** `14` distinct source keys; exactly `2` cases per mandatory year. Outcomes: **9 MATCH**, **2 PARTIAL**, **1 TITLE_CONFLICT**, **1 MATCH_TRACK_LIMITED**, **1 MATCH_PARTIAL**. The original review explicitly has `doi_resolution_verified=no` and `rights_to_rehost_verified=no` for **all 14 cases**. Do not translate `MATCH` into complete publisher verification or presume raw-file preservation, full technical-paper acceptance, country/affiliation evidence, abstract or media permission. These are intentionally sampled comparisons, not a coverage estimate.
+
+**Open evidence actions:** Strengthen SC-05/06 with direct ACM publisher comparisons where feasible; reconcile the FLUID-IoT title with the exact publisher appearance (SC-09); confirm article/track scope without auto-merging SC-12; and independently corroborate DOI/article fields for SC-14. Keep unresolved observations in review rather than asserting success. The selected public metadata policy is [PUB-01–PUB-06](chi-metadata-publication-rights-policy.md); rights/availability states remain per source and per field.
+
+## 7. Issue #13 acceptance impact and follow-up
 
 - **AC-03:** New official evidence supports the distinct volume/source categories and a specific workshop crosswalk; final contribution types are not fully verified.
 - **AC-04:** Five title/year pairs are documented with separate source keys, source-author order and DOI claims; canonical work relationships remain open.
-- **AC-05:** This targeted five-pair/AutomationXP review alone does not cover all seven mandatory years. A separate owner-provided **14-record / two-per-year seven-year comparison package** exists outside this PR, with partial and conflict-limited cases; its evidence quality and full consolidation still require the final Issue re-audit.
-- **AC-06 / AC-09:** This provides partial field-level provenance and identity evidence. The **PUB-01–PUB-06 policy principles are now owner APPROVED**; individual asset rights, final evidence consolidation and verified executable controls remain outstanding. See [publication policy](chi-metadata-publication-rights-policy.md).
+- **AC-05:** The [14-case seven-year register](#6-seven-year-comparison-register-14-cases) documents **two source comparisons in each mandatory year**, but SC-05/06 are secondary-source PARTIAL, SC-09 is TITLE_CONFLICT, SC-12 is MATCH_TRACK_LIMITED and SC-14 is MATCH_PARTIAL. Numeric coverage is documented; final source-quality judgment and owner acceptance remain OPEN.
+- **AC-06 / AC-09:** The five-pair evidence and now-committed 14-case seven-year source register provide **documented but quality-limited** field-level provenance. The **PUB-01–PUB-06 policy principles are owner APPROVED**; individual asset rights, final reviewer/owner acceptance and implementation verification remain outstanding. See [publication policy](chi-metadata-publication-rights-policy.md).
 - **AC-07 / AC-08:** Design fixtures are proposed; Laravel/PostgreSQL ingest, constraints and authorization tests have **NOT RUN**.
 - **AC-10:** Approval of model is not authorization for migrations, import, PR merge or GitHub Issue closure.
 
-**Next evidence gate:** Complete the final seven-year/source comparison reconciliation, review unresolved identity and contribution-track decisions and obtain explicit approval of any proposed canonical merge. An editorial answer about CEUR `short10.pdf` is desirable **follow-up**, not a blocker for independently verified records; its membership/title remain OPEN. This register is part of documentation-only Draft PR #14. **No PR merge, application/database mutation or Issue closure is authorized.**
+**Next evidence gate:** Review the consolidated fourteen source cases and known evidence-quality gaps, review unresolved identity and contribution-track decisions, and obtain explicit approval of any proposed canonical merge. An editorial answer about CEUR `short10.pdf` is desirable **follow-up**, not a blocker for independently verified records; its membership/title remain OPEN. This register is part of documentation-only Draft PR #14. **No PR merge, application/database mutation or Issue closure is authorized.**
 
-## 7. External source references
+## 8. External source references
 
 [r1]: https://dblp.org/db/conf/chi/chi1994.html
 [r2]: https://dblp.org/db/conf/chi/chi1994c.html
