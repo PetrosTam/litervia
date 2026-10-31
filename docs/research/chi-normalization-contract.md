@@ -6,6 +6,7 @@
 - **Status:** **DRAFT CONTRACT / PROPOSED operational rules** based on the [APPROVED ADR baseline](../architecture/adr-0001-chi-catalogue-identity.md). This document is **not** an authorized ingestion specification or physical migration plan.
 - **Sources of truth:** Product Engineering Specification §§5–6, 8, 12; Master Project Instructions Stage 02; Engineering Playbook; dated DBLP source manifest; sampled CSV/manifest; GitHub Issue #13 and PostgreSQL foundation. See [reference register](#12-reference-register).
 - **Evidence companion:** [Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) (five candidate pairs and AutomationXP 2023). It records **source-level findings**, not approval to consolidate canonical works.
+- **Publication policy:** [Metadata Publication & Rights Policy](chi-metadata-publication-rights-policy.md) — **PUB-01–PUB-06 APPROVED by owner on 2026-10-31**; physical implementation and any per-asset reuse clearance remain OPEN.
 
 ## 1. Normative language and evidence classes
 
@@ -156,7 +157,7 @@ The current extractor's `doi` field is sourced from explicit `<doi>` elements; i
 
 **Required assertion envelope — PROPOSED:** `assertion_id`, target typed FK, `field_key`, `raw_value_json`, optional `normalized_value_json`, `provider`, `source_snapshot_id?`, `source_record_id?`, source URL/record identifier, `retrieved_at_utc`, `evidence_checked_at_utc?`, `availability_state`, `review_state`, `rights_state`, `selection_state`, `decision_id?`, `superseded_by?`. For offline DBLP data, `retrieved_at_utc` should not be fabricated when only the snapshot date is known; store the available source/snapshot date and an explicit unknown retrieval time. Provenance of a derived assertion may refer to its derivation/run; **do not invent a human reviewer** for automatic parsing.
 
-Rights states to implement only after policy approval: `permitted_metadata`, `permission_required`, `restricted`, `unknown`, `not_applicable`. Record evidence and interpretation date; do not automatically copy an upstream website's blanket license to third-party assets.
+**Policy versus implementation:** The owner APPROVED PUB-01–PUB-06 on 2026-10-31. The proposed SQL/API rights-state values `permitted_metadata`, `permission_required`, `restricted`, `unknown`, `not_applicable` remain **PROPOSED / NOT IMPLEMENTED**; their exact enum/table representation requires approval. Record evidence and interpretation date; do not copy a source metadata licence to third-party assets.
 
 ## 7. Collision/identity decision register (source evidence reviewed; canonical identity OPEN)
 
@@ -225,16 +226,17 @@ The following tests are measurable contracts for **later** execution. All are **
 | Priority | Item still needing approval or external evidence | Owner of gate / next proof |
 |---|---|---|
 | P0 | Five collision identities/relationships; whether same work or related/different appearances | Bibliographic reviewer + official proceedings source reconciliation |
-| P0 | Workshop membership conflict and verified volume crosswalk; historical CHI editions | Source comparison with CEUR/ACM/SIGCHI, link + retrieval date |
+| P0 | Verify source-volume/category crosswalk and historical CHI editions without implying technical-paper type | Source comparisons with CEUR/ACM/SIGCHI, dated evidence |
+| P1 | CEUR `short10.pdf` TOC membership / title conflict **OPEN** but non-blocking for unrelated verified records | Editorial clarification desirable as follow-up; preserve disputed provenance and do not claim final acceptance |
 | P0 | Final ID normalization algorithms and typed FK/uniqueness policy | Dedicated design approval plus negative/ambiguous DOI tests |
-| P0 | Rights for optional abstracts/affiliations/media and field-level retrieval metadata | Source-by-source legal/technical review |
+| P0 | Per-asset / per-source rights for any future abstracts, media or enrichment (**general PUB-01–PUB-06 publication policy APPROVED**) | Copy/version-specific licence, provenance and separate implementation owner approval |
 | P0 | Exact physical schema, catalogue writer/grants and promotion atomicity | Reviewed migrations on disposable PostgreSQL, database permissions tests |
 | P1 | Author/institution disambiguation policy incl. ORCID/ROR conflicts | Verified work-specific affiliations, no blanket profile inference |
 | P1 | Public API filter naming, collation, sort/pagination and indexes | Separately approved API contract and EXPLAIN/feature tests |
 | P1 | Publishing thresholds and release approval authority | Reconciliation fixture and owner decision |
 | P1 | Private references, redirects and consistency repair under work mergers | Server-side authorization/integrity tests in private DB |
 
-**Draft PR review gate:** [Draft PR #14](https://github.com/PetrosTam/litervia/pull/14) now contains the ADR, this contract and the focused source-evidence register. Before merging, reconcile outstanding publisher evidence and rights, check links/Markdown rendering, inspect CI and the complete diff, and perform the Issue #13 final re-audit. No migrations, project code, research data exports, or local Windows files belong in this PR. Approval of the architectural baseline does not approve these OPEN decisions or implementations.
+**Draft PR review gate:** [Draft PR #14](https://github.com/PetrosTam/litervia/pull/14) contains the ADR, this contract, the source-evidence register and the [owner-approved publication policy](chi-metadata-publication-rights-policy.md). Before considering readiness or merge, complete document consistency/source-link review, evaluate the mandatory seven-year evidence package and unresolved independent gates, inspect actual CI and full diff, and perform the final Issue #13 re-audit. The CEUR `short10.pdf` editorial answer is **non-blocking for unrelated verified records**, while that record's membership/title decisions stay OPEN. No migrations, application code, source exports or local Windows files belong in this PR. No merge, Issue closure, ingestion or deployment authorization follows from policy approval.
 
 ## 11. Short risk register
 
@@ -256,6 +258,7 @@ The following tests are measurable contracts for **later** execution. All are **
 - `Litervia_CHI_1982_2026_Record_Level_Audit_Report.pdf` and the related coverage/collision CSV files; historical audit is distinct from the new snapshot.
 - `chi_pilot_150_records_2026-10-03.csv` and `chi_pilot_150_manifest_2026-10-03.json` (locally supplied and checked); full DBLP source and derived CSV remain outside Git.
 - [Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) — dated source-level observations and the still-open case register; no canonical merges authorized.
+- [Metadata Publication & Rights Policy](chi-metadata-publication-rights-policy.md) — PUB-01–PUB-06 approved 2026-10-31; per-asset clearance and physical rules remain open.
 - [GitHub Issue #13](https://github.com/PetrosTam/litervia/issues/13), [PostgreSQL Foundation](https://github.com/PetrosTam/litervia/blob/main/docs/postgresql-foundation.md), [current README](https://github.com/PetrosTam/litervia/blob/main/README.md).
 
 **Official external technical/research references (accessed 2026-10-31):**
