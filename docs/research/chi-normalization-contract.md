@@ -176,7 +176,7 @@ The [dated Source Evidence & Identity Decision Review](chi-source-evidence-ident
 
 **Decision envelope — PROPOSED:** `case_id`, typed subject IDs, `decision_type`, `status` (`candidate/confirmed/rejected/reversed`), reviewer identity, timestamp, source URLs/checked dates, snapshot IDs, rationale and superseding decision link. The verified decision here is **separate appearance identity**, not canonical work equivalence. No inferred reviewer signature or editorial response may be invented.
 
-**Targeted-review limitation:** This evidence register does not replace the Issue #13 requirement for at least **two externally compared records per each of seven mandatory pilot years**, nor the required independent source-rights review. See the open gates and T-17.
+**Evidence scope update:** The [companion source-evidence register](chi-source-evidence-identity-review.md#6-seven-year-comparison-register-14-cases) now includes **14 cases / two in each seven mandatory pilot years**, copied from the source-attributed owner evidence package with its original quality labels. Numeric comparison coverage does **not** establish publisher completeness, DOI resolution or per-asset rights. SC-05/06 need stronger primary-source checks; SC-09/12/14 retain documented conflicts or limitations. See T-17 and the open AC-05 review gate.
 
 ## 8. Import, reconciliation, release and recovery contract
 
