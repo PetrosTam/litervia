@@ -122,8 +122,8 @@ The exact count of tables, FK names, generated UUID method, selected-field cachi
 | D-01 | **APPROVED** | Separate work, appearance, source record identities | Owner approval in conversation; Specification §6.3 |
 | D-02 | **APPROVED** | Main-only default; EA/Companion/Workshop separately discoverable; unknown visible through All | Owner approval in conversation |
 | D-03 | **APPROVED** | Stable IDs, raw source preservation, no title/year merge, two databases | Specification §§5–6; owner approval; Issue #11 |
-| D-04 | **PROPOSED** | UUID strategy, typed XOR source bindings and single typed identifier table | PostgreSQL constraint design and migrations review |
-| D-05 | **PROPOSED** | Stage/publish release pointer, release-scoped appearance/volume memberships and pinned display-assertion revisions, controlled promotion/rollback | Transaction/recovery design and test fixtures |
+| D-04 | **APPROVED DIRECTION / PHYSICAL DDL PROPOSED** | Independent UUID identities (UUIDv4 recommended), type-compatible source bindings, controlled identifier owners and original bylines; exact SQL and audit mechanics not frozen | Owner approval 2026-11-01; [physical design contract](chi-catalogue-physical-design-contract.md) §2–3; PostgreSQL negative tests NOT RUN |
+| D-05 | **APPROVED DIRECTION / PROMOTION MECHANISM PROPOSED** | Immutable validated release contents, atomic active pointer and audited transitions; rights withdrawal must fail closed; exact publisher/rollback privileges and thresholds open | Owner approval 2026-11-01; [physical design contract](chi-catalogue-physical-design-contract.md) §4; recovery/rights tests NOT RUN |
 | D-06 | **OPEN** | How to decide same-work vs related/different appearances for TC-001/002/071/140/141 | Record-level official sources, reviewer reasoning and evidence log |
 | D-07 | **OPEN** | DOI canonicalization and ambiguous multi-DOI policy, DOI resolver checks | Scheme test cases, official DOI metadata/targets, collisions |
 | D-08 | **OPEN** | Verified main/EA/workshop volume crosswalk and exact track/contribution vocabulary | Official publisher/workshop evidence, including AutomationXP discrepancy |
@@ -133,6 +133,8 @@ The exact count of tables, FK names, generated UUID method, selected-field cachi
 | D-12 | **OPEN** | Final physical table count, read-view security grants and importer role privileges | Reviewed migrations and isolated PostgreSQL privilege tests |
 | D-13 | **OPEN** | 1984 display/historical interpretation and independently corroborated coverage | Preserve source zero; do not invent historical conference claims |
 | D-14 | **OPEN** | Completion of mandatory official-source cross-checks on seven pilot years and all disputed pairs | At least 2 cited records/year, collision case review, conflict resolution |
+
+**Design review status (2026-11-01):** The owner approved the *architectural direction* of D-04 and D-05 after the [physical schema design review](chi-catalogue-physical-design-contract.md); this is **not** final physical DDL, importer/publisher-role, grants or migration authorization. **D-12 remains OPEN; Issue #13 AC-10 remains unchecked/not authorized.** The source-level collision/DOI/CEUR/rights decisions remain unresolved where recorded. The design-only follow-up is tracked in [Issue #17](https://github.com/PetrosTam/litervia/issues/17).
 
 ## 9. Evidence and limitations
 
