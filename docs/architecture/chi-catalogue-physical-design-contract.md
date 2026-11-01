@@ -1,7 +1,9 @@
 # CHI Catalogue Physical Design Contract — PostgreSQL 18
 
 **Revision:** v0.4 · **2026-11-01** · **Scope:** design-only · **Tracking:** Issue #17, upstream research pilot Issue #13
-**Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION** (owner, 2026-11-01); detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.  
+
+**Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION** (owner, 2026-11-01); detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
+
 **Execution evidence:** STATIC DOCUMENT REVIEW ONLY. **No migrations, database tests, importer runs, grants, runtime role changes, enrichment, data import, application changes or deployment.**
 
 ## 1. Sources and non-negotiable boundaries
