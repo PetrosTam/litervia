@@ -172,7 +172,7 @@ Proposed schemas `research`, `publication` and `api_public` require explicit sch
 | `current_source_bindings` | PK `source_record_id`; UNIQUE `binding_id` if no binding decision may be shared | At most one current mapping per observation |
 | `appearance_volume_memberships` | Partial UNIQUE (`appearance_id`) WHERE `membership_state='confirmed' AND superseded_at IS NULL` | One current verified hosting volume, not inferred via booktitle |
 | `appearance_authorships` | PK (`byline_set_id`, `position`) | Repeatable observed author ordering |
-| `source_field_assertions` | (`source_record_id`, `field_key`), composite (`id`, `appearance_id`) | Provenance and release assertion correctness |
+| `source_field_assertions` | (`subject_source_record_id`, `field_key`), composite (`id`, `appearance_id`) | Provenance and release assertion correctness |
 | `external_identifiers` | (`scheme`, `normalized_key`) **non-unique** | Candidate search; ambiguity retained |
 | `catalogue_release_items` | PK (`release_id`, `appearance_id`), (`release_id`, `source_category`), (`release_id`, `work_id`) | Category and work-level filtering without duplicated joins |
 | `catalogue_release_bylines` | PK (`release_id`, `appearance_id`, `position`) | Exact release display ordering |
