@@ -1,6 +1,6 @@
 # CHI Catalogue Physical Design Contract — PostgreSQL 18
 
-**Revision:** v0.4 · **2026-11-01** · **Scope:** design-only · **Tracking:** Issue #17, upstream research pilot Issue #13
+**Scope:** design-only · **Tracking:** Issue #17, upstream research pilot Issue #13
 
 **Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION** (owner, 2026-11-01); detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
 
@@ -223,6 +223,6 @@ Additional PostgreSQL FTS/trigram/ICU indexes and search sorting are **D-10 OPEN
 - [PostgreSQL 18: GRANT](https://www.postgresql.org/docs/18/sql-grant.html)
 - [PostgreSQL 18: default privileges](https://www.postgresql.org/docs/18/sql-alterdefaultprivileges.html)
 
-**Local-first review correction, v0.4 (2026-11-01):** REV-01 typed source/byline composite lineage; REV-02 non-null title/byline selections and guarded release validation; REV-03 evidence-backed confirmed membership; REV-04 source-observation claims without fabricated canonical mapping; REV-05 public view/rights bypass threat model; REV-06 Markdown section markers. This is **DESIGN ONLY**, not PostgreSQL execution proof or a final D-12 freeze. File modifications must be reviewed and committed locally before any separately approved GitHub push.
+**Local-first review corrections (2026-11-01):** REV-01 typed source/byline composite lineage; REV-02 non-null title/byline selections and guarded release validation; REV-03 evidence-backed confirmed membership; REV-04 source-observation claims without fabricated canonical mapping; REV-05 public view/rights bypass threat model; REV-06 Markdown section markers. This is **DESIGN ONLY**, not PostgreSQL execution proof or a final D-12 freeze. File modifications must be reviewed and committed locally before any separately approved GitHub push.
 
 **Last review scope:** owner-approved design direction, detailed physical contract **proposed**, database and importer tests **NOT RUN**.
