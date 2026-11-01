@@ -4,7 +4,7 @@
 - **Review date:** 2026-10-31.
 - **Status:** **RESEARCH REVIEW / EVIDENCE REGISTER** (not an approved canonical-work merge or database change).
 - **Scope:** Five title/year collision pairs from the 150-record pilot, AutomationXP@CHI 2023, and a 14-case cross-source comparison index covering the seven required pilot years.
-- **Repository reference:** [Issue #13](https://github.com/PetrosTam/litervia/issues/13); this evidence register is the third documentation file in [Draft PR #14](https://github.com/PetrosTam/litervia/pull/14), alongside the ADR and Normalization Contract. Its inclusion is **not** approval of canonical work merges or of this Issue's closure.
+- **Repository reference (2026-11-01 update):** [Issue #13](https://github.com/PetrosTam/litervia/issues/13); initial four-file evidence/architecture package merged in [PR #14](https://github.com/PetrosTam/litervia/pull/14) as `4b6b681`. The AC-09 supplement below is a separate, documentation-only, **not-yet-accepted** review deliverable; canonical work merges, migrations, ingestion and Issue closure are not implied.
 - **Source distinction:** DBLP CSV is a dated observation; external conference/library/institution sources are later independent assertions. Different assertions are not silently reconciled.
 - **Owner approval (2026-10-31):** [PUB-01–PUB-06 publication policy](chi-metadata-publication-rights-policy.md) and the **non-blocking but unresolved** CEUR `short10.pdf` exception. Neither implies a canonical merge or final membership/title finding.
 
@@ -156,9 +156,57 @@
 - **AC-07 / AC-08:** Design fixtures are proposed; Laravel/PostgreSQL ingest, constraints and authorization tests have **NOT RUN**.
 - **AC-10:** Approval of model is not authorization for migrations, import, PR merge or GitHub Issue closure.
 
-**Next evidence gate:** Review the consolidated fourteen source cases and known evidence-quality gaps, review unresolved identity and contribution-track decisions, and obtain explicit approval of any proposed canonical merge. An editorial answer about CEUR `short10.pdf` is desirable **follow-up**, not a blocker for independently verified records; its membership/title remain OPEN. This register is part of documentation-only Draft PR #14. **No PR merge, application/database mutation or Issue closure is authorized.**
+**Next evidence gate (2026-11-01):** The 14-case register and source-specific gaps are preserved in their 2026-10-31 form. A dated supplemental evidence review and explicit open-decision register are recorded below for AC-09 review. Five canonical work relations and preferred conflicting titles remain OPEN, and CEUR `short10.pdf` editorial correspondence is optional/non-blocking for unrelated verified records. The original documentation package [PR #14](https://github.com/PetrosTam/litervia/pull/14) has already merged; **this AC-09 addendum does not authorize any application/database mutation or Issue #13 closure**.
 
-## 8. External source references
+## 8. AC-09 — Final evidence reconciliation and open-decision register (2026-11-01)
+
+**Review state: PROPOSED FOR FINAL OWNER ACCEPTANCE.** This is a dated addendum to the original 2026-10-31 register; it does **not** edit that evidence CSV, retroactively change the fourteen historical result labels, resolve a DOI, authorize a canonical work merge, or check AC-09 automatically. Issue #13 has **AC-01–AC-08 accepted, AC-09 and AC-10 OPEN** at the time of this documentation change. AC-09 acceptance requires local diff/source review, a PR with genuine checks, merge, and a separate owner sign-off on the updated evidence/decision register.
+
+### 8.1 Reproducibility and custody evidence accepted for AC-01 / AC-02
+
+| Evidence / execution | Observed result | Review boundary |
+|---|---|---|
+| DBLP 2026-10-03 XML archive | SHA-256 `20e45961bec5610dc07b8e932ccd27a2387534cfa12c92a24289fe873aebe969` — **PASS** against both manifests | Exact local artifact identity; no new full-XML reparse or independently repeated upstream download |
+| DTD / dated DTD copy | Both SHA-256 `03ec35cb34a4227572a0e89da407b06b6e44a6cc23e19cabc3b49b702a5f897d` — **PASS** | Identity, not proof of independent parser audit |
+| CHI-only source CSV (28,870 rows) | SHA-256 `765cc206350ff14c11c67047c3325f9c7445ca9c43ddb3806deaaa90966c564c`; record count **PASS** | Dated derived export; no completeness claim against ACM |
+| Extraction manifest | SHA-256 `b54d184c16c543597bd4477fd85e95adf6e91ebd9d93c27c0ce57ba6e9e48d4c`; extractor `1.2.0` | Manifest values reviewed, extractor not rerun on full XML |
+| Pilot CSV (150 rows) | SHA-256 `34360f4b1470213cf5f9c52b5bba9179bc07b1fb6b7fbc18fd82fbcff860a087` — **PASS** | Non-representative stratified/exception-enriched sample |
+| Pilot manifest | SHA-256 `cf6d97b40bc76a44a9ab8366aeab0a931493e2dc7c88c0df6fbf141cd20084bb`; selector `1.0.0` | Original seed `litervia-chi-pilot-150-v1-2026-10-03` retained |
+| Record-level PowerShell audit | **8/8 PASS:** counts, distinct keys, 150/150 source membership, all 18 original fields, quotas and mandatory exceptions | Observed user execution; no assertion about unselected publisher records |
+| In-memory selector rerun, Python 3.12.10 | Identical 150 source keys, sequence and all field values; **LF serialized bytes identical** (pilot hash above); CLI preview exit `0` | The initial reviewer-generated CRLF comparison failed and was corrected; no independent alternative selector algorithm |
+| Selector script identity | SHA-256 `00e0bd1fee4076f917797935da32eb791dcdea8aed9b1263b46b6dd12ee8f47` | User's external tool; not installed in this repository |
+| Historical seven-year package | Source-comparison CSV SHA-256 `8c1d4573ac99caa36c83e3d34d24b76fa899e537337b11c8714ce519ec5130dd`; rights-audit Markdown SHA-256 `9479fb3879bc046989fc93f60e373b149ec35ee35b3271122dc80832567407ec` — **2/2 PASS** | Both originals preserved outside Git under `C:\Dev\LiterviaResearchData\Reviews\2026-10-31\ResearchEvidence` in a verified ZIP |
+
+### 8.2 New supporting source assertions — not changes to the historical CSV
+
+The fourteen historical statuses in Section 6 remain **9 MATCH, 2 PARTIAL, 1 TITLE_CONFLICT, 1 MATCH_TRACK_LIMITED, 1 MATCH_PARTIAL**. The dated supplemental observations below strengthen bibliographic corroboration but **do not** turn secondary, author or institutional pages into verified ACM landing-page records. Source URLs are references, not reuse licences. At review time, **0/14** original cases had independently verified DOI resolution and **0/14** had established rights to rehost assets.
+
+| Case | Supplemental assertion checked 2026-11-01 | Bounded conclusion / still open |
+|---|---|---|
+| **SC-05 / `DearmanT10`** | [David Dearman's CV](https://www.dgp.toronto.edu/~dearman/papers/DavidDearman_CV_Dec2011.pdf) attributes the paper to Dearman and Truong at CHI 2010, pp. 329–332. | `CORROBORATED_PARTIAL`: author-maintained source supports bibliographic facts; direct ACM record and independently completed DOI resolution remain **NOT CHECKED**. |
+| **SC-06 / `DornG10`** | [University of Illinois research paper bibliography](https://trailslab.web.illinois.edu/pubs/ICER2024_JH_Profiling_CPs_Full_Paper.pdf) cites Dorn/Guzdial, CHI 2010, pp. 703–712, DOI candidate `10.1145/1753326.1753430`. | `CORROBORATED_PARTIAL`: independent scholarly citation, still **not a direct ACM metadata check**; historical PARTIAL retained. |
+| **SC-09 / `LeeJSCSSS24`** | [Co-author ORCID](https://orcid.org/0009-0000-4672-9444) lists the DBLP “Fine-Grained … Multi-user UI Distribution” title; [DGIST](https://scholar.dgist.ac.kr/handle/20.500.11750/57542) and [Sungkyunkwan](https://pure.skku.edu/en/publications/fluid-iot-flexible-and-granular-access-control-in-shared-iot-envi/) use “Granular … UI-Level Control Distribution”, all associated with DOI candidate `10.1145/3613904.3641991`. | `TITLE_CONFLICT_OPEN`: preserve both exact source titles and attribution. **No publisher-title selection**; approved PUB-02 keeps source DBLP display fallback until reviewed. |
+| **SC-12 / `RhedenAME25`** | Two [Monash appearance records, article 731](https://research.monash.edu/en/publications/gesturesock-exploring-toe-gestures-as-alternative-input-method-2/) (DOI `10.1145/3706599.3721114`) and [article 914](https://research.monash.edu/en/publications/gesturesock-exploring-toe-gestures-as-alternative-input-method/) (DOI `10.1145/3706599.3721350`); [CHI programme labels the latter Video Showcase](https://programs.sigchi.org/chi/2025/program/content/194078). | `DISTINCT_APPEARANCES_CORROBORATED`: retain both source/appearance identities and separate track evidence; **same-work canonical relationship OPEN**. |
+| **SC-14 / `TangLW26`** | [Contributor's ORCID entry, Crossref-sourced](https://orcid.org/0000-0003-0193-7228) lists the disability-first AI dataset annotation paper with DOI `10.1145/3772318.3790405`; [SIGCHI 2026 programme](https://programs.sigchi.org/chi/2026/program/content/222630) identifies its programme appearance. | `CORROBORATED_PARTIAL`: DOI string and byline separately supported; article 284 remains a DBLP/source assertion, **not newly verified through ACM**. No asset rights derived. |
+
+### 8.3 Open-decision register — explicit non-destructive actions
+
+| Decision ID | Status | Evidence-preserving rule | Closure gate / owner decision |
+|---|---|---|---|
+| `OPEN-TC-001/002/071/140/141` | **OPEN** | Keep ten source records, individual DOI candidates and appearances distinct; use related-contribution *candidates* only. | Work-level merge requires publisher/content comparison plus explicit reviewed decision, separately authorized. |
+| `OPEN-AUT23-TOC` | **DISPUTED / OPEN, non-blocking** | Keep `short10.pdf` hosted/link-observed but not in 19-entry CEUR volume TOC; preserve `Physical Inputs` and `Physical Controls` assertions. | Corrected publisher/editorial source or explicit evidence-backed decision; no blanket block on unrelated verified CHI records. |
+| `OPEN-SC09-TITLE` | **OPEN** | Version separate DBLP/author/institutional title assertions; use provisional DBLP fallback per PUB-02. | Publisher/version evidence and separately reviewed display-title selection. |
+| `OPEN-SC12-WORK` | **OPEN** | Separate article 731/914 DOI and venue-track appearances; no implicit work-level merge. | Source- and content-backed same-work decision with explicit review. |
+| `OPEN-SC05/06/14-PUBLISHER` | **PARTIAL / OPEN** | Use supplemental author/secondary/ORCID programme support as corroboration, not publisher-certified fields. | Direct authoritative primary metadata comparison and review if needed for a particular public field. |
+| `OPEN-DOI` | **NOT CHECKED** | Preserve `<ee>` DOI *candidates* and multiple values; never infer resolver success or canonical uniqueness. | Approved resolution/normalization procedure and reproducible tests. |
+| `OPEN-RIGHTS` | **NOT CLEARED** | Publication limited to approved bibliographic metadata/outbound links; no abstract/PDF/figure/audio/video hosting by inference. | Field/asset/copy/version-specific rights and per-provider integration authorizations. |
+| `OPEN-TAXONOMY` | **PARTIAL / OPEN** | Source `booktitle`/proceedings category and named contribution-track evidence are separate dimensions. | Official per-year track crosswalk with reviewed exceptions and test cases. |
+| `OPEN-PHYSICAL` | **PROPOSED / NOT RUN** | Logical PostgreSQL model and fixtures only; no enacted SQL model or runtime permission claims. | Separate Issue, owner-approved migration/ingestion scope, tests and safety review. |
+| `OPEN-RELEASE` | **PROPOSED / NOT RUN** | Import/recovery/rollback are versioned design contracts, not executed capabilities. | Reproducible idempotency, rollback, public-visibility and authorization tests after implementation approval. |
+
+**AC-09 proposed acceptance boundary:** The evidence register is reviewed, source-specific, exception-preserving, reproducibly traceable and explicit about unresolved decisions. Acceptance of this *documentation deliverable* means accepting the documented disposition of conflicts, **not** certifying every disputed bibliographic fact, granting publisher reuse rights or authorizing database execution. AC-09 remains unchecked pending owner review and merge verification. **AC-10 remains unchecked** until a separate explicit authorization of a bounded implementation Issue, migrations and/or ingestion. No runtime importer, PostgreSQL catalogue schema/security tests or deployment are claimed.
+
+## 9. External source references
 
 [r1]: https://dblp.org/db/conf/chi/chi1994.html
 [r2]: https://dblp.org/db/conf/chi/chi1994c.html
