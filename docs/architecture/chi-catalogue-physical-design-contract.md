@@ -2,13 +2,13 @@
 
 **Scope:** design-only · **Tracking:** Issue #17, upstream research pilot Issue #13
 
-**Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION** (owner, ); detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
+**Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION**; detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
 
 **Execution evidence:** STATIC DOCUMENT REVIEW ONLY. **No migrations, database tests, importer runs, grants, runtime role changes, enrichment, data import, application changes or deployment.**
 
 ## 1. Sources and non-negotiable boundaries
 
-Authority, in priority order: explicitly approved owner decisions; Product Engineering Specification §§5–6, 12, 14–15; [ADR-0001](adr-0001-chi-catalogue-identity.md); [CHI Normalization Contract](../research/chi-normalization-contract.md) N-01–N-14; [publication/rights policy](../research/chi-metadata-publication-rights-policy.md) PUB-01–PUB-06; [PostgreSQL foundation](../postgresql-foundation.md); dated [source review](../research/chi-source-evidence-identity-review.md); current repository. The Product Specification's initial SQLite proposal was superseded by approved PostgreSQL 18 foundation Issue #11 / PR #12; do not silently rewrite that historical specification.
+Authority, in priority order: recorded approved project decisions; Product Engineering Specification §§5–6, 12, 14–15; [ADR-0001](adr-0001-chi-catalogue-identity.md); [CHI Normalization Contract](../research/chi-normalization-contract.md) N-01–N-14; [publication/rights policy](../research/chi-metadata-publication-rights-policy.md) PUB-01–PUB-06; [PostgreSQL foundation](../postgresql-foundation.md); dated [source review](../research/chi-source-evidence-identity-review.md); current repository. The Product Specification's initial SQLite proposal was superseded by approved PostgreSQL 18 foundation Issue #11 / PR #12; do not silently rewrite that historical specification.
 
 **APPROVED:** (1) independent stable `research_works`, `work_appearances`, `source_records` identities; separate proceedings volumes; (2) main CHI **verified** category default, EA/Companion/workshop explicit opt-ins, unknown under All; (3) original DBLP keys, DOI candidates and source author ordering preserved; no title/year/DOI-only merge; (4) catalogue/private PostgreSQL database separation and server-enforced authorization; (5) PUB-01–PUB-06 conservative bibliographic publication policy; (6) D-04/D-05 direction as explicitly approved on .
 
@@ -234,7 +234,7 @@ Additional PostgreSQL FTS/trigram/ICU indexes and search sorting are **D-10 OPEN
 | D-10 | OPEN | Search query, filters, stable sort and measured indexes |
 | D-11 | OPEN | Redirect review and private record consistency |
 | **D-12** | **OPEN — NOT FROZEN** | Final DDL, schema ownership/GRANT verification, object graph, publisher/importer role authorization |
-| Issue #13 AC-10 | **OPEN / NOT AUTHORIZED** | Separate explicit bounded owner authorization before any migration/importer/DB change |
+| Future catalogue implementation | **NOT AUTHORIZED** | Separate bounded approval required before any migration/importer/database change |
 
 **Acceptance boundary for this Issue #17:** documentation can be reviewed/accepted without freezing every physical DDL decision. A design-only merge is **not** implementation sign-off. Mark a decision "approved physical" only after its *specific* constraints, privileges, risk gates and negative-test plan are accepted. Never label unrun tests PASS.
 
