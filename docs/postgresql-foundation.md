@@ -38,7 +38,7 @@ A read-only check confirms a database's encoding/locale/owner without disclosing
 & $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -c "SELECT datname, pg_encoding_to_char(encoding), datlocprovider, datlocale, pg_get_userbyid(datdba) FROM pg_database WHERE datname IN ('litervia_catalogue', 'litervia_private', 'litervia_catalogue_test', 'litervia_private_test') ORDER BY datname;"
 ```
 
-Database permission checks completed locally: the two application identities can connect to their own runtime DB, not the opposite one, and lack public-schema `CREATE`; both migrators successfully created a probe table **inside a rolled-back transaction** and could not connect to the opposite DB. The four testing accounts successfully connected to their respective test DBs; a test account was refused from a runtime DB. This is observed provided output, **not** an independent hostile review of PostgreSQL ACLs.
+Database permission checks completed locally: the two application identities can connect to their own runtime DB, not the opposite one, and lack public-schema `CREATE`; both migrators successfully created a probe table **inside a rolled-back transaction** and could not connect to the opposite DB. The four testing accounts successfully connected to their respective test DBs; a test account was refused from a runtime DB. These are recorded local results, **not** an independent adversarial review of PostgreSQL ACLs.
 
 First clear config and then run the opt-in PostgreSQL integration check. It connects only to two hardcoded local test databases on `127.0.0.1`; its full config is checked before connecting.
 
