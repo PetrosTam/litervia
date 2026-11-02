@@ -21,13 +21,13 @@
 
 ## Asset provenance / limitations
 
-- Derived WebP images from the documented v02 visual QA package; original masters are held outside Git at `C:\Dev\litervia-assets\hero-images\originals`. The recorded source attestation states that all six assets were generated inside **ChatGPT (OpenAI)** from their own prompts, without uploaded third-party reference photos or copyrighted source assets. the project also reports using a **GPT-6 / High thinking effort** chat session. This identifies the reported ChatGPT session setting, **not** a verified underlying image-generation model. This is recorded as **source attestation**, not independent legal/IP clearance; exact image-generation model remains unknown. Optimized files in `public/media/heroes/` are served by the app independently of the external originals. Preserve source hashes, originals and a separate visual/release approval gate.
-- **APPROVED visual selection:** The existing Mobile 06 v02 artwork and crop are the final visual choice after the confirmed five checks in a mobile browser viewport: subject/composition, text readability, crop, consistency with Mobile 02/07 and overall preference. See the scoped `visual_approval` record in the manifest. This is reported visual approval, **not** independent device/contrast/performance certification or deployment authorization. Other assets retain their existing review statuses.
-- No fabricated paper previews, conference posters, authors, data sets or logos. The prominent hero disclaimer is intentionally removed for editorial clarity; the site footer retains an independence notice, while detailed documentation retains the conceptual-imagery provenance and limits of the project attestation.
+- Derived WebP images from the documented v02 visual QA package; original masters are held outside Git at `C:\Dev\litervia-assets\hero-images\originals`. The recorded source attestation states that all six assets were generated inside **ChatGPT (OpenAI)** from their own prompts, without uploaded third-party reference photos or copyrighted source assets. This is recorded as **source attestation**, not independent legal/IP clearance; exact image-generation model remains unknown. Optimized files in `public/media/heroes/` are served by the app independently of the external originals. Preserve source hashes, originals and a separate visual/release approval gate.
+- **APPROVED visual selection:** The existing Mobile 06 v02 artwork and crop are the final visual choice following five documented mobile browser viewport checks: subject/composition, text readability, crop, consistency with Mobile 02/07 and overall preference. See the scoped `visual_approval` record in the manifest. This is reported visual approval, **not** independent device/contrast/performance certification or deployment authorization. Other assets retain their existing review statuses.
+- No fabricated paper previews, conference posters, authors, data sets or logos. The prominent hero disclaimer is intentionally removed for editorial clarity; the site footer retains an independence notice, while detailed documentation retains the conceptual-imagery provenance and limitations of the recorded source attestation.
 
 ## Validation and approval gates
 
-**Local automated evidence (locally executed, October 2026; reported from the local worktree, not independently rerun by this document):**
+**Local automated checks (recorded from the development environment; not independently rerun for this documentation review):**
 
 | Check | Status / observed result |
 | --- | --- |
