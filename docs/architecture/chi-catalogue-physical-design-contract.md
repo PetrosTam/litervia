@@ -34,12 +34,12 @@ A `source_record` has kind `inproceedings` or `proceedings`. The physical propos
 -- DESIGN PSEUDOSQL; NOT EXECUTED OR APPROVED AS A MIGRATION.
 UNIQUE (source_records.id, source_records.record_kind)
 FOREIGN KEY (source_record_id, source_record_kind)
- REFERENCES research.source_records (id, record_kind)
+  REFERENCES research.source_records (id, record_kind)
 CHECK (num_nonnulls(appearance_id, volume_id) = 1)
 CHECK (
- (source_record_kind = 'inproceedings' AND appearance_id IS NOT NULL)
- OR
- (source_record_kind = 'proceedings' AND volume_id IS NOT NULL)
+  (source_record_kind = 'inproceedings' AND appearance_id IS NOT NULL)
+  OR
+  (source_record_kind = 'proceedings' AND volume_id IS NOT NULL)
 )
 ```
 
