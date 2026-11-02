@@ -40,25 +40,25 @@
 
 ```mermaid
 erDiagram
- SOURCE_SNAPSHOTS ||--o{ SOURCE_RECORDS : contains
- CONFERENCE_EDITIONS ||--o{ PROCEEDINGS_VOLUMES : includes
- RESEARCH_WORKS ||--o{ WORK_APPEARANCES : has
- PROCEEDINGS_VOLUMES o|--o{ WORK_APPEARANCES : hosts
- SOURCE_RECORDS ||--o{ SOURCE_RECORD_BINDINGS : binding_history
- WORK_APPEARANCES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
- PROCEEDINGS_VOLUMES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
- WORK_APPEARANCES ||--o{ APPEARANCE_AUTHORSHIPS : lists
- AUTHORS o|--o{ APPEARANCE_AUTHORSHIPS : resolved_person
- SOURCE_RECORDS ||--o{ SOURCE_FIELD_ASSERTIONS : supports
- WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_subject
- WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_object
- RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_subject
- RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_object
- INGESTION_RUNS ||--o{ INGESTION_RECORD_RESULTS : evaluates
- CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_ITEMS : contains
- WORK_APPEARANCES ||--o{ CATALOGUE_RELEASE_ITEMS : published_as
- CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : includes
- PROCEEDINGS_VOLUMES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : published_in
+    SOURCE_SNAPSHOTS ||--o{ SOURCE_RECORDS : contains
+    CONFERENCE_EDITIONS ||--o{ PROCEEDINGS_VOLUMES : includes
+    RESEARCH_WORKS ||--o{ WORK_APPEARANCES : has
+    PROCEEDINGS_VOLUMES o|--o{ WORK_APPEARANCES : hosts
+    SOURCE_RECORDS ||--o{ SOURCE_RECORD_BINDINGS : binding_history
+    WORK_APPEARANCES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
+    PROCEEDINGS_VOLUMES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
+    WORK_APPEARANCES ||--o{ APPEARANCE_AUTHORSHIPS : lists
+    AUTHORS o|--o{ APPEARANCE_AUTHORSHIPS : resolved_person
+    SOURCE_RECORDS ||--o{ SOURCE_FIELD_ASSERTIONS : supports
+    WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_subject
+    WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_object
+    RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_subject
+    RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_object
+    INGESTION_RUNS ||--o{ INGESTION_RECORD_RESULTS : evaluates
+    CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_ITEMS : contains
+    WORK_APPEARANCES ||--o{ CATALOGUE_RELEASE_ITEMS : published_as
+    CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : includes
+    PROCEEDINGS_VOLUMES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : published_in
 ```
 
 Notes: `SOURCE_RECORD_BINDINGS` has a **typed, exclusive target**: exactly one of `appearance_id` and `volume_id`. A source record may have **multiple historical binding decisions**, but at most **one active binding** per source observation; an unresolved/quarantined record may have none. This is a **PROPOSED physical simplification** of the approved appearance/volume source-link concept. Both subject and object ends of the relationship tables must have enforceable typed FKs, with no self-relation or prohibited cycles. `CATALOGUE_RELEASE_VOLUME_ITEMS` is a proposed logical release-membership relation, not necessarily a separate physical table. Each immutable release must also pin the selected field assertions, authorship presentation and classification/identity decision versions used in public responses; the precise implementation (release-scoped mapping vs immutable revision manifest) remains OPEN. Additional logical entities (typed identifiers, author-affiliation evidence, classification/identity decisions, redirects) are specified in the companion contract. Workshop events may require an explicitly evidenced `colocated_with` event relationship rather than misclassifying their volumes as main CHI.
