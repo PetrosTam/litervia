@@ -160,7 +160,7 @@
 
 ## 8. AC-09 — Final evidence reconciliation and open-decision register
 
-**Review state: ACCEPTED DOCUMENTATION (post-merge).** This evidence addendum retains the original evidence CSV and all fourteen historical outcome labels. The source-evidence review and implementation authorization were evaluated separately. Subsequently, the approved policy establishes Ready for Review, Squash & Merge of [PR #15](https://github.com/PetrosTam/litervia/pull/15), and final AC-09 acceptance after verifying clean, synchronized local `main` and matching 4/4 GitHub documentation blobs. **AC-01–AC-09 are accepted within their stated scope (9/9 retained criteria); implementation authorization remains separate.** This does **not** retroactively change a source claim, independently resolve a DOI, approve a canonical work merge or grant source-asset reuse rights.
+**Review state: ACCEPTED DOCUMENTATION (post-merge).** This evidence addendum retains the original evidence CSV and all fourteen historical outcome labels. The source-evidence review and implementation authorization were evaluated separately. [PR #15](https://github.com/PetrosTam/litervia/pull/15) passed its documented review and squash merge, followed by AC-09 acceptance after verifying synchronized local `main` and matching GitHub documentation blobs (4/4). **AC-01–AC-09 are accepted within their stated scope (9/9 retained criteria); implementation authorization remains separate.** This does **not** retroactively change a source claim, independently resolve a DOI, approve a canonical work merge or grant source-asset reuse rights.
 
 ### 8.1 Reproducibility and custody evidence accepted for AC-01 / AC-02
 
