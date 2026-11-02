@@ -1,6 +1,6 @@
 # PostgreSQL foundation (Issue #11)
 
-**Status:** Locally executed local PostgreSQL integration passed **6 tests / 406 assertions**; the complete Laravel + PostgreSQL suite passed **25 tests / 506 assertions**. GitHub [PR #12](https://github.com/PetrosTam/litervia/pull/12) head `b25b66e` passed [Actions run #40980614901](https://github.com/PetrosTam/litervia/actions/runs/40980614901): **3/3 jobs** (PHP 8.4, PHP 8.5 and Node.js 24), including fresh isolated PostgreSQL provisioning, credential-bootstrap negative checks, Laravel config-cache and PostgreSQL integration verification. No CHI ingestion, user tables, production database or hosted deployment has been created by this deliverable.
+**Status:** Local PostgreSQL integration tests passed **6 tests / 406 assertions**; the complete Laravel + PostgreSQL suite passed **25 tests / 506 assertions**. GitHub [PR #12](https://github.com/PetrosTam/litervia/pull/12) head `b25b66e` passed [Actions run #40980614901](https://github.com/PetrosTam/litervia/actions/runs/40980614901): **3/3 jobs** (PHP 8.4, PHP 8.5 and Node.js 24), including fresh isolated PostgreSQL provisioning, credential-bootstrap negative checks, Laravel config-cache and PostgreSQL integration verification. No CHI ingestion, user tables, production database or hosted deployment has been created by this deliverable.
 
 ## Boundaries
 
