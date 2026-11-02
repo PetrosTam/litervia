@@ -17,9 +17,9 @@ Prerequisites: installed PostgreSQL 18 server and `psql`, PHP with `pdo_pgsql`, 
 ```powershell
 cd C:\Dev\litervia
 $psql = 'C:\Program Files\PostgreSQL\18\bin\psql.exe'
-& $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 -f.\database\provisioning\01_postgresql_databases.sql
-& $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 -f.\database\provisioning\02_postgresql_roles.sql
-& $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 -f.\database\provisioning\03_postgresql_test_databases.sql
+& $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 -f .\database\provisioning\01_postgresql_databases.sql
+& $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 -f .\database\provisioning\02_postgresql_roles.sql
+& $psql -X -h 127.0.0.1 -p 5432 -U postgres -d postgres -v ON_ERROR_STOP=1 -f .\database\provisioning\03_postgresql_test_databases.sql
 ```
 
 **Fresh-cluster hardening (verified in disposable PR CI on PHP 8.4 and 8.5):** Script 01 now creates each application database with `ALLOW_CONNECTIONS = false`, revokes database-level `PUBLIC` permissions while connections remain disabled, verifies both databases are still closed, and then enables connections before connecting as the administrator to revoke `public` schema permissions. This avoids a setup-time window where default `PUBLIC CONNECT`/`TEMP` permissions would otherwise be active. The fresh 01→02→03 sequence passed in isolated PostgreSQL 18.6 GitHub Actions services on both PHP jobs; **do not use the existing Windows cluster for this regression check**. Mid-script failure can leave partially created objects: stop and inspect instead of rerunning.
@@ -46,9 +46,9 @@ First clear config and then run the opt-in PostgreSQL integration check. It conn
 php artisan config:clear
 $env:LITERVIA_PG_INTEGRATION = '1'
 try {
- php artisan test --filter=PostgreSQLConnectionTest --fail-on-skipped --fail-on-empty-test-suite
+    php artisan test --filter=PostgreSQLConnectionTest --fail-on-skipped --fail-on-empty-test-suite
 } finally {
- Remove-Item Env:\LITERVIA_PG_INTEGRATION -ErrorAction SilentlyContinue
+    Remove-Item Env:\LITERVIA_PG_INTEGRATION -ErrorAction SilentlyContinue
 }
 ```
 
