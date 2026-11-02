@@ -223,10 +223,3 @@ Copyright (c) 2026 Petros Tamboutsiaris. All rights reserved.
 Litervia is proprietary software and is not distributed under an open-source license. Unauthorized use, modification, or distribution of its original source code is not permitted, except as allowed by applicable law or expressly authorized in writing.
 
 See [LICENSE](LICENSE) for details.
-
-## Hero imagery — review status
-
-The Home page uses six optimized desktop/mobile WebP variants across three conceptual AI-generated hero compositions (02, 06, 07). They are illustrative, not documentary images of CHI events, researchers or equipment. Generation provenance records text-only prompts and no declared third-party reference-image uploads; this is a recorded source assertion, not independent non-infringement or exclusivity certification. Source masters are retained outside the repository, while only optimized WebP files in `public/media/heroes/` are served. The mobile 06 composition has completed visual selection, and all six assets have recorded approval for use in Litervia, including commercial use. Public website deployment, independent accessibility certification and production LCP verification remain outside the completed scope. See [Home implementation review](docs/hero-implementation-review.md) and [artwork provenance](docs/hero-asset-provenance.json). The current application remains `noindex, nofollow`.
-
-
-The Home route alone selects a random image (excluding the last seen ID via an encrypted HttpOnly cookie) and supplies it in the Blade shell for early discovery. The public manifest does not expose private file paths or user data, and its response is explicitly non-cacheable by HTTP caches. Direct navigation to Research does not rotate the image; a Research-to-Home SPA transition uses a documented static fallback until the next document load.
