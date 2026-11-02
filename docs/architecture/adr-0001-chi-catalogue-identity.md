@@ -2,15 +2,15 @@
 
 - **Product:** Litervia — Discover research. Explore knowledge.
 - **Issue:** [#13 — CHI normalization, identity and provenance pilot](https://github.com/PetrosTam/litervia/issues/13)
-- **Draft date:** 2026-10-31
+- **Status tracking:** decision register
 - **Status:** **APPROVED ARCHITECTURAL BASELINE**, with the explicit **PROPOSED** refinements and **OPEN** decisions below. **NOT an approval to create migrations or ingest data.**
 - **Scope:** CHI 1982–2026 research catalogue and its controlled data lifecycle; private user data is addressed solely as a boundary.
 - **Companions:** [CHI Normalization Contract](../research/chi-normalization-contract.md) (draft implementation contract) · [Metadata Publication & Rights Policy](../research/chi-metadata-publication-rights-policy.md) (**PUB-01–PUB-06 APPROVED**).
-- **Review boundary (updated 2026-11-01):** Documentation-only [PR #14](https://github.com/PetrosTam/litervia/pull/14) was squash-merged as `4b6b681`; this ADR remains the approved architectural baseline, **not** an authorization for research ingestion, database migrations or Issue #13 closure. The AC-09 source-evidence reconciliation is a separately reviewed local-first documentation update.
+- **Review boundary (updated ):** Documentation-only [PR #14](https://github.com/PetrosTam/litervia/pull/14) was squash-merged as `4b6b681`; this ADR remains the approved architectural baseline, **not** an authorization for research ingestion, database migrations or Issue #13 closure. The AC-09 source-evidence reconciliation is a separately reviewed local-first documentation update.
 
 ## 1. Decision context and source hierarchy
 
-**APPROVED product facts:** The catalogue covers CHI 1982–2026. Ordinary app/API traffic must not mutate research metadata; user notes, favourites, collections, reading state and preferences belong in a separately secured private database. Original DBLP research snapshots remain immutable outside Git. The owner explicitly approved (a) the separation of `research_works`, `work_appearances`, and `source_records` as the architectural baseline, and (b) the discovery policy: main CHI proceedings appear by default; Extended Abstracts, Companion and workshops/co-located materials are accessible through distinct filters; unknown/unverified material is accessible under All/Unclassified but is not automatically included in main results. **Main volume does not imply Technical Paper.**
+**APPROVED product facts:** The catalogue covers CHI 1982–2026. Ordinary app/API traffic must not mutate research metadata; user notes, favourites, collections, reading state and preferences belong in a separately secured private database. Original DBLP research snapshots remain immutable outside Git. the approved design decision establishes (a) the separation of `research_works`, `work_appearances`, and `source_records` as the architectural baseline, and (b) the discovery policy: main CHI proceedings appear by default; Extended Abstracts, Companion and workshops/co-located materials are accessible through distinct filters; unknown/unverified material is accessible under All/Unclassified but is not automatically included in main results. **Main volume does not imply Technical Paper.**
 
 **VERIFIED implementation baseline:** The connected GitHub repository describes Laravel 13, React (JavaScript), and PostgreSQL 18 with separate `litervia_catalogue` and `litervia_private` databases; the application uses a separate catalogue database connection. PostgreSQL Issue #11 created roles and test foundations, **not** research tables, runtime grants, or ingestion. Its README continues to describe the Research page as a placeholder. Existing runtime catalogue grants are not yet a proof of SELECT-only permissions on future tables. See [PostgreSQL foundation](https://github.com/PetrosTam/litervia/blob/main/docs/postgresql-foundation.md).
 
@@ -40,25 +40,25 @@
 
 ```mermaid
 erDiagram
-    SOURCE_SNAPSHOTS ||--o{ SOURCE_RECORDS : contains
-    CONFERENCE_EDITIONS ||--o{ PROCEEDINGS_VOLUMES : includes
-    RESEARCH_WORKS ||--o{ WORK_APPEARANCES : has
-    PROCEEDINGS_VOLUMES o|--o{ WORK_APPEARANCES : hosts
-    SOURCE_RECORDS ||--o{ SOURCE_RECORD_BINDINGS : binding_history
-    WORK_APPEARANCES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
-    PROCEEDINGS_VOLUMES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
-    WORK_APPEARANCES ||--o{ APPEARANCE_AUTHORSHIPS : lists
-    AUTHORS o|--o{ APPEARANCE_AUTHORSHIPS : resolved_person
-    SOURCE_RECORDS ||--o{ SOURCE_FIELD_ASSERTIONS : supports
-    WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_subject
-    WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_object
-    RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_subject
-    RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_object
-    INGESTION_RUNS ||--o{ INGESTION_RECORD_RESULTS : evaluates
-    CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_ITEMS : contains
-    WORK_APPEARANCES ||--o{ CATALOGUE_RELEASE_ITEMS : published_as
-    CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : includes
-    PROCEEDINGS_VOLUMES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : published_in
+ SOURCE_SNAPSHOTS ||--o{ SOURCE_RECORDS : contains
+ CONFERENCE_EDITIONS ||--o{ PROCEEDINGS_VOLUMES : includes
+ RESEARCH_WORKS ||--o{ WORK_APPEARANCES : has
+ PROCEEDINGS_VOLUMES o|--o{ WORK_APPEARANCES : hosts
+ SOURCE_RECORDS ||--o{ SOURCE_RECORD_BINDINGS : binding_history
+ WORK_APPEARANCES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
+ PROCEEDINGS_VOLUMES o|--o{ SOURCE_RECORD_BINDINGS : evidenced_by
+ WORK_APPEARANCES ||--o{ APPEARANCE_AUTHORSHIPS : lists
+ AUTHORS o|--o{ APPEARANCE_AUTHORSHIPS : resolved_person
+ SOURCE_RECORDS ||--o{ SOURCE_FIELD_ASSERTIONS : supports
+ WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_subject
+ WORK_APPEARANCES ||--o{ APPEARANCE_RELATIONSHIPS : relationship_object
+ RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_subject
+ RESEARCH_WORKS ||--o{ WORK_RELATIONSHIPS : relationship_object
+ INGESTION_RUNS ||--o{ INGESTION_RECORD_RESULTS : evaluates
+ CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_ITEMS : contains
+ WORK_APPEARANCES ||--o{ CATALOGUE_RELEASE_ITEMS : published_as
+ CATALOGUE_RELEASES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : includes
+ PROCEEDINGS_VOLUMES ||--o{ CATALOGUE_RELEASE_VOLUME_ITEMS : published_in
 ```
 
 Notes: `SOURCE_RECORD_BINDINGS` has a **typed, exclusive target**: exactly one of `appearance_id` and `volume_id`. A source record may have **multiple historical binding decisions**, but at most **one active binding** per source observation; an unresolved/quarantined record may have none. This is a **PROPOSED physical simplification** of the approved appearance/volume source-link concept. Both subject and object ends of the relationship tables must have enforceable typed FKs, with no self-relation or prohibited cycles. `CATALOGUE_RELEASE_VOLUME_ITEMS` is a proposed logical release-membership relation, not necessarily a separate physical table. Each immutable release must also pin the selected field assertions, authorship presentation and classification/identity decision versions used in public responses; the precise implementation (release-scoped mapping vs immutable revision manifest) remains OPEN. Additional logical entities (typed identifiers, author-affiliation evidence, classification/identity decisions, redirects) are specified in the companion contract. Workshop events may require an explicitly evidenced `colocated_with` event relationship rather than misclassifying their volumes as main CHI.
@@ -119,38 +119,38 @@ The exact count of tables, FK names, generated UUID method, selected-field cachi
 
 | ID | State | Decision / unresolved question | Closure evidence or impact |
 |---|---|---|---|
-| D-01 | **APPROVED** | Separate work, appearance, source record identities | Owner approval in conversation; Specification §6.3 |
-| D-02 | **APPROVED** | Main-only default; EA/Companion/Workshop separately discoverable; unknown visible through All | Owner approval in conversation |
-| D-03 | **APPROVED** | Stable IDs, raw source preservation, no title/year merge, two databases | Specification §§5–6; owner approval; Issue #11 |
-| D-04 | **APPROVED DIRECTION / PHYSICAL DDL PROPOSED** | Independent UUID identities (UUIDv4 recommended), type-compatible source bindings, controlled identifier owners and original bylines; exact SQL and audit mechanics not frozen | Owner approval 2026-11-01; [physical design contract](chi-catalogue-physical-design-contract.md) §2–3; PostgreSQL negative tests NOT RUN |
-| D-05 | **APPROVED DIRECTION / PROMOTION MECHANISM PROPOSED** | Immutable validated release contents, atomic active pointer and audited transitions; rights withdrawal must fail closed; exact publisher/rollback privileges and thresholds open | Owner approval 2026-11-01; [physical design contract](chi-catalogue-physical-design-contract.md) §4; recovery/rights tests NOT RUN |
+| D-01 | **APPROVED** | Separate work, appearance, source record identities | approval in conversation; Specification §6.3 |
+| D-02 | **APPROVED** | Main-only default; EA/Companion/Workshop separately discoverable; unknown visible through All | approval in conversation |
+| D-03 | **APPROVED** | Stable IDs, raw source preservation, no title/year merge, two databases | Specification §§5–6; approval; Issue #11 |
+| D-04 | **APPROVED DIRECTION / PHYSICAL DDL PROPOSED** | Independent UUID identities (UUIDv4 recommended), type-compatible source bindings, controlled identifier owners and original bylines; exact SQL and audit mechanics not frozen | approval ; [physical design contract](chi-catalogue-physical-design-contract.md) §2–3; PostgreSQL negative tests NOT RUN |
+| D-05 | **APPROVED DIRECTION / PROMOTION MECHANISM PROPOSED** | Immutable validated release contents, atomic active pointer and audited transitions; rights withdrawal must fail closed; exact publisher/rollback privileges and thresholds open | approval ; [physical design contract](chi-catalogue-physical-design-contract.md) §4; recovery/rights tests NOT RUN |
 | D-06 | **OPEN** | How to decide same-work vs related/different appearances for TC-001/002/071/140/141 | Record-level official sources, reviewer reasoning and evidence log |
 | D-07 | **OPEN** | DOI canonicalization and ambiguous multi-DOI policy, DOI resolver checks | Scheme test cases, official DOI metadata/targets, collisions |
 | D-08 | **OPEN** | Verified main/EA/workshop volume crosswalk and exact track/contribution vocabulary | Official publisher/workshop evidence, including AutomationXP discrepancy |
 | D-09 | **APPROVED POLICY / OPEN IMPLEMENTATION** | PUB-01–PUB-06 define conservative publication, DBLP title fallback, attribution and asset-clearance gates; source-specific Crossref/OpenAlex/ACM integration and individual content rights remain OPEN | [Approved publication policy](../research/chi-metadata-publication-rights-policy.md), provider terms and per-asset verification |
 | D-10 | **OPEN** | PostgreSQL collation, multilingual search, performance and API query contract | Approved filters plus fixture benchmarks, EXPLAIN, negative API tests |
-| D-11 | **OPEN** | Identity review authority, redirect resolution policy, private-reference migration | Owner decision, authorization and consistency tests |
+| D-11 | **OPEN** | Identity review authority, redirect resolution policy, private-reference migration | decision, authorization and consistency tests |
 | D-12 | **OPEN** | Final physical table count, read-view security grants and importer role privileges | Reviewed migrations and isolated PostgreSQL privilege tests |
 | D-13 | **OPEN** | 1984 display/historical interpretation and independently corroborated coverage | Preserve source zero; do not invent historical conference claims |
 | D-14 | **OPEN** | Completion of mandatory official-source cross-checks on seven pilot years and all disputed pairs | At least 2 cited records/year, collision case review, conflict resolution |
 
-**Design review status (2026-11-01):** The owner approved the *architectural direction* of D-04 and D-05 after the [physical schema design review](chi-catalogue-physical-design-contract.md); this is **not** final physical DDL, importer/publisher-role, grants or migration authorization. **D-12 remains OPEN; Issue #13 AC-10 remains unchecked/not authorized.** The source-level collision/DOI/CEUR/rights decisions remain unresolved where recorded. The design-only follow-up is tracked in [Issue #17](https://github.com/PetrosTam/litervia/issues/17).
+**Design review status:** The approved the *architectural direction* of D-04 and D-05 after the [physical schema design review](chi-catalogue-physical-design-contract.md); this is **not** final physical DDL, importer/publisher-role, grants or migration authorization. **D-12 remains OPEN; Issue #13 AC-10 remains unchecked/not authorized.** The source-level collision/DOI/CEUR/rights decisions remain unresolved where recorded. The design-only follow-up is tracked in [Issue #17](https://github.com/PetrosTam/litervia/issues/17).
 
 ## 9. Evidence and limitations
 
 The pilot demonstrates a **need** for separation, not the correctness of a final populated schema. There is no implemented Laravel importer, complete publisher corpus comparison, proven title/author/DOI reconciliation, rights clearance for media/full text, or database ingestion. A valid DOI-shaped URL is not proof that a DOI resolves. Historical zero entries in 1984 describe a source export; they do not prove universal historical absence.
 
-**Example disputes:** `TC-071` has main and EA appearances with different author lists; `TC-141` has two different Extended Abstracts DOI; `AutomationXP@CHI 2023` has **20 `inproceedings` plus one `proceedings` volume record** in the pilot, while the CEUR Volume 3394 index reports 19 accepted short papers. The mismatch is a source-reconciliation case, **not** permission to delete the extra record or infer it was not published. **Owner-approved handling (2026-10-31):** `short10.pdf` TOC membership remains OPEN/DISPUTED but an editorial answer is not a prerequisite for unrelated, independently verified records.
+**Example disputes:** `TC-071` has main and EA appearances with different author lists; `TC-141` has two different Extended Abstracts DOI; `AutomationXP@CHI 2023` has **20 `inproceedings` plus one `proceedings` volume record** in the pilot, while the CEUR Volume 3394 index reports 19 accepted short papers. The mismatch is a source-reconciliation case, **not** permission to delete the extra record or infer it was not published. **approved handling:** `short10.pdf` TOC membership remains OPEN/DISPUTED but an editorial answer is not a prerequisite for unrelated, independently verified records.
 
 ## 10. Acceptance gate and next action
 
 **Verification state:** Uploaded pilot evidence was statically inspected; document checks are distinct from implementation validation. Laravel importer tests, PostgreSQL schema/permission tests and runtime search tests are **NOT RUN**.
 
-**PR #14 / PR #15 — documentation gates COMPLETED:** The ADR and its three companion documents were reviewed and merged in [PR #14](https://github.com/PetrosTam/litervia/pull/14), squash commit `4b6b681`; the owner's local `main` was synchronized and the original feature branch removed. The later evidence reconciliation was separately accepted after [PR #15](https://github.com/PetrosTam/litervia/pull/15), squash commit [`d2f4eb1`](https://github.com/PetrosTam/litervia/commit/d2f4eb13ef14f9a15cef314f9c8ea97196035cd3), and verified post-merge local synchronization. The fourteen-case [source evidence index](../research/chi-source-evidence-identity-review.md#6-seven-year-comparison-register-14-cases) retains publisher/track/rights limits. Neither PR's existing-application CI is proof of CHI importer execution or research catalogue security tests.
+**PR #14 / PR #15 — documentation gates COMPLETED:** The ADR and its three companion documents were reviewed and merged in [PR #14](https://github.com/PetrosTam/litervia/pull/14), squash commit `4b6b681`; the project's local `main` was synchronized and the original feature branch removed. The later evidence reconciliation was separately accepted after [PR #15](https://github.com/PetrosTam/litervia/pull/15), squash commit [`d2f4eb1`](https://github.com/PetrosTam/litervia/commit/d2f4eb13ef14f9a15cef314f9c8ea97196035cd3), and verified post-merge local synchronization. The fourteen-case [source evidence index](../research/chi-source-evidence-identity-review.md#6-seven-year-comparison-register-14-cases) retains publisher/track/rights limits. Neither PR's existing-application CI is proof of CHI importer execution or research catalogue security tests.
 
-**Issue #13 / future implementation gate (post-merge 2026-11-01):** The owner accepted **AC-01–AC-09**, each at its documented source-evidence, policy or design scope, after the verified [PR #15](https://github.com/PetrosTam/litervia/pull/15) merge. [Issue #13](https://github.com/PetrosTam/litervia/issues/13) remains **OPEN (9/10); AC-10 is OPEN / NOT AUTHORIZED**. The accepted [AC-09 evidence and decision register](../research/chi-source-evidence-identity-review.md#8-ac-09--final-evidence-reconciliation-and-open-decision-register-2026-11-01) explicitly preserves five collision-related same-work decisions, unresolved DOI canonicalization, contribution taxonomy, source/asset rights, physical PostgreSQL constraints/permissions and API/search contracts. The catalogue importer, release/rollback and new research runtime permission tests remain **NOT RUN**; no migrations, ingestion, enrichment or deployment are authorized.
+**Issue #13 / future implementation gate (post-merge ):** the project accepted **AC-01–AC-09**, each at its documented source-evidence, policy or design scope, after the verified [PR #15](https://github.com/PetrosTam/litervia/pull/15) merge. [Issue #13](https://github.com/PetrosTam/litervia/issues/13) remains **OPEN (9/10); AC-10 is OPEN / NOT AUTHORIZED**. The accepted [AC-09 evidence and decision register](../research/chi-source-evidence-identity-review.md#8-ac-09--final-evidence-reconciliation-and-open-decision-register-) explicitly preserves five collision-related same-work decisions, unresolved DOI canonicalization, contribution taxonomy, source/asset rights, physical PostgreSQL constraints/permissions and API/search contracts. The catalogue importer, release/rollback and new research runtime permission tests remain **NOT RUN**; no migrations, ingestion, enrichment or deployment are authorized.
 
-## 11. External references (reviewed 2026-10-31)
+## 11. External references (reviewed )
 
 1. [DBLP licence and CC0](https://dblp.org/db/about/copyright.html), [DBLP XML](https://dblp.org/xml/).
 2. [W3C PROV-O](https://www.w3.org/TR/prov-o/) — source, transformation and actor lineage.
