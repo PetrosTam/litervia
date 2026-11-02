@@ -2,15 +2,15 @@
 
 - **Project:** Litervia — Discover research. Explore knowledge.
 - **Issue:** [#13](https://github.com/PetrosTam/litervia/issues/13)
-- **Draft date:** 2026-10-31
+
 - **Status:** **DRAFT CONTRACT / PROPOSED operational rules** based on the [APPROVED ADR baseline](../architecture/adr-0001-chi-catalogue-identity.md). This document is **not** an authorized ingestion specification or physical migration plan.
 - **Sources of truth:** Product Engineering Specification §§5–6, 8, 12; Master Project Instructions Stage 02; Engineering Playbook; dated DBLP source manifest; sampled CSV/manifest; GitHub Issue #13 and PostgreSQL foundation. See [reference register](#12-reference-register).
 - **Evidence companion:** [Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) (five candidate pairs and AutomationXP 2023). It records **source-level findings**, not approval to consolidate canonical works.
-- **Publication policy:** [Metadata Publication & Rights Policy](chi-metadata-publication-rights-policy.md) — **PUB-01–PUB-06 APPROVED by owner on 2026-10-31**; physical implementation and any per-asset reuse clearance remain OPEN.
+- **Publication policy:** [Metadata Publication & Rights Policy](chi-metadata-publication-rights-policy.md) — **PUB-01–PUB-06 APPROVED**; physical implementation and any per-asset reuse clearance remain OPEN.
 
 ## 1. Normative language and evidence classes
 
-**MUST / MUST NOT** below express the *proposed acceptance contract* that implementation must satisfy **after approval**, not a claim that any implementation exists. **APPROVED** names owner-approved product/architecture policy; **VERIFIED** means supported by actual uploaded source artifacts or read-only repository evidence; **PROPOSED** means not approved as a final algorithm, SQL model or API response; **OPEN** identifies a blocked decision; **NOT RUN** denotes tests not executed. **Observed source values** are not equivalent to publisher-confirmed facts. **UNKNOWN** is not `null` masquerading as a verified absence.
+**MUST / MUST NOT** below express the *proposed acceptance contract* that implementation must satisfy **after approval**, not a claim that any implementation exists. **APPROVED** names approved product/architecture policy; **VERIFIED** means supported by actual uploaded source artifacts or read-only repository evidence; **PROPOSED** means not approved as a final algorithm, SQL model or API response; **OPEN** identifies a blocked decision; **NOT RUN** denotes tests not executed. **Observed source values** are not equivalent to publisher-confirmed facts. **UNKNOWN** is not `null` masquerading as a verified absence.
 
 Source lineage has four scopes: source publication/retrieval evidence; snapshot-file identity; individual source-record identity; derived field assertion and the review that selected it. A source author's name/ORCID claim is not automatically a verified person identity.
 
@@ -30,7 +30,7 @@ Source lineage has four scopes: source publication/retrieval evidence; snapshot-
 | Pilot selection method | Selector `1.0.0`; seed `litervia-chi-pilot-150-v1-2026-10-03`; mandated edge cases plus quotas and stable SHA-256 ranking |
 | Earlier historical audit | 13,022,717 scanned records in an older snapshot; not proof of row-level equivalence |
 
-The complete dated DBLP snapshot and derived CSV are on the owner's Windows machine under `C:\Dev\LiterviaResearchData` **outside Git**. They have **not** been opened from that Windows filesystem in this documentation step. The uploaded 150-record pilot was directly checked; the full 28,870-row CSV count relies on the recorded, owner-executed source audit and manifest, not a new local full-import run.
+The complete dated DBLP snapshot and derived CSV are on the project's Windows machine under `C:\Dev\LiterviaResearchData` **outside Git**. They have **not** been opened from that Windows filesystem in this documentation step. The uploaded 150-record pilot was directly checked; the full 28,870-row CSV count relies on the recorded, locally executed source audit and manifest, not a new local full-import run.
 
 ## 2. Catalogue entity and cardinality contract
 
@@ -157,7 +157,7 @@ The current extractor's `doi` field is sourced from explicit `<doi>` elements; i
 
 **Required assertion envelope — PROPOSED:** `assertion_id`, target typed FK, `field_key`, `raw_value_json`, optional `normalized_value_json`, `provider`, `source_snapshot_id?`, `source_record_id?`, source URL/record identifier, `retrieved_at_utc`, `evidence_checked_at_utc?`, `availability_state`, `review_state`, `rights_state`, `selection_state`, `decision_id?`, `superseded_by?`. For offline DBLP data, `retrieved_at_utc` should not be fabricated when only the snapshot date is known; store the available source/snapshot date and an explicit unknown retrieval time. Provenance of a derived assertion may refer to its derivation/run; **do not invent a human reviewer** for automatic parsing.
 
-**Policy versus implementation:** The owner APPROVED PUB-01–PUB-06 on 2026-10-31. The proposed SQL/API rights-state values `permitted_metadata`, `permission_required`, `restricted`, `unknown`, `not_applicable` remain **PROPOSED / NOT IMPLEMENTED**; their exact enum/table representation requires approval. Record evidence and interpretation date; do not copy a source metadata licence to third-party assets.
+**Policy versus implementation:** The PUB-01–PUB-06 publication policy is approved, but the operational implementation remains open. The proposed SQL/API rights-state values `permitted_metadata`, `permission_required`, `restricted`, `unknown`, `not_applicable` remain **PROPOSED / NOT IMPLEMENTED**; their exact enum/table representation requires approval. Record evidence and interpretation date; do not copy a source metadata licence to third-party assets.
 
 ## 7. Collision/identity decision register (source evidence reviewed; canonical identity OPEN)
 
@@ -176,7 +176,7 @@ The [dated Source Evidence & Identity Decision Review](chi-source-evidence-ident
 
 **Decision envelope — PROPOSED:** `case_id`, typed subject IDs, `decision_type`, `status` (`candidate/confirmed/rejected/reversed`), reviewer identity, timestamp, source URLs/checked dates, snapshot IDs, rationale and superseding decision link. The verified decision here is **separate appearance identity**, not canonical work equivalence. No inferred reviewer signature or editorial response may be invented.
 
-**Evidence scope update:** The [companion source-evidence register](chi-source-evidence-identity-review.md#6-seven-year-comparison-register-14-cases) now includes **14 cases / two in each seven mandatory pilot years**, copied from the source-attributed owner evidence package with its original quality labels. Numeric comparison coverage does **not** establish publisher completeness, DOI resolution or per-asset rights. SC-05/06 need stronger primary-source checks; SC-09/12/14 retain documented conflicts or limitations. See T-17 and the open AC-05 review gate.
+**Evidence scope update:** The [companion source-evidence register](chi-source-evidence-identity-review.md#6-seven-year-comparison-register-14-cases) now includes **14 cases / two in each seven mandatory pilot years**, copied from the source-attributed evidence package with its original quality labels. Numeric comparison coverage does **not** establish publisher completeness, DOI resolution or per-asset rights. SC-05/06 need stronger primary-source checks; SC-09/12/14 retain documented conflicts or limitations. See T-17 and the open AC-05 review gate.
 
 ## 8. Import, reconciliation, release and recovery contract
 
@@ -229,14 +229,14 @@ The following tests are measurable contracts for **later** execution. All are **
 | P0 | Verify source-volume/category crosswalk and historical CHI editions without implying technical-paper type | Source comparisons with CEUR/ACM/SIGCHI, dated evidence |
 | P1 | CEUR `short10.pdf` TOC membership / title conflict **OPEN** but non-blocking for unrelated verified records | Editorial clarification desirable as follow-up; preserve disputed provenance and do not claim final acceptance |
 | P0 | Final ID normalization algorithms and typed FK/uniqueness policy | Dedicated design approval plus negative/ambiguous DOI tests |
-| P0 | Per-asset / per-source rights for any future abstracts, media or enrichment (**general PUB-01–PUB-06 publication policy APPROVED**) | Copy/version-specific licence, provenance and separate implementation owner approval |
+| P0 | Per-asset / per-source rights for any future abstracts, media or enrichment (**general PUB-01–PUB-06 publication policy APPROVED**) | Copy/version-specific licence, provenance and separate implementation approval |
 | P0 | Exact physical schema, catalogue writer/grants and promotion atomicity | Reviewed migrations on disposable PostgreSQL, database permissions tests |
 | P1 | Author/institution disambiguation policy incl. ORCID/ROR conflicts | Verified work-specific affiliations, no blanket profile inference |
 | P1 | Public API filter naming, collation, sort/pagination and indexes | Separately approved API contract and EXPLAIN/feature tests |
-| P1 | Publishing thresholds and release approval authority | Reconciliation fixture and owner decision |
+| P1 | Publishing thresholds and release approval authority | Reconciliation fixture and decision |
 | P1 | Private references, redirects and consistency repair under work mergers | Server-side authorization/integrity tests in private DB |
 
-**Documentation review gate (post-merge 2026-11-01):** The original four-file architecture and policy package merged in [PR #14](https://github.com/PetrosTam/litervia/pull/14) (`4b6b681`), followed by the [PR #15 AC-09 evidence reconciliation](https://github.com/PetrosTam/litervia/pull/15) (squash commit [`d2f4eb1`](https://github.com/PetrosTam/litervia/commit/d2f4eb13ef14f9a15cef314f9c8ea97196035cd3)). After verified post-merge `main` synchronization the owner explicitly accepted AC-09. [Issue #13](https://github.com/PetrosTam/litervia/issues/13) therefore has **AC-01–AC-09 accepted at bounded evidence/design scope (9/10)**; **AC-10 remains OPEN / NOT AUTHORIZED**. The [dated AC-09 register](chi-source-evidence-identity-review.md#8-ac-09--final-evidence-reconciliation-and-open-decision-register-2026-11-01) preserves unresolved identities, contested publisher assertions, original source labels and CEUR `short10.pdf` disputed membership. The 21 normalization tests in Section 9, physical database privileges, importer and recovery workflows remain **DESIGN ONLY / NOT RUN**. No migration, ingestion, source enrichment or public release is approved by these documentation merges.
+**Documentation review gate (post-merge):** The original four-file architecture and policy package merged in [PR #14](https://github.com/PetrosTam/litervia/pull/14) (`4b6b681`), followed by the [PR #15 AC-09 evidence reconciliation](https://github.com/PetrosTam/litervia/pull/15) (squash commit [`d2f4eb1`](https://github.com/PetrosTam/litervia/commit/d2f4eb13ef14f9a15cef314f9c8ea97196035cd3)). Following verified post-merge `main` synchronization, AC-09 was accepted within its documented evidence scope. [Issue #13](https://github.com/PetrosTam/litervia/issues/13) therefore has **AC-01–AC-09 accepted at bounded evidence/design scope (9/9 retained criteria)**; future implementation approval remains separate. The [dated AC-09 register](chi-source-evidence-identity-review.md#8-ac-09--final-evidence-reconciliation-and-open-decision-register-) preserves unresolved identities, contested publisher assertions, original source labels and CEUR `short10.pdf` disputed membership. The 21 normalization tests in Section 9, physical database privileges, importer and recovery workflows remain **DESIGN ONLY / NOT RUN**. No migration, ingestion, source enrichment or public release is approved by these documentation merges.
 
 ## 11. Short risk register
 
@@ -258,10 +258,10 @@ The following tests are measurable contracts for **later** execution. All are **
 - `Litervia_CHI_1982_2026_Record_Level_Audit_Report.pdf` and the related coverage/collision CSV files; historical audit is distinct from the new snapshot.
 - `chi_pilot_150_records_2026-10-03.csv` and `chi_pilot_150_manifest_2026-10-03.json` (locally supplied and checked); full DBLP source and derived CSV remain outside Git.
 - [Source Evidence & Identity Decision Review](chi-source-evidence-identity-review.md) — dated source-level observations and the still-open case register; no canonical merges authorized.
-- [Metadata Publication & Rights Policy](chi-metadata-publication-rights-policy.md) — PUB-01–PUB-06 approved 2026-10-31; per-asset clearance and physical rules remain open.
+- [Metadata Publication & Rights Policy](chi-metadata-publication-rights-policy.md) — PUB-01–PUB-06 approved ; per-asset clearance and physical rules remain open.
 - [GitHub Issue #13](https://github.com/PetrosTam/litervia/issues/13), [PostgreSQL Foundation](https://github.com/PetrosTam/litervia/blob/main/docs/postgresql-foundation.md), [current README](https://github.com/PetrosTam/litervia/blob/main/README.md).
 
-**Official external technical/research references (accessed 2026-10-31):**
+**Official external technical/research references (accessed ):**
 
 - [DBLP copyright / CC0](https://dblp.org/db/about/copyright.html); [DBLP XML](https://dblp.org/xml/).
 - [CEUR-WS Volume 3394](https://ceur-ws.org/Vol-3394/) — workshop ToC and accepted-paper statement.

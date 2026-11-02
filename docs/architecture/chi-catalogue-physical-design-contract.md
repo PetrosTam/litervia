@@ -2,15 +2,15 @@
 
 **Scope:** design-only · **Tracking:** Issue #17, upstream research pilot Issue #13
 
-**Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION** (owner, 2026-11-01); detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
+**Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION**; detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
 
 **Execution evidence:** STATIC DOCUMENT REVIEW ONLY. **No migrations, database tests, importer runs, grants, runtime role changes, enrichment, data import, application changes or deployment.**
 
 ## 1. Sources and non-negotiable boundaries
 
-Authority, in priority order: explicitly approved owner decisions; Product Engineering Specification §§5–6, 12, 14–15; [ADR-0001](adr-0001-chi-catalogue-identity.md); [CHI Normalization Contract](../research/chi-normalization-contract.md) N-01–N-14; [publication/rights policy](../research/chi-metadata-publication-rights-policy.md) PUB-01–PUB-06; [PostgreSQL foundation](../postgresql-foundation.md); dated [source review](../research/chi-source-evidence-identity-review.md); current repository. The Product Specification's initial SQLite proposal was superseded by approved PostgreSQL 18 foundation Issue #11 / PR #12; do not silently rewrite that historical specification.
+Authority, in priority order: recorded approved project decisions; Product Engineering Specification §§5–6, 12, 14–15; [ADR-0001](adr-0001-chi-catalogue-identity.md); [CHI Normalization Contract](../research/chi-normalization-contract.md) N-01–N-14; [publication/rights policy](../research/chi-metadata-publication-rights-policy.md) PUB-01–PUB-06; [PostgreSQL foundation](../postgresql-foundation.md); dated [source review](../research/chi-source-evidence-identity-review.md); current repository. The Product Specification's initial SQLite proposal was superseded by approved PostgreSQL 18 foundation Issue #11 / PR #12; do not silently rewrite that historical specification.
 
-**APPROVED:** (1) independent stable `research_works`, `work_appearances`, `source_records` identities; separate proceedings volumes; (2) main CHI **verified** category default, EA/Companion/workshop explicit opt-ins, unknown under All; (3) original DBLP keys, DOI candidates and source author ordering preserved; no title/year/DOI-only merge; (4) catalogue/private PostgreSQL database separation and server-enforced authorization; (5) PUB-01–PUB-06 conservative bibliographic publication policy; (6) D-04/D-05 direction as explicitly approved on 2026-11-01.
+**APPROVED:** (1) independent stable `research_works`, `work_appearances`, `source_records` identities; separate proceedings volumes; (2) main CHI **verified** category default, EA/Companion/workshop explicit opt-ins, unknown under All; (3) original DBLP keys, DOI candidates and source author ordering preserved; no title/year/DOI-only merge; (4) catalogue/private PostgreSQL database separation and server-enforced authorization; (5) PUB-01–PUB-06 conservative bibliographic publication policy; (6) D-04/D-05 direction as explicitly approved on .
 
 **VERIFIED BASELINE:** `litervia_catalogue`, `litervia_private` and isolated `_test` databases; existing `litervia_catalogue_app`, `litervia_catalogue_migrator` (and separate private identities), per [foundation](../postgresql-foundation.md). **Not verified/existing:** research/publication/api_public schemas, research tables, catalogue importer/publisher principals, public views, grants on future tables, ingestion and release tests. The reviewed CSV source pilot is 150 distinct records (134 `inproceedings`, 16 `proceedings`), not a database import or 150 independently verified works. Original datasets remain immutable outside Git.
 
@@ -20,7 +20,7 @@ Authority, in priority order: explicitly approved owner decisions; Product Engin
 
 ### 2.1 Key choice and controlled schemes
 
-**Approved direction:** random internal IDs independent of upstream identifiers. **Proposed physical default (owner-approved direction, not tested DDL):** PostgreSQL native `uuid DEFAULT gen_random_uuid()` (UUIDv4) for identity tables; no extra extension. Stable work and appearance IDs must survive identical reruns, changes of assertions and supervised work redirects; never derive IDs from title, DOI, year, author name or source key. Every research source observation has a separate immutable `source_records.id` and unique (`snapshot_id`, `source_record_key`).
+**Approved direction:** random internal IDs independent of upstream identifiers. **Proposed physical default (approved direction, not tested DDL):** PostgreSQL native `uuid DEFAULT gen_random_uuid` (UUIDv4) for identity tables; no extra extension. Stable work and appearance IDs must survive identical reruns, changes of assertions and supervised work redirects; never derive IDs from title, DOI, year, author name or source key. Every research source observation has a separate immutable `source_records.id` and unique (`snapshot_id`, `source_record_key`).
 
 Preserve immutable snapshot hashes, selector/extractor contract version and source record raw exported values. `jsonb` reflects the exporter representation, **not proof of byte-perfect original XML**. Archived original XML and source datasets stay outside Git and the application database.
 
@@ -124,7 +124,7 @@ A `classification_decisions` record must distinguish `human_review` from `approv
 
 **Approved direction:** staged source import → validation → immutable release snapshot → explicit publication authority → catalogue-local atomic pointer → audited rollback; never infer a distributed transaction with `litervia_private`.
 
-**Proposed candidate transaction:** (1) verify a validated, immutable release/manifest; (2) verify owner-approved completeness and rights gates; (3) BEGIN and lock singleton `active_release` row; (4) recheck expected generation and active rights holds; (5) update `active_release.release_id` and increment generation; (6) insert the matching `release_transition_events` event in **the same transaction**; (7) COMMIT. A failure before COMMIT leaves the old pointer and no committed promotion event. A trigger/controlled function or equivalent DB-enforced boundary must prevent bypass and unaudited direct UPDATE; **not currently implemented**.
+**Proposed candidate transaction:** (1) verify a validated, immutable release/manifest; (2) verify approved completeness and rights gates; (3) BEGIN and lock singleton `active_release` row; (4) recheck expected generation and active rights holds; (5) update `active_release.release_id` and increment generation; (6) insert the matching `release_transition_events` event in **the same transaction**; (7) COMMIT. A failure before COMMIT leaves the old pointer and no committed promotion event. A trigger/controlled function or equivalent DB-enforced boundary must prevent bypass and unaudited direct UPDATE; **not currently implemented**.
 
 **Snapshot immutability:** Freeze membership for appearances **and volumes**, selected title/DOI/source links, observed/missingness states, ordered public byline, reviewed category/type, exact work association and source/evidence selection. A release A→B→A must return the same authorized *historical facts*. A current correction cannot mutate A. Every selected title assertion/byline FK must be checked for *the same appearance*, not merely point to an existing row. Do not accidentally follow the latest mutable identities when reading historical snapshots.
 
@@ -224,7 +224,7 @@ Additional PostgreSQL FTS/trigram/ICU indexes and search sorting are **D-10 OPEN
 
 ## 8. Open decisions and sign-off conditions
 
-| Decision | Review state after owner approval of *direction* | Next proof/decision |
+| Decision | Review state after approval of *direction* | Next proof/decision |
 |---|---|---|
 | D-01–D-03 | APPROVED (unchanged) | No unauthorized scope changes |
 | **D-04** | **APPROVED DIRECTION / PHYSICAL DDL PROPOSED** | Review final scheme whitelist, binding transition authorization, composite FKs and negative SQL fixtures |
@@ -234,7 +234,7 @@ Additional PostgreSQL FTS/trigram/ICU indexes and search sorting are **D-10 OPEN
 | D-10 | OPEN | Search query, filters, stable sort and measured indexes |
 | D-11 | OPEN | Redirect review and private record consistency |
 | **D-12** | **OPEN — NOT FROZEN** | Final DDL, schema ownership/GRANT verification, object graph, publisher/importer role authorization |
-| Issue #13 AC-10 | **OPEN / NOT AUTHORIZED** | Separate explicit bounded owner authorization before any migration/importer/DB change |
+| Future catalogue implementation | **NOT AUTHORIZED** | Separate bounded approval required before any migration/importer/database change |
 
 **Acceptance boundary for this Issue #17:** documentation can be reviewed/accepted without freezing every physical DDL decision. A design-only merge is **not** implementation sign-off. Mark a decision "approved physical" only after its *specific* constraints, privileges, risk gates and negative-test plan are accepted. Never label unrun tests PASS.
 
@@ -242,7 +242,7 @@ Additional PostgreSQL FTS/trigram/ICU indexes and search sorting are **D-10 OPEN
 
 - Planned files for Issue #17: this single consolidated design contract and a minimal ADR D-04/D-05 decision-register status sync. Other documents' historical statements remain preserved.
 - **Scope exclusions:** no PHP/JS/SQL migration, provisioning/regrant, users/private data, source files, snapshots, ingestion, DOI resolution, media, API/frontend changes, deployment, PR merge or Issue #13 closure.
-- Review the actual GitHub diff, internal links and the named decision register. Later PR readiness and merge require separate owner approval.
+- Review the actual GitHub diff, internal links and the named decision register. Later PR readiness and merge require separate approval.
 - Required implementation order remains: approved design → independently authorized disposable-test schema → database-enforced negative tests → authorized pilot importer → rights-gated public release.
 
 ## References
@@ -254,6 +254,6 @@ Additional PostgreSQL FTS/trigram/ICU indexes and search sorting are **D-10 OPEN
 - [PostgreSQL 18: GRANT](https://www.postgresql.org/docs/18/sql-grant.html)
 - [PostgreSQL 18: default privileges](https://www.postgresql.org/docs/18/sql-alterdefaultprivileges.html)
 
-**Local-first review corrections (2026-11-01):** REV-01 typed source/byline composite lineage; REV-02 non-null title/byline selections and guarded release validation; REV-03 evidence-backed confirmed membership; REV-04 source-observation claims without fabricated canonical mapping; REV-05 public view/rights bypass threat model; REV-06 Markdown section markers. This is **DESIGN ONLY**, not PostgreSQL execution proof or a final D-12 freeze. File modifications must be reviewed and committed locally before any separately approved GitHub push.
+**Local-first review corrections:** REV-01 typed source/byline composite lineage; REV-02 non-null title/byline selections and guarded release validation; REV-03 evidence-backed confirmed membership; REV-04 source-observation claims without fabricated canonical mapping; REV-05 public view/rights bypass threat model; REV-06 Markdown section markers. This is **DESIGN ONLY**, not PostgreSQL execution proof or a final D-12 freeze. File modifications must be reviewed and committed locally before any separately approved GitHub push.
 
-**Last review scope:** owner-approved design direction, detailed physical contract **proposed**, database and importer tests **NOT RUN**.
+**Last review scope:** approved design direction, detailed physical contract **proposed**, database and importer tests **NOT RUN**.

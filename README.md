@@ -2,232 +2,75 @@
 
 **Discover research. Explore knowledge.**
 
-Litervia is an independent research discovery and personal knowledge platform for exploring CHI research (1982–2026), discovering publications and authors, and building a personal research library.
+Litervia is an independent research-discovery and personal-knowledge platform for exploring CHI research from 1982 to 2026, discovering publications and researchers, and building a personal research library.
 
 ## Project Status
 
-**Early development — Laravel and React foundation with an initial editorial interface.**
+**In development.** The repository currently includes a Laravel and React application foundation, an editorial Home page, a Research page indicating that the catalogue is under development, isolated PostgreSQL database connections, automated tests, and GitHub Actions CI.
 
-The application foundation includes Laravel, Blade, React, React Router, TanStack Query, Tailwind CSS, and Vite. The Home page implements the owner-approved Editorial Research visual direction with three conceptual responsive hero compositions and a narrowly scoped public, read-only hero-image manifest; the Research route remains an explicit catalogue-under-development placeholder. Research ingestion, real search and filters, user accounts, private knowledge features, and deployment remain unimplemented. The design system is a locally reviewed foundation, not a completed or independently accessibility-certified product UI. Public release of the imagery remains separately gated.
-
-Development follows a GitHub Issue, feature branch, and Pull Request workflow.
+Research-data ingestion, catalogue search and filtering, accounts, private notes, favourites, collections, and production deployment are not yet implemented. The target CHI coverage is a product goal, not a claim that the catalogue has been completed or independently verified.
 
 ## Technology Stack
 
-The application technology stack includes:
+- **Backend:** PHP 8.4+, Laravel 13, Blade
+- **Frontend:** React (JavaScript), React Router, TanStack Query, Tailwind CSS 4, Vite 8
+- **Data:** PostgreSQL 18, with separate catalogue and private-user databases
+- **Quality:** Laravel feature/integration tests, Vitest, Laravel Pint, Composer/npm security checks, GitHub Actions
 
-- **Backend:** PHP and Laravel
-- **Frontend:** Blade, React (JavaScript), React Router, TanStack Query, Tailwind CSS 4, and Vite 8
-- **Data:** PostgreSQL 18 with separate research-catalogue and private-user databases; approved schemas and ingestion remain future work
+## Getting Started
 
-Laravel 13 owns HTTP routing and server responses. React Router handles navigation between explicitly registered application pages. TanStack Query provides the initial server-state infrastructure; research catalogue API integrations and the final data architecture remain future work. A separate public read-only hero-image manifest supports the approved local Home presentation; its route is an explicit, bounded Issue #5 scope exception.
+The following commands use **Windows PowerShell**. You need Git, PHP 8.4.1+, Composer, Node.js 24 with npm 11, and the PHP extensions required by Composer.
 
-## Requirements
-
-Local development requires:
-
-- PHP 8.4.1 or later, below PHP 9.0
-- Composer
-- Git for cloning the repository
-- Node.js 24.x and npm 11.x
-- PHP extensions required by the locked dependencies (`pdo_pgsql` for PostgreSQL integration)
-- PostgreSQL 18.x for the local database foundation and integration tests; see `docs/postgresql-foundation.md`
-
-The foundation has been tested locally with:
-
-- PHP 8.5.11
-- Composer 2.10.3
-- Laravel Framework 13.35.0
-
-Other operating systems and PHP versions have not yet been independently tested.
-
-The frontend environment has been verified locally with Node.js 24.21.0 and npm 11.19.0.
-
-## Local Development
-
-The following commands target PowerShell on Windows.
-
-### 1. Clone the repository
-
-For a new working copy:
+PostgreSQL 18 and `pdo_pgsql` are needed for the database foundation and its integration tests. Before configuring database access, read the [PostgreSQL setup and safety instructions](docs/postgresql-foundation.md). Do not rerun one-time provisioning scripts against an existing database cluster or run application migrations without a reviewed plan.
 
 ```powershell
 git clone https://github.com/PetrosTam/litervia.git
-cd litervia
-```
+Set-Location litervia
 
-The repository is private and requires authorized GitHub access.
-
-If the repository is already cloned, use the existing working directory instead.
-
-### 2. Create the local environment file
-
-```powershell
 Copy-Item .env.example .env
-```
-
-The `.env` file contains local configuration and secrets and must never be committed.
-
-For the default development server, set `APP_URL` in the local `.env` to `http://127.0.0.1:8000`.
-
-### 3. Install PHP dependencies
-
-```powershell
 composer install --no-interaction --prefer-dist
-```
-
-Composer installs the versions specified in `composer.lock`. Also run `npm ci` to install the frontend dependencies from `package-lock.json`.
-
-### 4. Generate the application key
-
-```powershell
+npm ci
 php artisan key:generate
 ```
 
-Do not commit or share the generated application key.
+Set `APP_URL=http://127.0.0.1:8000` and configure the appropriate local PostgreSQL connection credentials in the ignored `.env` file. Never commit credentials or application keys.
 
-### 5. Verify the installation
-
-```powershell
-php artisan --version
-php artisan route:list
-php artisan test
-```
-
-The application foundation provides:
-
-- `/` — editorial React Home page with a locally implemented, server-selected rotating conceptual CHI/HCI-inspired hero (02/06/07); a client-side Research-to-Home transition currently uses a documented static fallback
-- `/research` — React Research page that clearly states the catalogue is under development
-- `/api/home/hero-images` — allowlisted public image manifest (not research data); response is `private, no-store` because the Laravel `web` middleware may set a session cookie
-- `/up` — Laravel health endpoint
-
-### 6. Start the development server
+Start Laravel:
 
 ```powershell
 php artisan serve --host=127.0.0.1 --port=8000
 ```
 
-In a second PowerShell terminal, start the Vite development server with `npm run dev`.
+In a second PowerShell terminal, run `npm run dev`, then visit [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-After both Laravel and Vite are running, open http://127.0.0.1:8000 in a browser.
-
-Alternatively, run `npm run build` before opening the application to serve compiled assets without the Vite development server.
-
-Stop running development servers with `Ctrl+C`.
-
-## Testing and Quality
-
-Run the PHP tests:
+## Tests and Quality Checks
 
 ```powershell
 php artisan test
-```
-
-Validate Composer metadata:
-
-```powershell
+npm test
+npm run build
+php vendor/bin/pint --test
 composer validate --strict
+composer audit --locked --no-interaction
+npm audit --audit-level=high
 ```
 
-Check locked dependencies for known security advisories:
+The PostgreSQL integration suite uses separate, explicitly configured test databases and an opt-in safety guard. See [PostgreSQL foundation](docs/postgresql-foundation.md) for the exact command and prerequisites. Passing the current tests does not establish completed catalogue functionality or production readiness.
 
-```powershell
-composer audit --locked
-```
+## Documentation
 
-Laravel feature tests cover the application shell, initial SEO metadata, routing, HTTP 404 responses, health endpoint, disabled private storage routes, and Home hero selection. The public image-manifest test checks that `Cache-Control` contains `private` and `no-store` (irrespective of directive ordering) under the normal web middleware, including the session cookie behavior.
+- [PostgreSQL foundation, local setup, and database security](docs/postgresql-foundation.md)
+- [Frontend implementation and visual QA](docs/hero-implementation-review.md)
+- [Catalogue identity architecture (ADR-0001)](docs/architecture/adr-0001-chi-catalogue-identity.md)
+- [Catalogue physical-design contract](docs/architecture/chi-catalogue-physical-design-contract.md)
+- [CHI normalization and provenance](docs/research/chi-normalization-contract.md)
+- [Research evidence and identity review](docs/research/chi-source-evidence-identity-review.md)
+- [Metadata publication and rights policy](docs/research/chi-metadata-publication-rights-policy.md)
 
-These tests do not constitute comprehensive application or security coverage.
-
-For the isolated local PostgreSQL 18 connection tests (after provisioning, with the four test passwords configured only in the ignored `.env`):
-
-```powershell
-php artisan config:clear
-$env:LITERVIA_PG_INTEGRATION = '1'
-try { php artisan test --filter=PostgreSQLConnectionTest --fail-on-skipped --fail-on-empty-test-suite }
-finally { Remove-Item Env:\LITERVIA_PG_INTEGRATION -ErrorAction SilentlyContinue }
-```
-
-**Issue #11 verification (30 October 2026):** The owner ran the complete Laravel suite with PostgreSQL enabled: **25 passed / 506 assertions**, with no skips; the isolated PostgreSQL subset separately passed **6 tests / 406 assertions**. The default Laravel suite without opt-in passed **20 tests / 268 assertions, with 5 expected skips**. Pint passed on 27 PHP files, React/Vitest passed 20 tests, Composer validation/platform checks and dependency audit passed (no advisories), Vite production build passed, npm audit reported 0 vulnerabilities, and Git diff checks passed. These are owner-executed local results. **GitHub PR-head CI also passed independently:** on [Draft PR #12](https://github.com/PetrosTam/litervia/pull/12), head `b25b66e`, [Actions run #40980614901](https://github.com/PetrosTam/litervia/actions/runs/40980614901) completed **3/3 jobs successfully** (PHP 8.4, PHP 8.5 and Frontend Node.js 24), including fresh disposable PostgreSQL provisioning, fail-closed credential-bootstrap smoke tests, isolated Laravel `config:cache` verification, PostgreSQL integration tests and frontend regression/build checks. This validates the fresh CI fixture, **not** production provisioning, historical catalogue coverage or user-data authorization. See [`docs/postgresql-foundation.md`](docs/postgresql-foundation.md) for scope and recovery limitations.
-
-Recent owner-executed Issue #5 local checks (October 2026) passed: Laravel 19 tests / 100 assertions (including 7 hero-image tests / 57 assertions); Laravel Pint 26 files; React/Vitest 20 tests (rerun after the footer/Tailwind refinements); Vite 8.3.4 production build; `composer validate --strict`; `composer audit --locked --no-interaction` (no advisories reported); `npm audit` (zero vulnerabilities reported); and `git diff --check`. Separately, all three GitHub Actions jobs (PHP 8.4, PHP 8.5, and Frontend Node.js 24) passed on the final PR head `e91094b` ([PR CI run #40602725233](https://github.com/PetrosTam/litervia/actions/runs/40602725233)). Following the separately approved squash merge, the owner provided the successful `push` CI summary for `main` commit `e643d18` (**CI run #9, 3/3 PASS**). The PR #6 code and documentation were merged on 28 October 2026; Issue #5 is closed with 17/17 total checks.
-
-## Frontend Testing, Routing and SEO
-
-### Frontend quality checks
-
-Run the React component integration tests:
-
-`npm test`
-
-Build production frontend assets:
-
-`npm run build`
-
-Check frontend dependencies for known security advisories:
-
-`npm audit --audit-level=high`
-
-The frontend tests use Vitest, React Testing Library, and jsdom. They cover initial rendering, client-side navigation, accessibility-related elements, and placeholder metadata.
-
-The GitHub Actions workflow includes independent PHP 8.4, PHP 8.5, and Node.js 24 jobs. Their results must be verified on the actual Pull Request.
-
-### Routing responsibilities
-
-Laravel explicitly registers `/`, `/research`, and the public image manifest route, and serves a Blade application shell. React Router handles client-side navigation between these pages.
-
-Unknown research routes and unmatched API endpoints must return appropriate HTTP error responses rather than silently serving the React application shell.
-
-TanStack Query is configured as a provider. No real research API requests have been implemented.
-
-### Technical SEO
-
-Laravel supplies page-specific titles, descriptions, and Open Graph metadata in the initial HTML response. React updates relevant metadata during client-side navigation.
-
-Both unfinished application pages currently use `noindex, nofollow`.
-
-No production canonical URL, research sitemap, or publication structured data has been published.
-
-Before creating indexable publication, author, country, or catalogue pages, the public rendering strategy must be reviewed for reliable crawlability, canonical URLs, correct HTTP statuses, source provenance, and permitted metadata.
-
-### Design direction
-
-Editorial Research is the approved visual direction for Litervia. The current UI foundation uses centralized semantic Tailwind CSS 4 design tokens, a cream/forest-green palette, system-following light/dark colors via `prefers-color-scheme`, and self-hosted variable Newsreader (editorial headings) and Inter (interface/body text) WOFF2 subsets. Their SIL Open Font License notices are preserved under `resources/fonts/`. The Home hero uses three conceptual AI-generated CHI/HCI-inspired scenes (02, 06 and 07) as responsive, optimized WebP images with a CSS contrast scrim; they are **not documentary CHI imagery**. The owner has confirmed ChatGPT text-prompt-only generation without uploaded third-party reference images; provenance and remaining visual/release gates are recorded below.
-
-There is no manual theme selector, theme-preference persistence, live publication list, functional search, or account feature. The existing routes retain their server-delivered metadata and `noindex, nofollow` settings.
-
-The owner reported satisfactory manual checks of Home/Research motion, responsive layouts, system light/dark styling, keyboard navigation, reduced motion, browser console, images, browser zoom/reflow (200% and 400%), and increased text size. A recorded Home checklist covered 320, 375, 768, 1024 and 1440 CSS-pixel widths (25/25 checks); the exported Research checklist showed 0/25 despite the owner reporting successful Research inspection. Desktop and approximately 370px mobile screenshots show the owner-approved centered footer disclaimer. These are owner-reported browser checks, not independent WCAG certification or complete per-viewport Research evidence.
-
-Chrome 155 Incognito local Lighthouse evidence is recorded in `docs/hero-implementation-review.md`: Home/Research scored 93/95 on Mobile and 100/100 on Desktop in the temporary Caddy/gzip environment, with Accessibility and Best Practices scores of 100 for all four page/device combinations. Earlier uncompressed Laravel Mobile Home LCP (~3.7s) and CLS (~0.001) were observed; final Caddy per-run FCP/LCP/TBT/CLS and production Core Web Vitals are **not consistently recorded**. Issue #5 records **OWNER-VERIFIED PASS** for the required manual contrast/focus, responsive, difficult-content and text-spacing checks, while some detailed original measurements and Research per-viewport records were not archived. Independent WCAG 2.2 AA conformance auditing and production performance validation remain open; the supporting evidence and limitations are tracked in PR #6 and Issue #5. No duplicate manual QA is implied by these archival limitations.
-
-Generated frontend assets in `public/build/` and installed dependencies in `node_modules/` must not be committed to Git.
-
-## Data and Storage
-
-Issue #11 provisions two **empty** PostgreSQL 18 UTF8/ICU databases (`litervia_catalogue` and `litervia_private`) with independent roles and permissions, plus two isolated test databases. Named Laravel connections are configured; the research catalogue, private user tables, auth, normalization and import workflows **are not implemented**. See [`docs/postgresql-foundation.md`](docs/postgresql-foundation.md) for verified local steps, safe test opt-in, CI design and limitations.
-
-The normal Laravel suite currently uses SQLite in-memory as a legacy isolated fixture. The PostgreSQL integration suite is a separate opt-in check and must never run against application databases. Do not run default or destructive migrations as part of this foundation setup.
-
-The local filesystem disk does not expose Laravel temporary file-serving routes in the current configuration.
-
-Raw research datasets, private user data, credentials, generated dependencies, and local runtime databases must not be committed to Git.
-
-## Research Integrity
-
-The planned catalogue covers CHI bibliographic research from 1982 through 2026. Completeness, source provenance, publication categories, and metadata availability must be verified before records are presented as authoritative.
-
-Litervia is an independent project and is not affiliated with ACM or SIGCHI.
+Original research datasets, local databases, and private user information are not stored in this repository. Litervia is independent and is not affiliated with ACM or SIGCHI.
 
 ## License
 
 Copyright (c) 2026 Petros Tamboutsiaris. All rights reserved.
 
-Litervia is proprietary software and is not distributed under an open-source license. Unauthorized use, modification, or distribution of its original source code is not permitted, except as allowed by applicable law or expressly authorized in writing.
-
-See [LICENSE](LICENSE) for details.
-
-## Hero imagery — review status
-
-The current visual slice uses conceptual ChatGPT/OpenAI-generated artwork (02, 06, 07), not documentary photos of CHI, actual researchers or historical devices. The owner confirmed generation from their own text prompts, without third-party reference photos or copyrighted uploads; this is an **owner attestation**, not an independent infringement or exclusivity certification. The owner reports a GPT-6 / High-thinking ChatGPT session, but the actual image-generation model is not independently verified; these are separate provenance fields. The large source masters are stored outside Git at `C:\Dev\litervia-assets\hero-images\originals`; only optimized WebP derivatives in `public/media/heroes/` are served to visitors. The external originals are **not required at runtime** but should be retained for re-exporting, editing, and source traceability. The current Mobile 06 v02 artwork and crop are **owner-approved as the final visual choice (2026-10-27)** based on a five-point mobile browser viewport review. On 28 October 2026 the owner separately approved **usage of all six declared hero assets in Litervia, including commercial use**; this does not establish exclusivity, independent non-infringement clearance or permission for public deployment. Independent rendered accessibility assurance, actual-device testing, public-release authorization and production LCP evidence remain open. Local Lighthouse results and their limitations are documented in `docs/hero-implementation-review.md`. See `docs/hero-implementation-review.md` and `docs/hero-asset-provenance.json`. The site remains `noindex, nofollow` during this early development stage.
-
-The Home route alone selects a random image (excluding the last seen ID via an encrypted HttpOnly cookie) and supplies it in the Blade shell for early discovery. The public manifest does not expose private file paths or user data, and its response is explicitly non-cacheable by HTTP caches. Direct navigation to Research does not rotate the image; a Research-to-Home SPA transition uses a documented static fallback until the next document load.
+Litervia is proprietary software. Public visibility, if enabled, does not grant an open-source license or permission to reuse the project. See [LICENSE](LICENSE) for the applicable terms.
