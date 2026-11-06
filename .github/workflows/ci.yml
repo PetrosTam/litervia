@@ -203,11 +203,27 @@ jobs:
           '
 
       - name: Run isolated catalogue source provenance migration
+        shell: bash
         env:
+          CI_PG_SERVICE_ID: ${{ job.services.postgres.id }}
           LITERVIA_PG_INTEGRATION: '1'
           LITERVIA_TEST_DB_HOST: 127.0.0.1
           LITERVIA_TEST_DB_PORT: '5432'
-        run: php artisan migrate --database=catalogue_test_migrator --path=database/migrations/catalogue --force --no-interaction
+        run: |
+          set -euo pipefail
+          test -n "${CI_PG_SERVICE_ID:-}"
+          actual_image="$(docker inspect --format '{{.Config.Image}}' "$CI_PG_SERVICE_ID")"
+          test "$actual_image" = 'postgres:18.6@sha256:979bccfde35445db618c65107d27d08c6c21339d8dc3ad4c830c6633947be0e4'
+          # PostgreSQL sees its Docker bridge IP behind the published host port.
+          server_address="$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CI_PG_SERVICE_ID")"
+          if ! [[ "$server_address" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+            echo '::error::Expected exactly one IPv4 address for the disposable PostgreSQL service'
+            exit 1
+          fi
+          # Same-step migration and later test steps must verify the same service.
+          export LITERVIA_CI_PG_SERVER_ADDRESS="$server_address"
+          echo "LITERVIA_CI_PG_SERVER_ADDRESS=$server_address" >> "$GITHUB_ENV"
+          php artisan migrate --database=catalogue_test_migrator --path=database/migrations/catalogue --force --no-interaction
       - name: Run isolated PostgreSQL integration tests
         env:
           LITERVIA_PG_INTEGRATION: '1'

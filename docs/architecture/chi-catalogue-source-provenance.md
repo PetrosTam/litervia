@@ -38,7 +38,7 @@ Owner-executed checks on 2026-11-06, against the disposable PostgreSQL 18.6 cata
 - `down()` via `migrate:rollback --step=1`: **PASS**; both tables removed, `research` schema retained and the specific migration record removed.
 - Subsequent `up()` reapplication: **PASS**; both tables restored, zero remaining test records, one migration record.
 - Second run while already applied: **PASS**, Laravel reported `Nothing to migrate.`
-- Full opted-in Laravel/PostgreSQL suite after the additional permission-denial test: **32 passed, 653 assertions, zero skipped**. The provenance-specific suite passed **7 tests, 147 assertions**.
+- Full opted-in Laravel/PostgreSQL suite after the additional permission-denial test: **32 passed, 660 assertions, zero skipped**. The provenance-specific suite passed **7 tests, 154 assertions**.
 - Ordinary Laravel suite after the additional security test: **20 passed, 268 assertions**, with 12 expected PostgreSQL opt-in skips.
 - React/Vitest: **20 tests passed**; Vite production build: **PASS**; Laravel Pint: **PASS, 29 files**.
 - Composer validation/platform checks: **PASS**; Composer and npm security audits: no advisories/vulnerabilities reported by the executed checks.

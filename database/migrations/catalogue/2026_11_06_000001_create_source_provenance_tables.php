@@ -90,6 +90,25 @@ return new class extends Migration
             throw new RuntimeException('Research catalogue refused unexpected catalogue migration connection configuration');
         }
 
+        // PostgreSQL sees its Docker bridge IP when the CI runner connects
+        // through the service's published localhost port. The CI address is
+        // independently obtained from the exact pinned service container.
+        $expectedServerAddress = '127.0.0.1';
+
+        if (getenv('GITHUB_ACTIONS') === 'true') {
+            $ciServerAddress = getenv('LITERVIA_CI_PG_SERVER_ADDRESS');
+
+            if (! is_string($ciServerAddress)
+                || filter_var($ciServerAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false
+                || $ciServerAddress === '127.0.0.1') {
+                throw new RuntimeException('Research catalogue refused missing or invalid CI PostgreSQL service address');
+            }
+
+            $expectedServerAddress = $ciServerAddress;
+        } elseif (getenv('LITERVIA_CI_PG_SERVER_ADDRESS') !== false) {
+            throw new RuntimeException('Research catalogue refused CI service address outside GitHub Actions');
+        }
+
         // Laravel --pretend suppresses SELECT results. Read the identity
         // outside dry-run mode, without executing any DDL or writes.
         $identity = $connection->withoutPretending(fn () => $connection->selectOne(<<<'SQL'
@@ -100,7 +119,7 @@ return new class extends Migration
         if ($identity === null
             || $identity->db !== 'litervia_catalogue_test'
             || $identity->role_name !== 'litervia_catalogue_test_migrator'
-            || $identity->server_address !== '127.0.0.1'
+            || $identity->server_address !== $expectedServerAddress
             || (int) $identity->pg_major !== 18) {
             throw new RuntimeException('Research catalogue refused unexpected connected PostgreSQL server or identity');
         }

@@ -258,9 +258,21 @@ class CatalogueSourceProvenanceTest extends TestCase
                    host(inet_server_addr()) AS host,
                    current_setting('server_version_num')::int / 10000 AS pg_major
             SQL);
+        $expectedServerAddress = '127.0.0.1';
+
+        if (getenv('GITHUB_ACTIONS') === 'true') {
+            $ciServerAddress = getenv('LITERVIA_CI_PG_SERVER_ADDRESS');
+            $this->assertIsString($ciServerAddress);
+            $this->assertNotFalse(filter_var($ciServerAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4));
+            $this->assertNotSame('127.0.0.1', $ciServerAddress);
+            $expectedServerAddress = $ciServerAddress;
+        } else {
+            $this->assertFalse(getenv('LITERVIA_CI_PG_SERVER_ADDRESS'));
+        }
+
         $this->assertSame('litervia_catalogue_test', $identity->db);
         $this->assertSame('litervia_catalogue_test_migrator', $identity->role_name);
-        $this->assertSame('127.0.0.1', $identity->host);
+        $this->assertSame($expectedServerAddress, $identity->host);
         $this->assertSame(18, (int) $identity->pg_major);
     }
 
