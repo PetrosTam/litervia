@@ -44,9 +44,19 @@ Owner-executed checks on 2026-11-06, against the disposable PostgreSQL 18.6 cata
 - Composer validation/platform checks: **PASS**; Composer and npm security audits: no advisories/vulnerabilities reported by the executed checks.
 - Authenticated restricted application-role denial checks for `INSERT`, `UPDATE`, `DELETE` and `CREATE TABLE`: **PASS**. Each operation was rejected with PostgreSQL SQLSTATE `42501`; probes used transactional rollback.
 
+## Verified GitHub Actions CI — PR #25
+
+On 2026-11-06, GitHub Actions run [42297412550](https://github.com/PetrosTam/litervia/actions/runs/42297412550) completed successfully on commit `fe019c4e6c2ea2f55d0a40c75571e17dc9daee6f`.
+
+- PHP 8.4 and PHP 8.5: **PASS**. The disposable catalogue provenance migration applied successfully in both jobs.
+- PostgreSQL connection tests: **6 passed, 406 assertions** per PHP job.
+- Catalogue provenance tests: **7 passed, 168 assertions** per PHP job. CI checks include Docker service identity assertions; the local provenance suite passed with 154 assertions.
+- Frontend (Node.js 24): **PASS**, including React tests and production build.
+
+These results apply to the identified commit. Any subsequent documentation or code commit requires successful CI on the new final PR HEAD before merge.
+
 Not yet verified or authorized:
 
-- GitHub Actions on the final catalogue PR head (PHP 8.4, PHP 8.5, Node.js 24).
 - Runtime catalogue migration, populated-data recovery, real CHI ingestion, or production deployment. These require separate review and explicit approval.
 
 These results validate a bounded, synthetic-data implementation in a disposable database; they do not establish production readiness or historical catalogue completeness.
