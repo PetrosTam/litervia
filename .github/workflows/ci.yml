@@ -157,6 +157,7 @@ jobs:
           unset original_catalogue_password
           echo 'CI credential-bootstrap negative smoke tests passed'
           psql_in_service < "$bootstrap"
+          psql_in_service < database/provisioning/04_catalogue_provenance_test_schema.sql
 
       - name: Verify isolated Laravel configuration cache
         shell: bash
@@ -201,12 +202,25 @@ jobs:
             }
           '
 
+      - name: Run isolated catalogue source provenance migration
+        env:
+          LITERVIA_PG_INTEGRATION: '1'
+          LITERVIA_TEST_DB_HOST: 127.0.0.1
+          LITERVIA_TEST_DB_PORT: '5432'
+        run: php artisan migrate --database=catalogue_test_migrator --path=database/migrations/catalogue --force --no-interaction
       - name: Run isolated PostgreSQL integration tests
         env:
           LITERVIA_PG_INTEGRATION: '1'
           LITERVIA_TEST_DB_HOST: 127.0.0.1
           LITERVIA_TEST_DB_PORT: '5432'
         run: php artisan test --filter=PostgreSQLConnectionTest --fail-on-skipped --fail-on-empty-test-suite
+
+      - name: Run isolated source provenance integration tests
+        env:
+          LITERVIA_PG_INTEGRATION: '1'
+          LITERVIA_TEST_DB_HOST: 127.0.0.1
+          LITERVIA_TEST_DB_PORT: '5432'
+        run: php artisan test --filter=CatalogueSourceProvenanceTest --fail-on-skipped --fail-on-empty-test-suite
 
   frontend:
     name: Frontend (Node.js 24)
