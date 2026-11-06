@@ -29,6 +29,21 @@ The Laravel migration deliberately binds to `catalogue_test_migrator` and refuse
 - Command evidence for `up`, second-run idempotency via Laravel's migration repository, and `down` on the same disposable target. Never use `migrate:fresh`, `db:wipe`, runtime DBs or broad schema cascade.
 - Existing PHP / frontend regressions, real GitHub Actions CI on the final PR HEAD, final Issue re-audit and owner-approved merge. Do not mark ACs complete from source inspection alone.
 
+## Recovery from interrupted test-only provisioning or migration
+
+**Scope:** Disposable `litervia_catalogue_test` only.
+**Evidence status:** Apply, controlled rollback, reapply and repeated no-op are PASS. An unexpected partial-failure injection has NOT RUN.
+
+1. **Stop and preserve evidence.** Record the failed command, exit status, PostgreSQL SQLSTATE and relevant logs without copying passwords. Do not rerun the privileged provisioning script, use `migrate:fresh` or `db:wipe`, or delete research objects automatically.
+2. **Reconfirm the target.** Before recovery, verify PostgreSQL 18 server identity, expected host/port, `litervia_catalogue_test` database and the intended authenticated role. Refuse any runtime or private database target.
+3. **Inspect provisioning state.** The privileged `04_catalogue_provenance_test_schema.sql` script uses an explicit transaction and is intentionally non-idempotent. Check whether the `research` schema exists and whether ownership and grants match the reviewed contract. Never rerun this script if the schema already exists.
+4. **Inspect migration state.** Use Laravel's migration-status command against the isolated test connection and read-only PostgreSQL catalogue queries to determine whether both approved source tables exist and whether the migration is recorded. Do not infer success solely from the existence of one table.
+5. **Choose the safe recovery path.** If neither table exists and the migration is unrecorded, investigate the failure before an owner-authorized retry. If both tables exist and the migration is recorded, verify their constraints and permissions instead of repeating the migration. If table state and migration history disagree, stop and require a reviewed repair plan; do not manually drop objects or forge migration history.
+6. **Controlled rollback, when explicitly approved.** Verify that the provenance migration is the migration targeted by the rollback before using the existing guarded, one-step Laravel rollback. Inspect the result before any approved reapplication. Never apply these commands to runtime databases.
+7. **Revalidate and report.** Repeat the authenticated schema, constraint, permission and integration checks on the disposable target; record PASS, FAIL, BLOCKED or NOT RUN. A failed local recovery must not be represented as successful merely because a fresh CI service passes.
+
+CI may discard its disposable PostgreSQL service and provision a fresh isolated fixture. Local recovery must preserve evidence and follow the reviewed target-specific plan; no production recovery capability is claimed.
+
 ## Local verification evidence
 
 Owner-executed checks on 2026-11-06, against the disposable PostgreSQL 18.6 catalogue test database:
