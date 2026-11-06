@@ -4,6 +4,8 @@
 
 **Status:** D-04 and D-05 **APPROVED ARCHITECTURAL DIRECTION**; detailed DDL/role implementation remains **PROPOSED / NOT FROZEN**. D-12 **OPEN**.
 
+**2026-11-06 follow-up — Issue #22 / PR #25:** This document retains the historical design-only review baseline. A separately approved, disposable-test-only implementation subsequently established `research.source_snapshots` and `research.source_records` in `litervia_catalogue_test`, with successful local and GitHub CI verification. See the [source provenance schema contract](chi-catalogue-source-provenance.md). This does not approve runtime migrations, ingestion, publication or the remaining D-12 physical design.
+
 **Execution evidence:** STATIC DOCUMENT REVIEW ONLY. **No migrations, database tests, importer runs, grants, runtime role changes, enrichment, data import, application changes or deployment.**
 
 ## 1. Sources and non-negotiable boundaries
